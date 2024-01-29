@@ -1,0 +1,42 @@
+form{
+  margin: 50px;
+}
+
+.avatar-container {
+  justify-content: end;
+}
+
+.avatar-img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.card {
+  margin-top: 90px;
+  margin-bottom: 90px;
+}
+
+.card-header h2{
+margin-top: 10px;
+font-weight: bold;
+font-family: Italic;
+font-size: 25px;
+height: 20px;
+}
+
+.ng-valid:not(form).ng-touched{
+  border: 5px solid #42A948;
+}
+
+.ng-invalid:not(form).ng-touched {
+border: 5px solid #a94442;
+}
+
+:host {
+  display: block;
+  background-image: url('/assets/Images/auth/recuperar3.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+}

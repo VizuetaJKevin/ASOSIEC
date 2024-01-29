@@ -1,0 +1,48 @@
+.avatar-container {
+  display: flex;
+  justify-content: center;
+}
+
+.avatar-img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.card {
+  margin-top: 100px;
+  margin-bottom: 80px;
+}
+
+.card-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.tittle {
+font-family:verdana;
+font-weight: bold;
+}
+
+.card-header h2{
+font-size: 30px;
+margin-top: 20px;
+font-family: fantasy;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+:host {
+  display: block;
+  background-image: url('/assets/Images/auth/perfil.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+}

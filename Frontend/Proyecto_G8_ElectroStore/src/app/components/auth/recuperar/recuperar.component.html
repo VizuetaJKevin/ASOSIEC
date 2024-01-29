@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="row shadow justify-content-center">
+    <div class="col-md-6">
+      <div class="card bg-dark shadow">
+        <div class="card-header bg-light text-center bold">
+          <h2>¿Está intentando recuperar su contraseña?</h2>
+        </div>
+        <div class="card-body">
+
+          <!-- Formulario de Recuperación -->
+          <form [formGroup]="FormularioRecuperar" *ngIf="!valid" class="mb-5">
+            <div class="form mb-3 text-white text-center">
+              <div class="text-center text-white">
+                <div class="avatar-container mb-4">
+                  <img src="/assets/Images/auth/recuperar.png" alt="Avatar" class="avatar-img img-fluid">
+                </div>
+              </div>
+              <h2 for="inputEmail" class="form-label">Escriba su nuevo correo</h2>
+              <input formControlName="email" type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp">
+              <div *ngIf="valido(FormularioRecuperar,'email')" class="text-danger">
+                El Email es requerido!!
+              </div>
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" (click)="recuperarBtnCancelar()" class="btn btn-primary me-md-2">Cancelar</button>
+              <button type="button" (click)="recuperarBtnAceptar()" class="btn btn-primary">Aceptar</button>
+            </div>
+          </form>
+
+          <!-- Formulario de Cambio de Contraseña -->
+          <form [formGroup]="FormularioCPassword" *ngIf="valid">
+            <div class="form mb-3 text-white text-center">
+              <div class="text-center text-white">
+                <div class="avatar-container mb-4">
+                  <img src="/assets/Images/auth/recuperar2.png" alt="Avatar" class="avatar-img img-fluid">
+                </div>
+              </div>
+              <h2 for="inputPassword" class="form-label">Escriba su nueva contraseña</h2>
+              <input formControlName="password" type="password" class="form-control" id="inputPassword">
+              <div *ngIf="valido(FormularioCPassword,'password')" class="text-danger">
+                Este campo es requerido!!
+              </div>
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" (click)="recuperarBtnCancelar()" class="btn btn-primary me-md-2">Cancelar</button>
+              <button type="button" (click)="cambiar()" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+export interface Orden{
+    id :number,
+    estadoId :number,
+    usuarioId :number,
+    companiaId :number,
+    nombre :string,
+    apellido :string,
+    email :string,
+    costo_envio :number,
+    total :number,
+    token_orden :string,
+    direccion_1 :string,
+    direccion_2 :string,
+    fecha :string,
+}

@@ -1,0 +1,63 @@
+<div class="mt-4 text-center">
+  <h2>Tu Carrito de Compras ({{ itemsTotal }})</h2>
+
+  <div *ngIf="user.rolid==2 && productosEnCarrito!=null; else carritoVacio">
+
+    <table class="table table-light table-responsive custom-width shadow border">
+      <thead>
+        <tr>
+          <th scope="col" class="align-middle">Producto</th>
+          <th scope="col" class="align-middle">Nombre</th>
+          <th scope="col" class="align-middle">Descripción</th>
+          <th scope="col" class="align-middle">Precio</th>
+          <th scope="col" class="align-middle">Cantidad</th>
+          <th scope="col" class="align-middle">Subtotal</th>
+          <th scope="col" class="align-middle">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of productosEnCarrito; let i = index">
+          <td class="text-center align-middle">
+            <img src="assets/Images/productos/{{producto.img}}" alt="{{ producto.nombre }}" style="max-width: 80px; max-height: 80px;">
+          </td>
+          <td class="align-middle">{{ producto.nombre }}</td>
+          <td class="align-middle">{{ producto.descripcion }}</td>
+          <td class="align-middle"><strong>{{ producto.precio | currency }}</strong></td>
+
+          <td class="align-middle">
+            <div class="btn-group" role="group" aria-label="Cantidad">
+              <button class="btn btn-outline-secondary" type="button" (click)="decrementarCantidad(producto.entidad_Item)">-</button>
+              <span class="btn btn-outline-secondary disabled custom-quantity">{{ producto.entidad_Item.cantidad }}</span>
+              <button class="btn btn-outline-secondary" type="button" (click)="incrementarCantidad(producto.entidad_Item,producto.stock)">+</button>
+            </div>
+          </td>
+
+          <td class="align-middle"><strong>{{ (producto.precio * producto.entidad_Item.cantidad) | currency }}</strong></td>
+          <td class="align-middle">
+            <button mat-icon-button color="warn" (click)="eliminarProducto(producto.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="total text-right">
+      <p>TOTAL: <strong>{{ totalValue | currency }}</strong></p>
+      <button class="btn btn-primary" routerLink="check-out">Continuar con el Pago</button>
+    </div>
+  </div>
+
+  <ng-template #carritoVacio>
+    <div class="text-center text-white">
+      <div class="avatar-container mb-4">
+        <img src="/assets/Images/productos/carrito.png" alt="Avatar" class="avatar-img img-fluid">
+      </div>
+    </div>
+    <p class="cart fst-italic">Tu carrito está vacío. ¡Agrega algunos productos!</p>
+    <button class="btn btn-primary" [routerLink]="['/productos']">Ir a la tienda</button>
+  </ng-template>
+</div>
+<br>
+
+<router-outlet></router-outlet>

@@ -1,0 +1,21 @@
+.card {
+  margin-top: 100px;
+  margin-bottom: 100px;
+  width: 100%;
+}
+
+:host {
+  display: block;
+  background-image: url('/assets/Images/auth/registro.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.ng-valid:not(form).ng-touched{
+  border: 5px solid #42A948;
+}
+
+.ng-invalid:not(form).ng-touched {
+border: 5px solid #a94442;
+}

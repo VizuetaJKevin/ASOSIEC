@@ -1,0 +1,209 @@
+
+.portrait h1 {
+  font-size: 80px;
+  padding-bottom: 60px;
+}
+
+.portrait h3 {
+  font-size: 30px;
+  margin-top: 50px;
+}
+
+.inicio {
+  background-color: #ededed;
+}
+.fondosm{
+  transform: translateY(50px);
+}
+
+.anm1{
+  animation: liftAndDrop 5s infinite;
+}
+.anm2{
+  animation: liftAndDrop2 5s infinite;
+}
+.anm3{
+  animation: liftAndDrop3 5s infinite;
+}
+
+.fondos{
+  width: 40%;
+  padding-left: 10px;
+}
+.justify{
+text-align: justify;
+}
+@keyframes liftAndDrop {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(50px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes liftAndDrop2 {
+  0% {
+    transform: translateY(-30px);
+  }
+  50% {
+    transform: translateY(50px);
+  }
+  100% {
+    transform: translateY(-30px);
+  }
+}
+@keyframes liftAndDrop3 {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(50px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@media screen and (max-width: 768px) {
+  .fondos {
+    width: 30%;
+  }
+}
+
+.card-title {
+  font-size: 25px;
+  font-weight: bolder;
+}
+.card-text{
+  font-size: 16px;
+
+}
+.card ul{
+  font-size: 20px;
+}
+
+.list-group {
+  margin-bottom: auto;
+}
+
+
+.top-marcas {
+  padding: 50px 0;
+  text-align: center;
+}
+
+.marcas {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.marcas-imagen {
+  position: relative;
+  width: calc(25% - 20px);
+  margin: 10px;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.marcas-imagen img {
+  width: 50%;
+  height: 100%;
+}
+
+.top-marcas h2 {
+  font-size: 30px;
+  color: rgb(22, 22, 21);
+  font-weight: bold;
+}
+
+.image-overlay {
+  position: absolute;
+  font-size: 30px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  color: #fff;
+  padding: 5px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.marcas-imagen:hover {
+  transform: scale(1.5);
+}
+
+.marcas-imagen:hover .image-overlay {
+  opacity: 1;
+}
+
+.descuento {
+  text-decoration: line-through; /* Tachado para el precio antes */
+  font-size: 0.9em; /* Tamaño más pequeño para el precio antes */
+  color:rgb(86, 85, 85);
+}
+
+.precio-ahora {
+  font-weight: bold; /* Negrita para el precio ahora */
+  font-size: 1.2em; /* Tamaño más grande para el precio ahora */
+}
+
+/* Agrega estas clases de estilo para la transición */
+.banner-grow {
+  width: 100%;
+  max-width: 200px; /* Ajusta este valor según tus necesidades */
+  transition: transform 0.3s; /* Añade una transición para suavizar el crecimiento */
+}
+
+.banner-grow:hover {
+  transform: scale(1.2); /* Cambia el factor de escala según tus preferencias */
+}
+
+.card {
+  height: 95%;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-title,
+.card-text {
+  margin-bottom: 15px;
+}
+
+.text-truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.btn-primary {
+  transition: transform 0.3s ease-in-out; /* Agrega una transición para suavizar el efecto */
+}
+
+.btn-custom {
+  background-color: rgba(24, 171, 240, 0.8); /* Reemplaza los valores RGB y ajusta la opacidad según tu preferencia */
+  transition: transform 0.3s ease-in-out;
+}
+
+.btn-custom:hover {
+  transform: scale(1.3); /* Escala el botón al 110% al pasar el ratón sobre él */
+  background-color: rgb(147, 27, 191);
+  border-color: rgb(251, 246, 246);
+}
+
+
+
+.btn-primary:hover {
+  transform: scale(1.3); /* Escala el botón al 110% al pasar el ratón sobre él */
+  background-color: rgb(33, 133, 142);
+  border-color: rgb(251, 246, 246);
+}

@@ -1,0 +1,77 @@
+<mat-tab-group class="estado">
+  <mat-tab label ="Lista de Estado">
+    <div class="container">
+      <table mat-table [dataSource]="listaEstado" class="table text-center text-white shadow">
+        <ng-container matColumnDef="Id">
+          <th mat-header-cell *matHeaderCellDef class="text-center"> Id </th>
+          <td mat-cell *matCellDef="let element" class="align-middle text-center"> {{element.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Descripcion">
+          <th mat-header-cell *matHeaderCellDef class="text-center"> Descripcion </th>
+          <td mat-cell *matCellDef="let element" class="align-middle text-center"> {{element.descripcion}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Opciones">
+          <th mat-header-cell *matHeaderCellDef class="text-center"> Opciones </th>
+          <td mat-cell *matCellDef="let element" class="align-middle text-center">
+            <div class="text-center">
+              <button mat-icon-button color="primary" (click)="editar(element)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <div *ngIf="edit==true" class="mt-4">
+        <form [formGroup]="Formulario" class="row g-3 justify-content-center">
+          <div class="text-center text-white">
+            <div class="avatar-container mb-4">
+              <img src="/assets/Images/admin/icon.png" alt="Avatar" class="avatar-img img-fluid">
+            </div>
+          </div>
+          <div class="col text-center">
+          <br><br>
+            <label for="descripcion mb-3" class="form-label">Modifique la descripción</label>
+            <br><br>
+            <div class="input-group  mx-auto custom-input">
+              <input matInput placeholder="Descripción" formControlName="descripcion" class="form-control">
+              <button mat-button type="submit" class="btn btn-custom" (click)="guardar()">
+                Guardar
+                <mat-icon aria-hidden="false" aria-label="delete" fontIcon="add"></mat-icon>
+                <i class="bi bi-check"></i>
+              </button>
+
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Registrar un estado" onclick="limpiar()">
+    <div class="container">
+      <form [formGroup]="Formulario" class="row g-3">
+        <div class="col text-center">
+          <label class="form-label mb-3">Descripción</label>
+          <div class="mb-3">
+            <input formControlName="descripcion" type="text" class="form-control mx-auto custom-input">
+            <div *ngIf="valido('descripcion')" class="text-danger">
+            </div>
+          </div>
+
+          <button mat-button type="submit" class="btn btn-custom" (click)="agregarDescripcion()">
+            Agregar
+            <mat-icon aria-hidden="false" aria-label="delete" fontIcon="add"></mat-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </mat-tab>
+
+
+</mat-tab-group>

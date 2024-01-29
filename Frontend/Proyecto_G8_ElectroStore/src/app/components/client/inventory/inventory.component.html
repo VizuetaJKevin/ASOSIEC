@@ -1,0 +1,59 @@
+<div class="container mt-4 text-center">
+  <h1> Tu historial de compras</h1>
+
+<div class="text-center text-white">
+  <div class="avatar-container mb-4">
+    <img src="/assets/Images/inventory/icon.png" alt="Avatar" class="avatar-img img-fluid">
+  </div>
+</div>
+
+<div *ngIf="ListaOrden == null" class="col-12 d-flex justify-content-center align-content-center text-center">
+  <span>Aún no has comprado ningún producto.</span>
+</div>
+
+<div class="col-12 p-4" *ngIf="ListaOrden != null">
+  <table class="table table-light table-striped shadow table-bordered table-responsive custom-width align-middle text-center">
+    <thead class="title">
+      <tr>
+        <th scope="col">N_Orden</th>
+        <th scope="col">Total</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Productos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let element of ListaOrden">
+        <td>{{ element.token_orden }}</td>
+        <td><b>$ {{ element.total | number:'1.2-2' }}</b></td>
+        <td>{{ element.fecha }}</td>
+        <td>{{ obtener(ListaEstado, element.estadoId).descripcion }}</td>
+
+        <td>
+          <div class="row">
+            <button class="btn btn-link" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapseProductos' + element.id" aria-expanded="false" aria-controls="collapseProductos">
+              Ver productos
+            </button>
+          </div>
+          <div style="max-height: 120px;">
+            <div class="collapse" [attr.id]="'collapseProductos' + element.id">
+              <span *ngFor="let item of obtenerItems(element.id)">
+                <div class="row">
+                  <span class="justify">
+                    {{
+                      '(' + obtener(ListaProductos, item.productoId).nombre_producto + ') - '
+                      + obtener(ListaProductos, item.productoId).descripcion
+                      + ' - $' + obtener(ListaProductos, item.productoId).precio_ahora
+                    }}
+                  </span>
+                </div>
+              </span>
+            </div>
+          </div>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>

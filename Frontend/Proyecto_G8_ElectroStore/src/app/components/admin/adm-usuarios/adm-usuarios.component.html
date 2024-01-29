@@ -1,0 +1,96 @@
+<mat-tab-group class="estado">
+  <mat-tab label="Lista Usuarios">
+    <div class="container">
+      <table mat-table [dataSource]="ListaUsuarios" class="table text-center text-white shadow">
+        <ng-container matColumnDef="Id">
+          <th mat-header-cell *matHeaderCellDef class="text-center"> Rol </th>
+          <td mat-cell *matCellDef="let element" class="align-middle text-center">
+            {{ element.rolId === 1 ? 'Administrador' : (element.rolId === 2 ? 'Cliente' : 'Otro') }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Nombre">
+          <th mat-header-cell *matHeaderCellDef class="text-center"> Nombre </th>
+          <td mat-cell *matCellDef="let element" class="align-middle text-center"> {{element.nombre}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Email">
+          <th mat-header-cell *matHeaderCellDef class="text-center"> Email </th>
+          <td mat-cell *matCellDef="let element" class="align-middle text-center"> {{element.email}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Opciones">
+          <th mat-header-cell *matHeaderCellDef class="text-center"> Opciones </th>
+          <td mat-cell *matCellDef="let element" class="align-middle text-center">
+            <div class="text-center">
+              <button mat-icon-button color="warn" (click)="eliminar(element.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="editar(element)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <br><br>
+
+
+      <div class="col-12 p-t4" *ngIf="usuario != null">
+        <form [formGroup]="formulario" (ngSubmit)="Actualizar()">
+          <div class="custom-container">
+            <div class="text-center text-white">
+              <div class="avatar-container mb-4">
+                <img src="/assets/Images/admin/icon.png" alt="Avatar" class="avatar-img img-fluid">
+              </div>
+            </div>
+            <div class="row">
+              <!-- Columna izquierda -->
+              <div class="col-md-6 text-center">
+                <div class="p-2 custom-container">
+                  <label class="custom-label">Nombre</label>
+                  <input class="custom-input mx-auto" placeholder="Nombre" formControlName="nombre">
+
+                  <label class="custom-label">Apellido</label>
+                  <input class="custom-input mx-auto" placeholder="Apellido" formControlName="apellido">
+
+                  <label class="custom-label">Email</label>
+                  <input class="custom-input mx-auto" placeholder="pat@example.com" formControlName="email">
+
+                  <label class="custom-label">Contraseña</label>
+                  <input class="custom-input mx-auto" placeholder="Contraseña" formControlName="password">
+                </div>
+              </div>
+
+              <!-- Columna derecha -->
+              <div class="col-md-6 text-center">
+                <div class="form-group p-2 custom-input mx-auto">
+                  <label class="custom-label" for="estadoId">Selecciona un estado Usuario</label>
+                  <select class="form-select" aria-label="Large select example" id="estadoId" formControlName="estadoId">
+                    <option *ngFor="let item of ListaEstados" [value]="item.id">{{item.descripcion}}</option>
+                  </select>
+                </div>
+
+                <div class="form-group p-2 custom-input mx-auto">
+                  <label class="custom-label" for="rolId">Selecciona el Rol del Usuario</label>
+                  <select class="form-select" aria-label="Large select example" id="rolId" formControlName="rolId">
+                    <option *ngFor="let item of ListaRoles" [value]="item.id">{{item.descripcion}}</option>
+                  </select>
+                </div> <br>
+                <mat-card-actions>
+                  <button mat-button type="submit" class=" btn-custom">Actualizar
+                    <mat-icon aria-hidden="false" aria-label="delete" fontIcon="add"></mat-icon>
+                  </button>
+                </mat-card-actions>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </mat-tab>
+</mat-tab-group>

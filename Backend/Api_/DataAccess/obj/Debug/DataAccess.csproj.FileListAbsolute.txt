@@ -1,0 +1,45 @@
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\DataAccess.dll
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\DataAccess.pdb
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\Entidad.dll
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\Microsoft.Extensions.Configuration.dll
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\Microsoft.Extensions.Primitives.dll
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\System.Buffers.dll
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\System.Data.SqlClient.dll
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\System.Memory.dll
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\System.ValueTuple.dll
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\Entidad.pdb
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\Microsoft.Extensions.Configuration.xml
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\Microsoft.Extensions.Configuration.Abstractions.xml
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\Microsoft.Extensions.Primitives.xml
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\System.Buffers.xml
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\System.Data.SqlClient.xml
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\System.Memory.xml
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\bin\Debug\System.ValueTuple.xml
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\obj\Debug\DataAccess.csproj.AssemblyReference.cache
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\obj\Debug\DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\obj\Debug\DataAccess.csproj.CopyComplete
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\obj\Debug\DataAccess.dll
+C:\Users\miguel\Desktop\ProyectosAngular\proyecto ug\api\tienda_instrumentos\DataAccess\obj\Debug\DataAccess.pdb
+C:\Users\Usuario\Desktop\Api_\DataAccess\bin\Debug\DataAccess.dll
+C:\Users\Usuario\Desktop\Api_\DataAccess\bin\Debug\DataAccess.pdb
+C:\Users\Usuario\Desktop\Api_\DataAccess\bin\Debug\Entidad.dll
+C:\Users\Usuario\Desktop\Api_\DataAccess\bin\Debug\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\Usuario\Desktop\Api_\DataAccess\bin\Debug\Microsoft.Extensions.Primitives.dll
+C:\Users\Usuario\Desktop\Api_\DataAccess\bin\Debug\System.Buffers.dll
+C:\Users\Usuario\Desktop\Api_\DataAccess\bin\Debug\System.Memory.dll
+C:\Users\Usuario\Desktop\Api_\DataAccess\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Usuario\Desktop\Api_\DataAccess\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Usuario\Desktop\Api_\DataAccess\bin\Debug\System.ValueTuple.dll
+C:\Users\Usuario\Desktop\Api_\DataAccess\bin\Debug\Entidad.pdb
+C:\Users\Usuario\Desktop\Api_\DataAccess\bin\Debug\Microsoft.Extensions.Configuration.xml
+C:\Users\Usuario\Desktop\Api_\DataAccess\bin\Debug\System.Data.SqlClient.xml
+C:\Users\Usuario\Desktop\Api_\DataAccess\obj\Debug\DataAccess.csproj.AssemblyReference.cache
+C:\Users\Usuario\Desktop\Api_\DataAccess\obj\Debug\DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\Desktop\Api_\DataAccess\obj\Debug\DataAccess.csproj.CopyComplete
+C:\Users\Usuario\Desktop\Api_\DataAccess\obj\Debug\DataAccess.dll
+C:\Users\Usuario\Desktop\Api_\DataAccess\obj\Debug\DataAccess.pdb

@@ -1,0 +1,136 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Usuario\\Desktop\\Api_\\tienda_instrumentos\\tienda_instrumentos.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Usuario\\Desktop\\Api_\\DataAccess\\DataAccess.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\Api_\\DataAccess\\DataAccess.csproj",
+        "projectName": "DataAccess",
+        "projectPath": "C:\\Users\\Usuario\\Desktop\\Api_\\DataAccess\\DataAccess.csproj",
+        "frameworks": {
+          "net472": {
+            "projectReferences": {
+              "C:\\Users\\Usuario\\Desktop\\Api_\\Entidad\\Entidad.csproj": {
+                "projectPath": "C:\\Users\\Usuario\\Desktop\\Api_\\Entidad\\Entidad.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net472": {}
+      }
+    },
+    "C:\\Users\\Usuario\\Desktop\\Api_\\Entidad\\Entidad.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\Api_\\Entidad\\Entidad.csproj",
+        "projectName": "Entidad",
+        "projectPath": "C:\\Users\\Usuario\\Desktop\\Api_\\Entidad\\Entidad.csproj",
+        "frameworks": {
+          "net472": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net472": {}
+      }
+    },
+    "C:\\Users\\Usuario\\Desktop\\Api_\\Negocio\\Negocio.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\Api_\\Negocio\\Negocio.csproj",
+        "projectName": "Negocio",
+        "projectPath": "C:\\Users\\Usuario\\Desktop\\Api_\\Negocio\\Negocio.csproj",
+        "frameworks": {
+          "net472": {
+            "projectReferences": {
+              "C:\\Users\\Usuario\\Desktop\\Api_\\DataAccess\\DataAccess.csproj": {
+                "projectPath": "C:\\Users\\Usuario\\Desktop\\Api_\\DataAccess\\DataAccess.csproj"
+              },
+              "C:\\Users\\Usuario\\Desktop\\Api_\\Entidad\\Entidad.csproj": {
+                "projectPath": "C:\\Users\\Usuario\\Desktop\\Api_\\Entidad\\Entidad.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net472": {}
+      }
+    },
+    "C:\\Users\\Usuario\\Desktop\\Api_\\tienda_instrumentos\\tienda_instrumentos.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\Api_\\tienda_instrumentos\\tienda_instrumentos.csproj",
+        "projectName": "tienda_instrumentos",
+        "projectPath": "C:\\Users\\Usuario\\Desktop\\Api_\\tienda_instrumentos\\tienda_instrumentos.csproj",
+        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Usuario\\Desktop\\Api_\\tienda_instrumentos\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\Usuario\\Desktop\\Api_\\Negocio\\Negocio.csproj": {
+                "projectPath": "C:\\Users\\Usuario\\Desktop\\Api_\\Negocio\\Negocio.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.2.3, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.5, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
