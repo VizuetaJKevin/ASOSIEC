@@ -1,0 +1,150 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A506FD9E-9A13-4C77-A69D-4CB69CDD49F4}|Negocio\\Negocio.csproj|c:\\users\\usuario\\desktop\\sistema de ventas online - final\\backend\\api_\\negocio\\services\\rideservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A506FD9E-9A13-4C77-A69D-4CB69CDD49F4}|Negocio\\Negocio.csproj|solutionrelative:negocio\\services\\rideservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7F09C5B6-434F-303F-32F2-07CC2B9A6743}|ASOSIEC_backend\\ASOSIEC.csproj|c:\\users\\usuario\\desktop\\sistema de ventas online - final\\backend\\api_\\asosiec_backend\\controllers\\comprobantepagocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7F09C5B6-434F-303F-32F2-07CC2B9A6743}|ASOSIEC_backend\\ASOSIEC.csproj|solutionrelative:asosiec_backend\\controllers\\comprobantepagocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A506FD9E-9A13-4C77-A69D-4CB69CDD49F4}|Negocio\\Negocio.csproj|c:\\users\\usuario\\desktop\\sistema de ventas online - final\\backend\\api_\\negocio\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A506FD9E-9A13-4C77-A69D-4CB69CDD49F4}|Negocio\\Negocio.csproj|solutionrelative:negocio\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7F09C5B6-434F-303F-32F2-07CC2B9A6743}|ASOSIEC_backend\\ASOSIEC.csproj|c:\\users\\usuario\\desktop\\sistema de ventas online - final\\backend\\api_\\asosiec_backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7F09C5B6-434F-303F-32F2-07CC2B9A6743}|ASOSIEC_backend\\ASOSIEC.csproj|solutionrelative:asosiec_backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7F09C5B6-434F-303F-32F2-07CC2B9A6743}|ASOSIEC_backend\\ASOSIEC.csproj|c:\\users\\usuario\\desktop\\sistema de ventas online - final\\backend\\api_\\asosiec_backend\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7F09C5B6-434F-303F-32F2-07CC2B9A6743}|ASOSIEC_backend\\ASOSIEC.csproj|solutionrelative:asosiec_backend\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7F09C5B6-434F-303F-32F2-07CC2B9A6743}|ASOSIEC_backend\\ASOSIEC.csproj|c:\\users\\usuario\\desktop\\sistema de ventas online - final\\backend\\api_\\asosiec_backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7F09C5B6-434F-303F-32F2-07CC2B9A6743}|ASOSIEC_backend\\ASOSIEC.csproj|solutionrelative:asosiec_backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A506FD9E-9A13-4C77-A69D-4CB69CDD49F4}|Negocio\\Negocio.csproj|c:\\users\\usuario\\desktop\\sistema de ventas online - final\\backend\\api_\\negocio\\negocio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A506FD9E-9A13-4C77-A69D-4CB69CDD49F4}|Negocio\\Negocio.csproj|solutionrelative:negocio\\negocio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ComprobantePagoController.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\ASOSIEC_backend\\Controllers\\ComprobantePagoController.cs",
+              "RelativeDocumentMoniker": "ASOSIEC_backend\\Controllers\\ComprobantePagoController.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\ASOSIEC_backend\\Controllers\\ComprobantePagoController.cs",
+              "RelativeToolTip": "ASOSIEC_backend\\Controllers\\ComprobantePagoController.cs",
+              "ViewState": "AgIAAHACAAAAAAAAAAAmwJECAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T14:12:51.832Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EmailService.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\Negocio\\Services\\EmailService.cs",
+              "RelativeDocumentMoniker": "Negocio\\Services\\EmailService.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\Negocio\\Services\\EmailService.cs",
+              "RelativeToolTip": "Negocio\\Services\\EmailService.cs",
+              "ViewState": "AgIAACwFAAAAAAAAAAAuwEgFAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T14:12:20.244Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "RideService.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\Negocio\\Services\\RideService.cs",
+              "RelativeDocumentMoniker": "Negocio\\Services\\RideService.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\Negocio\\Services\\RideService.cs",
+              "RelativeToolTip": "Negocio\\Services\\RideService.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAAwC8AAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T14:11:39.956Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "LoginController.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\ASOSIEC_backend\\Controllers\\LoginController.cs",
+              "RelativeDocumentMoniker": "ASOSIEC_backend\\Controllers\\LoginController.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\ASOSIEC_backend\\Controllers\\LoginController.cs",
+              "RelativeToolTip": "ASOSIEC_backend\\Controllers\\LoginController.cs",
+              "ViewState": "AgIAAOgDAAAAAAAAAAA8wPwDAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-02T05:41:48.4Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\ASOSIEC_backend\\Program.cs",
+              "RelativeDocumentMoniker": "ASOSIEC_backend\\Program.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\ASOSIEC_backend\\Program.cs",
+              "RelativeToolTip": "ASOSIEC_backend\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAMcAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-19T16:33:45.989Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "negocio.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\Negocio\\negocio.cs",
+              "RelativeDocumentMoniker": "Negocio\\negocio.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\Negocio\\negocio.cs",
+              "RelativeToolTip": "Negocio\\negocio.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-19T16:33:41.506Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\ASOSIEC_backend\\appsettings.json",
+              "RelativeDocumentMoniker": "ASOSIEC_backend\\appsettings.json",
+              "ToolTip": "C:\\Users\\Usuario\\Desktop\\Sistema de ventas online - final\\Backend\\Api_\\ASOSIEC_backend\\appsettings.json",
+              "RelativeToolTip": "ASOSIEC_backend\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADsAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-02-19T16:24:06.5Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

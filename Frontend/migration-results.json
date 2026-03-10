@@ -1,0 +1,400 @@
+{
+  "fecha": "2026-02-04T04:37:53.118Z",
+  "total": 56,
+  "exitosos": 56,
+  "errores": 0,
+  "detalle": [
+    {
+      "id": 11,
+      "nombre": "Collar filigrana con rosas y perlas",
+      "imagenOriginal": "bisuteria1.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179831/asosiec/productos/bisuteria1.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 12,
+      "nombre": "Aretes colgantes filigrana mariposa",
+      "imagenOriginal": "bisuteria2.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179831/asosiec/productos/bisuteria2.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 13,
+      "nombre": "Pulsera ancha repujada con motivos andinos",
+      "imagenOriginal": "bisuteria3.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179832/asosiec/productos/bisuteria3.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 14,
+      "nombre": "Anillo filigrana con piedra de tagua",
+      "imagenOriginal": "bisuteria4.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179833/asosiec/productos/bisuteria4.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 15,
+      "nombre": "Broche para cabello en forma de flor",
+      "imagenOriginal": "bisuteria5.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179834/asosiec/productos/bisuteria5.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 16,
+      "nombre": "Collar largo con dije de corazón",
+      "imagenOriginal": "bisuteria6.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179834/asosiec/productos/bisuteria6.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 17,
+      "nombre": "Collar largo de tagua pintada a mano",
+      "imagenOriginal": "bisuteria7.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179835/asosiec/productos/bisuteria7.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 18,
+      "nombre": "Pulsera elástica con semillas de huayruro",
+      "imagenOriginal": "bisuteria8.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179835/asosiec/productos/bisuteria8.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 19,
+      "nombre": "Aretes redondos de tagua con diseños indígenas",
+      "imagenOriginal": "bisuteria9.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179836/asosiec/productos/bisuteria9.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 20,
+      "nombre": "Llavero tagua tallada - animalitos",
+      "imagenOriginal": "bisuteria10.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179837/asosiec/productos/bisuteria10.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 21,
+      "nombre": "Pulsera macramé con cuentas de tagua",
+      "imagenOriginal": "bisuteria11.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179837/asosiec/productos/bisuteria11.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 22,
+      "nombre": "Collar de semillas y tagua trenzado",
+      "imagenOriginal": "bisuteria12.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179838/asosiec/productos/bisuteria12.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 23,
+      "nombre": "Anillo ajustable de tagua",
+      "imagenOriginal": "bisuteria13.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179839/asosiec/productos/bisuteria13.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 34,
+      "nombre": "Figura tallada de tortuga marina",
+      "imagenOriginal": "decoracion1.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179840/asosiec/productos/decoracion1.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 35,
+      "nombre": "Lámpara de mesa con base de tagua",
+      "imagenOriginal": "decoracion2.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179840/asosiec/productos/decoracion2.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 36,
+      "nombre": "Cuadro relieve en madera balsa - paisaje de playa",
+      "imagenOriginal": "decoracion3.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179841/asosiec/productos/decoracion3.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 37,
+      "nombre": "Posavasos set de 6 con motivos marinos",
+      "imagenOriginal": "decoracion4.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179842/asosiec/productos/decoracion4.png",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 38,
+      "nombre": "Adorno de pared - sol y luna tallados",
+      "imagenOriginal": "decoracion5.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179843/asosiec/productos/decoracion5.png",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 39,
+      "nombre": "Adorno de mesa - flor de cabuya",
+      "imagenOriginal": "decoracion6.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179844/asosiec/productos/decoracion6.png",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 40,
+      "nombre": "Canasta pequeña de cabuya",
+      "imagenOriginal": "decoracion7.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179844/asosiec/productos/decoracion7.png",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 41,
+      "nombre": "Canasta grande de cabuya para almacenamiento",
+      "imagenOriginal": "decoracion8.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179845/asosiec/productos/decoracion8.png",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 42,
+      "nombre": "Lámpara colgante de cabuya trenzada",
+      "imagenOriginal": "decoracion9.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179846/asosiec/productos/decoracion9.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 43,
+      "nombre": "Tapete redondo tejido de cabuya",
+      "imagenOriginal": "decoracion10.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179847/asosiec/productos/decoracion10.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 44,
+      "nombre": "Bolso shopper de cabuya y cuero",
+      "imagenOriginal": "decoracion11.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179848/asosiec/productos/decoracion11.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 45,
+      "nombre": "Adorno de pared - mandala de fibras",
+      "imagenOriginal": "decoracion12.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179848/asosiec/productos/decoracion12.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 1,
+      "nombre": "Bufanda ikat azul y rojo",
+      "imagenOriginal": "textil1.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179849/asosiec/productos/textil1.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 2,
+      "nombre": "Poncho tradicional otavaleño rojo y negro",
+      "imagenOriginal": "textil2.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179850/asosiec/productos/textil2.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 4,
+      "nombre": "Bolso mochila ikat mediano",
+      "imagenOriginal": "textil3.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179851/asosiec/productos/textil3.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 5,
+      "nombre": "Cinturón ancho tejido con grecas",
+      "imagenOriginal": "textil4.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179851/asosiec/productos/textil4.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 6,
+      "nombre": "Bufanda de lana de oveja teñida natural",
+      "imagenOriginal": "textil5.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179852/asosiec/productos/textil5.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 7,
+      "nombre": "Gorro andino con orejeras",
+      "imagenOriginal": "textil6.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179853/asosiec/productos/textil6.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 8,
+      "nombre": "Manoplas de lana con grecas",
+      "imagenOriginal": "textil7.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179854/asosiec/productos/textil7.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 9,
+      "nombre": "Chaleco corto tejido a dos agujas",
+      "imagenOriginal": "textil8.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179854/asosiec/productos/textil8.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 10,
+      "nombre": "Mantón ligero de algodón",
+      "imagenOriginal": "textil9.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179855/asosiec/productos/textil9.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 46,
+      "nombre": "Mermelada de naranjilla 250 g",
+      "imagenOriginal": "alimento1.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179856/asosiec/productos/alimento1.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 47,
+      "nombre": "Chocolate artesanal 70% cacao Arriba 80 g",
+      "imagenOriginal": "alimento2.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179856/asosiec/productos/alimento2.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 48,
+      "nombre": "Miel de abeja silvestre amazónica 300 g",
+      "imagenOriginal": "alimento3.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179857/asosiec/productos/alimento3.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 49,
+      "nombre": "Dulce de mora de monte 200 g",
+      "imagenOriginal": "alimento4.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179858/asosiec/productos/alimento4.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 50,
+      "nombre": "Panela granulada orgánica 500 g",
+      "imagenOriginal": "alimento5.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179858/asosiec/productos/alimento5.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 51,
+      "nombre": "Queso artesanal de altura 500 g",
+      "imagenOriginal": "alimento6.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179859/asosiec/productos/alimento6.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 52,
+      "nombre": "Sal de hierbas andinas 200 g",
+      "imagenOriginal": "alimento7.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179860/asosiec/productos/alimento7.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 24,
+      "nombre": "Plato decorativo vidriado con flores",
+      "imagenOriginal": "ceramica1.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179860/asosiec/productos/ceramica1.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 25,
+      "nombre": "Jarra pequeña para agua con asa",
+      "imagenOriginal": "ceramica2.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179861/asosiec/productos/ceramica2.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 26,
+      "nombre": "Taza de café con plato juego",
+      "imagenOriginal": "ceramica3.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179862/asosiec/productos/ceramica3.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 27,
+      "nombre": "Florero mediano esmaltado azul",
+      "imagenOriginal": "ceramica4.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179863/asosiec/productos/ceramica4.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 28,
+      "nombre": "Cuenco para frutas con diseño geométrico",
+      "imagenOriginal": "ceramica5.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179864/asosiec/productos/ceramica5.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 29,
+      "nombre": "Olla pequeña negra para cocinar",
+      "imagenOriginal": "ceramica6.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179864/asosiec/productos/ceramica6.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 30,
+      "nombre": "Plato hondo negro decorado",
+      "imagenOriginal": "ceramica7.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179865/asosiec/productos/ceramica7.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 31,
+      "nombre": "Taza negra con asa",
+      "imagenOriginal": "ceramica8.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179865/asosiec/productos/ceramica8.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 32,
+      "nombre": "Incensario de cerámica negra",
+      "imagenOriginal": "ceramica9.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179866/asosiec/productos/ceramica9.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 33,
+      "nombre": "Figurilla de animal - cerámica negra",
+      "imagenOriginal": "ceramica10.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179866/asosiec/productos/ceramica10.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 53,
+      "nombre": "Mermelada de mora andina 250 g",
+      "imagenOriginal": "alimento8.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179867/asosiec/productos/alimento8.jpg",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 56,
+      "nombre": "Portavelas tallado en madera con relieve natural",
+      "imagenOriginal": "oferta1.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179868/asosiec/productos/oferta1.png",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 59,
+      "nombre": "Vaso alto para bebidas con diseño grabado sutil",
+      "imagenOriginal": "oferta2.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179869/asosiec/productos/oferta2.png",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 60,
+      "nombre": "Anillo ancho de plata con incrustación de tagua",
+      "imagenOriginal": "oferta3.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179869/asosiec/productos/oferta3.png",
+      "status": "SUCCESS"
+    },
+    {
+      "id": 61,
+      "nombre": "Broche decorativo en forma de hoja estilizada",
+      "imagenOriginal": "oferta4.png",
+      "cloudinaryUrl": "https://res.cloudinary.com/asosiec/image/upload/v1770179870/asosiec/productos/oferta4.png",
+      "status": "SUCCESS"
+    }
+  ]
+}

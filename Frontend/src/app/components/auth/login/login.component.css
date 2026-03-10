@@ -1,0 +1,356 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* =============================================
+   WRAPPER — Wave paper-cut background
+   ============================================= */
+.auth-wrapper {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #282828;
+  /* padding-top = 72px navbar + 24px espacio. Así el contenido nunca queda tapado al hacer zoom */
+  padding: 96px 16px 24px;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  box-sizing: border-box;
+}
+
+/* Top wave layer — rosa claro */
+.auth-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  clip-path: ellipse(120% 62% at 50% 0%);
+  z-index: 0;
+}
+
+/* Mid wave — rosa medio, da profundidad y volumen */
+.auth-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #e0dfdf;
+  clip-path: ellipse(115% 56% at 50% 0%);
+  opacity: .45;
+  z-index: 0;
+  animation: waveDrift 9s ease-in-out infinite alternate;
+}
+
+@keyframes waveDrift {
+  from { clip-path: ellipse(115% 56% at 47% 0%); }
+  to   { clip-path: ellipse(120% 60% at 53% 0%); }
+}
+
+.bg-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.floating-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(55px);
+  opacity: .16;
+  animation: floatOrb ease-in-out infinite;
+}
+.orb-1 { width: 280px; height: 280px; top: -70px;  right: -70px; background: #f9c4d2; animation-duration: 13s; }
+.orb-2 { width: 200px; height: 200px; bottom: 8%;  left: -50px;  background: #c4c4c4; animation-duration: 17s; animation-delay: -5s; }
+.orb-3 { width: 130px; height: 130px; bottom: 22%; right: 8%;    background: #ffd0e0; animation-duration: 11s; animation-delay: -3s; }
+
+@keyframes floatOrb {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-22px); }
+}
+
+/* =============================================
+   CARD
+   ============================================= */
+.auth-card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 650px;
+  background: rgba(255,255,255,.88);
+  backdrop-filter: blur(22px) saturate(1.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  border-radius: 28px;
+  border: 1px solid rgba(255,255,255,.78);
+  box-shadow:
+    0 12px 52px rgba(123,53,88,.24),
+    0 2px 8px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.95);
+  padding: 58px 52px 46px;
+  animation: cardIn .65s cubic-bezier(.22,.68,0,1.2) both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(30px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);   }
+}
+
+/* =============================================
+   LOGO
+   ============================================= */
+.logo-wrapper {
+  position: absolute;
+  top: -52px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 156px; height: 106px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-ring {
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b6914 0%, #c9a362 100%);
+  animation: pulseRing 2.6s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes pulseRing {
+  0%,100% { transform: scale(1);    box-shadow: 0 0 0 0   rgba(230, 193, 166, 0.45); }
+  50%     { transform: scale(1.09); box-shadow: 0 0 0 14px rgba(155,63,106,0);  }
+}
+
+.logo-img {
+  position: relative; z-index: 1;
+  width: 156px; height: 106px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  background: linear-gradient(135deg, #d7d3d3 0%, #ffffff 100%);
+  box-shadow: 0 15px 35px rgba(169, 171, 157, 0.5);
+  animation: logoBreath 3.8s ease-in-out infinite;
+}
+
+@keyframes logoBreath {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.04); }
+}
+
+/* =============================================
+   TYPOGRAPHY
+   ============================================= */
+.auth-title {
+  margin: 30px 0 6px;
+  font-family: BlackOps;
+  font-size: 2.1rem;
+  font-weight: 700;
+  text-align: center;
+  background: linear-gradient(135deg, #8b6914 0%, #c9a362 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -.4px;
+  text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+.auth-subtitle {
+  margin: 0 0 30px;
+  text-align: center;
+  color: #8a7080;
+  font-size: .88rem;
+}
+
+/* =============================================
+   FORM FIELDS
+   ============================================= */
+.auth-form { display: flex; flex-direction: column; gap: 20px; }
+
+.field-group { display: flex; flex-direction: column; gap: 7px; }
+
+.field-label {
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #161616;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.label-icon {
+  display: flex;
+  align-items: center;
+  color: #1b1b1b;
+  font-size: 1rem;
+}
+.label-icon .bi      { font-size: 1rem; line-height: 1; }
+.label-icon .mat-icon { font-size: 18px; width: 18px; height: 18px; line-height: 18px; }
+
+.input-wrap { position: relative; }
+
+.field-input {
+  width: 100%;
+  padding: 13px 18px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(16, 16, 16, 0.22);
+  background: rgba(255,255,255,.65);
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  font-size: .95rem;
+  color: #2d2d2d;
+  outline: none;
+  transition: border-color .25s cubic-bezier(.4,0,.2,1),
+              box-shadow   .25s cubic-bezier(.4,0,.2,1),
+              background   .25s cubic-bezier(.4,0,.2,1);
+  box-sizing: border-box;
+}
+.field-input::placeholder { color: #c4a5b0; }
+.field-input:focus {
+  border-color: #3f9b8d;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(155,63,106,.12);
+}
+
+.input-glow {
+  display: block;
+  position: absolute;
+  bottom: 0; left: 14px; right: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg,#FAE1D6 0%, #F5C6B8 );
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform .25s cubic-bezier(.4,0,.2,1);
+  pointer-events: none;
+}
+.field-input:focus ~ .input-glow { transform: scaleX(1); }
+
+.field-error .field-input { border-color: #e05c7a; background: #fff8f9; }
+
+.field-err-msg {
+  font-size: .78rem;
+  color: #e05c7a;
+  margin: 0;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.toggle-pw {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: transparent; border: none; cursor: pointer;
+  padding: 4px; color: #8a7080;
+  display: flex; align-items: center;
+  transition: color .25s cubic-bezier(.4,0,.2,1);
+}
+.toggle-pw:hover          { color: #9b3f6a; }
+.toggle-pw .bi            { font-size: 1.1rem; }
+.toggle-pw .mat-icon      { font-size: 20px; width: 20px; height: 20px; }
+
+.field-input[type="password"],
+.field-input[type="text"]  { padding-right: 46px; }
+
+/* =============================================
+   FORGOT ROW
+   ============================================= */
+.forgot-row { display: flex; justify-content: flex-end; margin-top: -8px; }
+
+.link-btn {
+  background: none; border: none; cursor: pointer;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  font-size: .8rem;
+  color: #a07830;
+  font-weight: 500; padding: 0;
+  transition: opacity .25s cubic-bezier(.4,0,.2,1);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.link-btn:hover { opacity: .65; }
+
+/* =============================================
+   LOGIN BUTTON
+   ============================================= */
+.btn-login {
+  position: relative; overflow: hidden;
+  margin-top: 6px; padding: 15px 24px;
+  border-radius: 14px; border: none; cursor: pointer;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  font-size: 1rem; font-weight: 600; letter-spacing: .04em; color: #fbfbfb;
+  background: linear-gradient(135deg, #8b6914, #5c420a);
+  box-shadow: 0 6px 24px rgba(123,53,88,.38), 0 2px 6px rgba(123,53,88,.18);
+  transition: transform     .25s cubic-bezier(.4,0,.2,1),
+              box-shadow    .25s cubic-bezier(.4,0,.2,1),
+              opacity       .25s cubic-bezier(.4,0,.2,1);
+  width: 70%;
+}
+.btn-login:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(123,53,88,.45);
+}
+.btn-login:active:not(:disabled) { transform: translateY(0); }
+.btn-login:disabled               { opacity: .72; cursor: not-allowed; }
+
+.btn-shine {
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.25) 50%, transparent 62%);
+  transform: translateX(-100%);
+}
+.btn-login:hover .btn-shine { animation: shine .5s ease forwards; }
+@keyframes shine { to { transform: translateX(100%); } }
+
+.btn-content {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+
+.spinner {
+  display: inline-block; width: 17px; height: 17px;
+  border: 2.5px solid rgba(255,255,255,.38); border-top-color: #fff;
+  border-radius: 50%; animation: spin .65s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* =============================================
+   DIVIDER
+   ============================================= */
+.divider {
+  display: flex; align-items: center; gap: 10px;
+  margin: 22px 0 14px; color: #8a7080; font-size: .78rem;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(155,63,106,.25), transparent);
+}
+
+/* =============================================
+   REGISTER BUTTON
+   ============================================= */
+.btn-register {
+  width: 70%; padding: 13px 24px; border-radius: 14px;
+  border: 1.5px solid rgba(57, 47, 41, 0.4); background: transparent;
+  cursor: pointer; font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  font-size: .9rem;
+  font-weight: 500;
+  color: #a07830;
+  transition: background  .25s cubic-bezier(.4,0,.2,1),
+              box-shadow  .25s cubic-bezier(.4,0,.2,1),
+              transform   .25s cubic-bezier(.4,0,.2,1);
+}
+.btn-register:hover {
+  background: rgba(155,63,106,.07);
+  box-shadow: 0 4px 16px rgba(123,53,88,.12);
+  transform: translateY(-1px);
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 560px) {
+  .auth-card  { padding: 50px 24px 34px; border-radius: 22px; }
+  .auth-title { font-size: 1.8rem; }
+  /* En móvil el navbar baja a 64px */
+  .auth-wrapper { padding-top: 88px; }
+}

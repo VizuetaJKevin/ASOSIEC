@@ -1,0 +1,1159 @@
+/* ==============================================
+   ASOSIEC NAVBAR — MODERN TECH DESIGN v2
+   Compatible 100% con Angular Component Styles
+   ============================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+/* ── VARIABLES ── */
+:root {
+  --nav-h: 72px;
+  --nav-bg: #0e0e0e;
+  --radius: 12px;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* ==============================================
+   HEADER
+   ============================================== */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  background: #0e0e0e;
+  /* Eliminar cualquier borde/sombra que Angular Material pueda agregar */
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Fix Angular Material mat-toolbar si se usa como wrapper */
+::ng-deep .main-header mat-toolbar,
+::ng-deep .main-header .mat-toolbar {
+  background: #0e0e0e !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  height: var(--nav-h) !important;
+}
+
+/* Eliminar la línea blanca que algunos temas de Angular Material agregan */
+::ng-deep .mat-drawer-content,
+::ng-deep .mat-sidenav-content {
+  border-top: none !important;
+}
+
+/* Borde inferior animado usando ::after — compatible con Angular */
+.main-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(
+    90deg,
+    #3b200e 0%,
+    #3b281e 25%,
+    #7e7100 50%,
+    #1a1a1a 75%,
+    #ffc6c6 100%
+  );
+  background-size: 300% 100%;
+  animation: border-flow 5s linear infinite;
+}
+
+@keyframes border-flow {
+  0%   { background-position: 0% center; }
+  100% { background-position: -300% center; }
+}
+
+.navbar {
+  width: 100%;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* ==============================================
+   FIX LAYOUT — no colapsa al alejar la cámara
+   ============================================== */
+.navbar-content {
+  width: 100%;
+  min-width: 0;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* ==============================================
+   LOGO
+   ============================================== */
+.logo-link {
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.logo-link:hover {
+  transform: translateY(-2px);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              filter 0.3s ease;
+}
+
+.logo-link:hover .logo-img {
+  transform: rotate(-8deg) scale(1.1);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logo-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  background: linear-gradient(90deg, #fff 0%, #fff 30%, #c7d2fe 50%, #fff 70%, #fff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logo-link:hover .logo-title {
+  animation: shimmer-logo 0.8s ease forwards;
+}
+
+@keyframes shimmer-logo {
+  0%   { background-position: 100% center; }
+  100% { background-position: -100% center; }
+}
+
+.logo-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.527);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+/* ==============================================
+   NAV MENU — centro, no encoge
+   ============================================== */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex: 0 1 auto;
+  justify-content: center;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px; /* pill shape — más moderno y suave */
+  color: rgba(255, 255, 255, 0.7); /* más visible */
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: color 0.25s ease, background 0.25s ease;
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+  line-height: 1;
+}
+
+/* Sweep background */
+.nav-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item:hover::before,
+.nav-item.active::before {
+  transform: scaleX(1);
+}
+
+/* Underline indicator */
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 50%;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  border-radius: 2px;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-item:hover::after,
+.nav-item.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.nav-item mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px; /* Fix alineación vertical */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.6); /* más visible */
+  transition: color 0.25s ease,
+              transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+}
+
+.nav-item:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.nav-item:hover mat-icon {
+  color: rgba(255, 255, 255, 0.95);
+  transform: scale(1.15) rotate(-5deg);
+}
+
+.nav-item.active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+
+.nav-item.active mat-icon {
+  color: #ffffff;
+}
+
+/* ==============================================
+   NAV ACTIONS — derecha, no encoge
+   ============================================== */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+/* ==============================================
+   CART BUTTON
+   ============================================== */
+.icon-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.icon-btn mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.11);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.icon-btn:hover mat-icon {
+  transform: scale(1.15) rotate(-8deg);
+}
+
+.cart-btn { position: relative; }
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0 0.3rem;
+  border-radius: 8px;
+  min-width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.55);
+  font-family: var(--font-body);
+}
+
+/* ==============================================
+   USER MENU BUTTONS — base
+   ============================================== */
+.user-menu-btn {
+  display: flex !important;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: var(--radius) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  transition: all 0.25s ease !important;
+  border: none !important;
+}
+
+.user-menu-btn .arrow {
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.user-menu-btn:hover .arrow {
+  transform: rotate(180deg) !important;
+}
+
+/* ==============================================
+   ADMIN BUTTON
+   ============================================== */
+.admin-btn {
+  position: relative !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  height: 50px !important;
+  border-radius: 10px !important;
+  overflow: visible !important;
+  min-width: unset !important;
+}
+
+.admin-btn-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px 0 10px;
+  border-radius: 10px;
+  background: #100505;
+  height: 50px;
+  box-sizing: border-box;
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  overflow: hidden;
+  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-btn:hover .admin-btn-inner {
+  background: #1a0707;
+  border-color: rgba(220, 38, 38, 0.7);
+  box-shadow: 0 0 24px rgba(220, 38, 38, 0.12);
+}
+
+.admin-scan-line {
+  position: absolute;
+  left: 0; width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.9), transparent);
+  top: -2px;
+  animation: admin-scan 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes admin-scan {
+  0%   { top: -2px; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: calc(100% + 2px); opacity: 0; }
+}
+
+.admin-btn-inner::before,
+.admin-btn-inner::after {
+  content: '';
+  position: absolute;
+  width: 10px; height: 10px;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.admin-btn-inner::before {
+  top: 4px; left: 4px;
+  border-top: 1.5px solid rgba(220, 38, 38, 0.5);
+  border-left: 1.5px solid rgba(220, 38, 38, 0.5);
+}
+
+.admin-btn-inner::after {
+  bottom: 4px; right: 4px;
+  border-bottom: 1.5px solid rgba(220, 38, 38, 0.5);
+  border-right: 1.5px solid rgba(220, 38, 38, 0.5);
+}
+
+.admin-btn:hover .admin-btn-inner::before {
+  border-color: rgba(220, 38, 38, 1); width: 14px; height: 14px;
+}
+.admin-btn:hover .admin-btn-inner::after {
+  border-color: rgba(220, 38, 38, 1); width: 14px; height: 14px;
+}
+
+.admin-icon-wrap {
+  width: 30px; height: 30px;
+  border-radius: 7px;
+  background: rgba(220, 38, 38, 0.15);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-btn:hover .admin-icon-wrap {
+  background: rgba(220, 38, 38, 0.25);
+  box-shadow: 0 0 12px rgba(220, 38, 38, 0.5);
+}
+
+.admin-icon-wrap mat-icon {
+  font-size: 17px; width: 17px; height: 17px; color: #ef4444;
+}
+
+.admin-text-wrap { display: flex; flex-direction: column; gap: 1px; z-index: 1; }
+
+.admin-label {
+  font-size: 0.7rem; font-weight: 800; color: #ef4444;
+  letter-spacing: 1.5px; font-family: var(--font-body); line-height: 1;
+}
+
+.admin-sublabel {
+  font-size: 0.64rem; color: rgba(255, 255, 255, 0.28);
+  letter-spacing: 0.3px; font-family: var(--font-body); line-height: 1;
+}
+
+.admin-btn .arrow {
+  font-size: 15px !important; width: 15px !important; height: 15px !important;
+  color: rgba(220, 38, 38, 0.5) !important;
+  transition: transform 0.3s ease, color 0.2s ease !important; z-index: 1;
+}
+
+.admin-btn:hover .arrow {
+  transform: rotate(180deg) !important; color: #ef4444 !important;
+}
+
+/* ==============================================
+   ADMIN MENU
+   ============================================== */
+::ng-deep .admin-menu.mat-mdc-menu-panel {
+  border-radius: 16px !important;
+  margin-top: 8px;
+  background: #130606 !important;
+  border: 1px solid rgba(220, 38, 38, 0.25) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  min-width: 260px !important; padding: 8px !important;
+}
+
+::ng-deep .admin-menu .mat-mdc-menu-content { padding: 0 !important; }
+
+.admin-menu-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  font-size: 0.68rem; font-weight: 800;
+  color: #ef4444; text-transform: uppercase; letter-spacing: 1.5px;
+  border-bottom: 1px solid rgba(220, 38, 38, 0.15); margin-bottom: 4px;
+}
+
+.admin-menu-header mat-icon { font-size: 15px; width: 15px; height: 15px; color: #ef4444; }
+
+::ng-deep .admin-menu .mat-mdc-menu-item {
+  border-radius: 10px !important; margin: 2px 0 !important;
+  padding: 10px 14px !important; font-family: var(--font-body) !important;
+  font-size: 0.875rem !important; font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  transition: all 0.2s ease !important; min-height: 42px !important; height: auto !important;
+}
+
+::ng-deep .admin-menu .mat-mdc-menu-item:hover {
+  background: rgba(220, 38, 38, 0.1) !important; color: #ffffff !important;
+}
+
+::ng-deep .admin-menu .mat-mdc-menu-item mat-icon {
+  color: rgba(255, 255, 255, 0.35) !important;
+  font-size: 19px; width: 19px; height: 19px;
+  margin: 0 10px 0 0 !important;
+  flex-shrink: 0;
+  transition: color 0.2s ease !important;
+}
+
+/* Selector MDC interno — es el que realmente controla el layout */
+::ng-deep .admin-menu .mat-mdc-menu-item .mdc-list-item__primary-text {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+::ng-deep .admin-menu .mat-mdc-menu-item .mat-icon {
+  margin-right: 10px !important;
+}
+
+::ng-deep .admin-menu .mat-mdc-menu-item:hover mat-icon { color: rgba(255, 255, 255, 0.9) !important; }
+
+::ng-deep .admin-menu .mat-mdc-menu-item.menu-item-red { color: rgba(239, 68, 68, 0.8) !important; }
+::ng-deep .admin-menu .mat-mdc-menu-item.menu-item-red:hover {
+  background: rgba(239, 68, 68, 0.12) !important; color: #ef4444 !important;
+}
+::ng-deep .admin-menu .mat-mdc-menu-item.menu-item-red mat-icon { color: rgba(239, 68, 68, 0.55) !important; }
+::ng-deep .admin-menu .mat-mdc-menu-item.menu-item-red:hover mat-icon { color: #ef4444 !important; }
+
+::ng-deep .admin-menu .mat-mdc-menu-item.logout-item { color: rgba(255, 100, 100, 0.8) !important; }
+::ng-deep .admin-menu .mat-mdc-menu-item.logout-item:hover {
+  background: rgba(255, 80, 80, 0.1) !important; color: #ff6464 !important;
+}
+::ng-deep .admin-menu .mat-mdc-menu-item.logout-item mat-icon { color: rgba(255, 100, 100, 0.55) !important; }
+::ng-deep .admin-menu .mat-mdc-menu-item.logout-item:hover mat-icon { color: #ff6464 !important; }
+
+::ng-deep .admin-menu .mat-divider {
+  border-top-color: rgba(220, 38, 38, 0.12) !important; margin: 4px 0 !important;
+}
+
+/* ==============================================
+   VENDEDOR BUTTON
+   ============================================== */
+.vendedor-btn {
+  position: relative !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  height: 50px !important;
+  border-radius: 10px !important;
+  overflow: visible !important;
+  min-width: unset !important;
+}
+
+.vendedor-btn-inner {
+  position: relative;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 14px 0 10px;
+  border-radius: 10px;
+  background: #030f06;
+  height: 50px;
+  box-sizing: border-box;
+  border: 1px solid rgba(22, 163, 74, 0.35);
+  overflow: hidden;
+  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vendedor-btn:hover .vendedor-btn-inner {
+  background: #061208;
+  border-color: rgba(22, 163, 74, 0.7);
+  box-shadow: 0 0 24px rgba(22, 163, 74, 0.12);
+}
+
+.vendedor-pulse-ring {
+  position: absolute; right: -8px; top: -8px;
+  width: 16px; height: 16px; pointer-events: none; z-index: 2;
+}
+
+.vendedor-pulse-ring::before,
+.vendedor-pulse-ring::after {
+  content: ''; position: absolute; inset: 0; border-radius: 50%; background: #22c55e;
+}
+
+.vendedor-pulse-ring::before {
+  width: 8px; height: 8px; top: 4px; left: 4px; box-shadow: 0 0 4px #22c55e;
+}
+
+.vendedor-pulse-ring::after {
+  background: transparent;
+  border: 2px solid rgba(34, 197, 94, 0.5);
+  animation: vendedor-pulse 2s ease-out infinite;
+}
+
+@keyframes vendedor-pulse {
+  0%   { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+.vendedor-btn-inner::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+  background: repeating-linear-gradient(
+    90deg, rgba(22, 163, 74, 0.07) 0px, rgba(22, 163, 74, 0.07) 4px, transparent 4px, transparent 10px
+  );
+  pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
+}
+
+.vendedor-btn:hover .vendedor-btn-inner::before { opacity: 1; }
+
+.vendedor-icon-wrap {
+  width: 30px; height: 30px; border-radius: 7px;
+  background: rgba(22, 163, 74, 0.15);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(22, 163, 74, 0.3);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vendedor-btn:hover .vendedor-icon-wrap {
+  background: rgba(22, 163, 74, 0.25);
+  box-shadow: 0 0 12px rgba(22, 163, 74, 0.5);
+}
+
+.vendedor-icon-wrap mat-icon { font-size: 17px; width: 17px; height: 17px; color: #22c55e; }
+
+.vendedor-text-wrap { display: flex; flex-direction: column; gap: 1px; z-index: 1; }
+
+.vendedor-label {
+  font-size: 0.7rem; font-weight: 800; color: #22c55e;
+  letter-spacing: 1.5px; font-family: var(--font-body); line-height: 1;
+}
+
+.vendedor-sublabel {
+  font-size: 0.64rem; color: rgba(255, 255, 255, 0.28);
+  letter-spacing: 0.3px; font-family: var(--font-body); line-height: 1;
+}
+
+.vendedor-btn .arrow {
+  font-size: 15px !important; width: 15px !important; height: 15px !important;
+  color: rgba(22, 163, 74, 0.5) !important;
+  transition: transform 0.3s ease, color 0.2s ease !important; z-index: 1;
+}
+
+.vendedor-btn:hover .arrow { transform: rotate(180deg) !important; color: #22c55e !important; }
+
+/* ==============================================
+   VENDEDOR MENU
+   ============================================== */
+::ng-deep .vendedor-menu.mat-mdc-menu-panel {
+  border-radius: 16px !important;
+  margin-top: 8px;
+  background: #051208 !important;
+  border: 1px solid rgba(22, 163, 74, 0.25) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  min-width: 240px !important; padding: 8px !important;
+}
+
+::ng-deep .vendedor-menu .mat-mdc-menu-content { padding: 0 !important; }
+
+.vendedor-menu-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  font-size: 0.68rem; font-weight: 800;
+  color: #22c55e; text-transform: uppercase; letter-spacing: 1.5px;
+  border-bottom: 1px solid rgba(22, 163, 74, 0.15); margin-bottom: 4px;
+}
+
+.vendedor-menu-header mat-icon { font-size: 15px; width: 15px; height: 15px; color: #22c55e; }
+
+::ng-deep .vendedor-menu .mat-mdc-menu-item {
+  border-radius: 10px !important; margin: 2px 0 !important;
+  padding: 10px 14px !important; font-family: var(--font-body) !important;
+  font-size: 0.875rem !important; font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  transition: all 0.2s ease !important; min-height: 42px !important; height: auto !important;
+}
+
+::ng-deep .vendedor-menu .mat-mdc-menu-item:hover {
+  background: rgba(22, 163, 74, 0.1) !important; color: #ffffff !important;
+}
+
+::ng-deep .vendedor-menu .mat-mdc-menu-item mat-icon {
+  color: rgba(255, 255, 255, 0.35) !important;
+  font-size: 19px; width: 19px; height: 19px;
+  margin: 0 10px 0 0 !important;
+  flex-shrink: 0;
+  transition: color 0.2s ease !important;
+}
+
+::ng-deep .vendedor-menu .mat-mdc-menu-item .mdc-list-item__primary-text {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+::ng-deep .vendedor-menu .mat-mdc-menu-item .mat-icon {
+  margin-right: 10px !important;
+}
+
+::ng-deep .vendedor-menu .mat-mdc-menu-item:hover mat-icon { color: rgba(255, 255, 255, 0.9) !important; }
+
+::ng-deep .vendedor-menu .mat-mdc-menu-item.logout-item { color: rgba(255, 100, 100, 0.8) !important; }
+::ng-deep .vendedor-menu .mat-mdc-menu-item.logout-item:hover {
+  background: rgba(255, 80, 80, 0.1) !important; color: #ff6464 !important;
+}
+::ng-deep .vendedor-menu .mat-mdc-menu-item.logout-item mat-icon { color: rgba(255, 100, 100, 0.55) !important; }
+::ng-deep .vendedor-menu .mat-mdc-menu-item.logout-item:hover mat-icon { color: #ff6464 !important; }
+
+::ng-deep .vendedor-menu .mat-divider {
+  border-top-color: rgba(22, 163, 74, 0.12) !important; margin: 4px 0 !important;
+}
+
+/* ==============================================
+   CLIENTE BUTTON
+   ============================================== */
+.cliente-btn {
+  position: relative !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  height: 50px !important;
+  border-radius: 25px !important;
+  overflow: visible !important;
+  min-width: unset !important;
+}
+
+.cliente-btn-inner {
+  position: relative;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 16px 0 10px;
+  border-radius: 25px;
+  background: #141414;
+  height: 50px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: border-color 0.4s ease, background 0.4s ease;
+  isolation: isolate;
+}
+
+.cliente-btn:hover .cliente-btn-inner {
+  background: #1c1c1c;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.orbit-ring {
+  position: absolute; border-radius: 50%;
+  border: 1px solid transparent; pointer-events: none;
+  opacity: 0; transition: opacity 0.4s ease;
+  left: 27px; top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cliente-btn:hover .orbit-ring { opacity: 1; }
+
+.orbit-ring-1 {
+  width: 52px; height: 52px;
+  border-color: rgba(99, 179, 237, 0.3);
+  animation: orbit-spin 2s linear infinite;
+}
+
+.orbit-ring-2 {
+  width: 68px; height: 68px;
+  border-color: rgba(255, 255, 255, 0.1);
+  animation: orbit-spin-reverse 3.5s linear infinite;
+}
+
+.orbit-ring-3 {
+  width: 84px; height: 84px;
+  border-color: rgba(99, 179, 237, 0.08);
+  animation: orbit-spin 6s linear infinite;
+}
+
+.orbit-dot {
+  position: absolute; width: 5px; height: 5px; border-radius: 50%;
+  background: #63b3ed; top: -2.5px; left: 50%; transform: translateX(-50%);
+  box-shadow: 0 0 6px 2px rgba(99, 179, 237, 0.7);
+}
+
+.orbit-ring-2 .orbit-dot {
+  width: 3px; height: 3px; top: -1.5px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.4);
+}
+
+.orbit-ring-3 .orbit-dot { width: 4px; height: 4px; top: -2px; }
+
+@keyframes orbit-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes orbit-spin-reverse {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+
+.cliente-avatar-pill {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #60a5fa);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 13px; font-weight: 800; color: #fff;
+  font-family: var(--font-body); z-index: 1;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+}
+
+.cliente-btn:hover .cliente-avatar-pill {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25), 0 4px 16px rgba(37, 99, 235, 0.5);
+}
+
+.user-name {
+  font-weight: 600; font-size: 0.875rem; max-width: 100px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: rgba(255, 255, 255, 0.75); font-family: var(--font-body);
+  z-index: 1; transition: color 0.2s ease;
+}
+
+.cliente-btn:hover .user-name { color: #ffffff; }
+
+.cliente-btn .arrow {
+  font-size: 17px !important; width: 17px !important; height: 17px !important;
+  color: rgba(255, 255, 255, 0.28) !important;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease !important; z-index: 1;
+}
+
+.cliente-btn:hover .arrow {
+  transform: rotate(180deg) !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* ==============================================
+   CLIENTE MENU
+   ============================================== */
+::ng-deep .cliente-menu.mat-mdc-menu-panel {
+  border-radius: 20px !important;
+  margin-top: 8px;
+  background: #161616 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5),
+              inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  min-width: 260px !important; padding: 8px !important; overflow: hidden !important;
+}
+
+::ng-deep .cliente-menu .mat-mdc-menu-content { padding: 0 !important; }
+
+.menu-user-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 14px; margin-bottom: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.avatar-large {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #60a5fa);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 800; color: #fff;
+  font-family: var(--font-body); flex-shrink: 0; letter-spacing: -0.5px;
+  box-shadow: 0 2px 12px rgba(37, 99, 235, 0.35);
+}
+
+.user-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+
+.user-info .name {
+  font-size: 0.9rem; font-weight: 700; color: #ffffff;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-family: var(--font-body);
+}
+
+.user-info .email {
+  font-size: 0.75rem; color: rgba(255, 255, 255, 0.38);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-family: var(--font-body);
+}
+
+::ng-deep .cliente-menu .mat-mdc-menu-item {
+  border-radius: 12px !important; margin: 2px 0 !important;
+  padding: 10px 14px !important; font-family: var(--font-body) !important;
+  font-size: 0.875rem !important; font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  transition: all 0.2s ease !important; min-height: 44px !important; height: auto !important;
+}
+
+::ng-deep .cliente-menu .mat-mdc-menu-item:hover {
+  background: rgba(255, 255, 255, 0.09) !important; color: #ffffff !important;
+}
+
+::ng-deep .cliente-menu .mat-mdc-menu-item mat-icon {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-size: 20px; width: 20px; height: 20px;
+  margin: 0 10px 0 0 !important;
+  flex-shrink: 0;
+  transition: color 0.2s ease !important;
+}
+
+::ng-deep .cliente-menu .mat-mdc-menu-item .mdc-list-item__primary-text {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+::ng-deep .cliente-menu .mat-mdc-menu-item .mat-icon {
+  margin-right: 10px !important;
+}
+
+::ng-deep .cliente-menu .mat-mdc-menu-item:hover mat-icon { color: rgba(255, 255, 255, 0.9) !important; }
+
+::ng-deep .cliente-menu .mat-mdc-menu-item.logout-item { color: rgba(255, 100, 100, 0.8) !important; }
+::ng-deep .cliente-menu .mat-mdc-menu-item.logout-item:hover {
+  background: rgba(255, 80, 80, 0.1) !important; color: #ff6464 !important;
+}
+::ng-deep .cliente-menu .mat-mdc-menu-item.logout-item mat-icon { color: rgba(255, 100, 100, 0.55) !important; }
+::ng-deep .cliente-menu .mat-mdc-menu-item.logout-item:hover mat-icon { color: #ff6464 !important; }
+
+::ng-deep .cliente-menu .mat-divider {
+  border-top-color: rgba(255, 255, 255, 0.08) !important; margin: 6px 0 !important;
+}
+
+/* ==============================================
+   LOGIN BUTTON
+   ============================================== */
+.login-btn {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.55rem 1.2rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-family: var(--font-body); font-size: 0.875rem; font-weight: 600;
+  transition: all 0.25s ease; white-space: nowrap;
+  position: relative; overflow: hidden;
+}
+
+.login-btn::before {
+  content: '';
+  position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.45s ease;
+}
+
+.login-btn:hover::before { left: 100%; }
+
+.login-btn mat-icon { font-size: 19px; width: 19px; height: 19px; }
+
+.login-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ==============================================
+   MOBILE MENU BUTTON
+   ============================================== */
+.mobile-menu-btn {
+  display: none !important;
+  width: 40px !important; height: 40px !important;
+  border-radius: 10px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+}
+
+.mobile-menu-btn mat-icon { color: rgba(255, 255, 255, 0.7); }
+.mobile-menu-btn:hover { background: rgba(255, 255, 255, 0.12) !important; }
+
+/* ==============================================
+   CUSTOM MENU BASE
+   ============================================== */
+::ng-deep .custom-menu {
+  border-radius: 14px !important;
+  background: #161616 !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding: 0.5rem !important; min-width: 200px !important;
+}
+
+::ng-deep .custom-menu .mat-mdc-menu-content { padding: 0 !important; }
+
+::ng-deep .custom-menu .mat-mdc-menu-item {
+  border-radius: 8px !important; margin: 0.125rem 0 !important;
+  padding: 0.75rem 1rem !important; font-family: var(--font-body) !important;
+  font-size: 0.875rem !important; font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  transition: all 0.15s ease !important; min-height: 42px !important;
+}
+
+::ng-deep .custom-menu .mat-mdc-menu-item:hover {
+  background: rgba(255, 255, 255, 0.08) !important; color: #ffffff !important;
+}
+
+::ng-deep .custom-menu .mat-mdc-menu-item mat-icon {
+  color: rgba(255, 255, 255, 0.38) !important;
+  font-size: 20px; width: 20px; height: 20px;
+  margin: 0 10px 0 0 !important;
+  flex-shrink: 0;
+}
+
+::ng-deep .custom-menu .mat-mdc-menu-item .mdc-list-item__primary-text {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+::ng-deep .custom-menu .mat-mdc-menu-item .mat-icon {
+  margin-right: 10px !important;
+}
+
+::ng-deep .custom-menu .mat-mdc-menu-item:hover mat-icon { color: rgba(255, 255, 255, 0.9) !important; }
+
+::ng-deep .custom-menu .mat-divider {
+  border-top-color: rgba(255, 255, 255, 0.07) !important; margin: 0.5rem 0 !important;
+}
+
+/* ==============================================
+   ITEMS ESPECIALES
+   ============================================== */
+::ng-deep .custom-menu .mat-mdc-menu-item.menu-item-red { color: rgba(239, 68, 68, 0.85) !important; }
+::ng-deep .custom-menu .mat-mdc-menu-item.menu-item-red mat-icon { color: rgba(239, 68, 68, 0.55) !important; }
+::ng-deep .custom-menu .mat-mdc-menu-item.menu-item-red:hover {
+  background: rgba(220, 38, 38, 0.1) !important; color: #ef4444 !important;
+}
+::ng-deep .custom-menu .mat-mdc-menu-item.menu-item-red:hover mat-icon { color: #ef4444 !important; }
+
+::ng-deep .custom-menu .mat-mdc-menu-item.menu-item-comprobantes {
+  position: relative; padding-right: 3.5rem !important;
+}
+
+.comprobantes-badge {
+  position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+  background: #ef4444; color: #ffffff;
+  font-size: 0.6875rem; font-weight: 700;
+  padding: 0.25rem 0.5rem; border-radius: 12px;
+  min-width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+  font-family: var(--font-body);
+}
+
+::ng-deep .custom-menu .mat-mdc-menu-item.menu-item-comprobantes:hover .comprobantes-badge {
+  background: #dc2626;
+}
+
+/* ==============================================
+   RESPONSIVE
+   ============================================== */
+@media (max-width: 1200px) {
+  .navbar-content { padding: 0 1.5rem; }
+  .nav-item { padding: 0.5rem 0.75rem; font-size: 0.8125rem; }
+}
+
+@media (max-width: 992px) {
+  .nav-menu { display: none; }
+  .mobile-menu-btn { display: flex !important; }
+  .logo-subtitle { display: none; }
+}
+
+@media (max-width: 768px) {
+  :root { --nav-h: 64px; }
+  .navbar-content { padding: 0 1rem; gap: 0.75rem; }
+  .logo-img { width: 38px; height: 38px; }
+  .logo-title { font-size: 1.15rem; }
+
+  .admin-btn, .vendedor-btn { height: 42px !important; }
+  .admin-btn-inner, .vendedor-btn-inner { padding: 0 10px !important; height: 42px !important; }
+  .admin-text-wrap, .vendedor-text-wrap { display: none; }
+  .admin-btn .arrow, .vendedor-btn .arrow { display: none !important; }
+  .vendedor-pulse-ring { display: none; }
+
+  .cliente-btn { height: 42px !important; }
+  .cliente-btn-inner { padding: 0 10px !important; height: 42px !important; }
+  .user-name { display: none; }
+  .cliente-btn .arrow { display: none !important; }
+  .orbit-ring { display: none; }
+
+  .login-btn span { display: none; }
+  .login-btn { padding: 0.625rem; width: 40px; height: 40px; justify-content: center; }
+}
+
+@media (max-width: 480px) {
+  .navbar-content { padding: 0 0.75rem; gap: 0.5rem; }
+  .nav-actions { gap: 0.4rem; }
+}
+
+/* ==============================================
+   ACCESIBILIDAD
+   ============================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+html { scroll-behavior: smooth; }
+
+
+
+/* Si el router-outlet está justo debajo del navbar */
+:host ::ng-deep router-outlet + * {
+  border-top: none !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Override directo del header */
+header.main-header {
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+
+/* Apunta a cualquier elemento hermano directo después del header */
+::ng-deep .main-header ~ * {
+  border-top: none !important;
+}
+
+/* El mat-sidenav-container o app-root que envuelve el contenido */
+::ng-deep mat-sidenav-container,
+::ng-deep .mat-sidenav-container {
+  border-top: none !important;
+  margin-top: 0 !important;
+}
+
+/* Algunos temas MDC aplican una sombra/borde al .mat-drawer-content */
+::ng-deep .mat-drawer-content,
+::ng-deep .mat-sidenav-content,
+::ng-deep .mdc-drawer-app-content {
+  border-top: none !important;
+  box-shadow: none !important;
+}

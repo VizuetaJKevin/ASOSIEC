@@ -1,0 +1,385 @@
+<div class="estados-wrapper">
+
+  <!-- Header con degradado -->
+  <div class="estados-header">
+    <div class="header-content">
+      <div class="header-icon-wrapper">
+        <mat-icon class="header-icon">toggle_on</mat-icon>
+      </div>
+      <div class="header-text">
+        <h1 class="header-title">Configuración de Estados</h1>
+        <p class="header-subtitle">Gestiona los estados del sistema para items, órdenes, productos y usuarios</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="estados-container">
+
+    <!-- Tabs Container -->
+    <div class="tabs-wrapper">
+      <mat-tab-group class="modern-tabs" animationDuration="300ms">
+
+        <!-- TAB 1: ESTADOS DE ITEM -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>shopping_cart</mat-icon>
+              <span>Items</span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+            <!-- Botón Agregar Flotante -->
+            <button class="btn-add-floating" (click)="abrirModalAgregar('item')">
+              <mat-icon>add</mat-icon>
+              Nuevo Estado
+            </button>
+
+            <div class="estados-grid">
+              <div class="estado-card" *ngFor="let estado of listaEstadosItem; let i = index">
+                <div class="card-badge">#{{i + 1}}</div>
+                <div class="card-header">
+                  <div class="code-tag">{{estado.codigo}}</div>
+                  <div class="status-indicator" [class.active]="estado.activo">
+                    <mat-icon>{{estado.activo ? 'check_circle' : 'cancel'}}</mat-icon>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <p class="card-description">{{estado.descripcion}}</p>
+                </div>
+                <div class="card-actions">
+                  <button class="action-btn edit-btn" (click)="editarEstado(estado, 'item')">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button class="action-btn delete-btn" (click)="eliminarEstado(estado.id, 'item')">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- TAB 2: ESTADOS DE ORDEN -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>receipt_long</mat-icon>
+              <span>Órdenes</span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+            <!-- Botón Agregar Flotante -->
+            <button class="btn-add-floating" (click)="abrirModalAgregar('orden')">
+              <mat-icon>add</mat-icon>
+              Nuevo Estado
+            </button>
+
+            <div class="estados-grid">
+              <div class="estado-card orden-card" *ngFor="let estado of listaEstadosOrden; let i = index">
+                <div class="card-badge">#{{i + 1}}</div>
+                <div class="card-header">
+                  <div class="code-tag">{{estado.codigo}}</div>
+                  <div class="status-indicator" [class.active]="estado.activo">
+                    <mat-icon>{{estado.activo ? 'check_circle' : 'cancel'}}</mat-icon>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <p class="card-description">{{estado.descripcion}}</p>
+                  <div class="order-flow" *ngIf="estado.orden_flujo">
+                    <mat-icon>sort</mat-icon>
+                    <span>Flujo: {{estado.orden_flujo}}</span>
+                  </div>
+                </div>
+                <div class="card-actions">
+                  <button class="action-btn edit-btn" (click)="editarEstado(estado, 'orden')">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button class="action-btn delete-btn" (click)="eliminarEstado(estado.id, 'orden')">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- TAB 3: ESTADOS DE PRODUCTO -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>inventory</mat-icon>
+              <span>Productos</span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+            <!-- Botón Agregar Flotante -->
+            <button class="btn-add-floating" (click)="abrirModalAgregar('producto')">
+              <mat-icon>add</mat-icon>
+              Nuevo Estado
+            </button>
+
+            <div class="estados-grid">
+              <div class="estado-card" *ngFor="let estado of listaEstadosProducto; let i = index">
+                <div class="card-badge">#{{i + 1}}</div>
+                <div class="card-header">
+                  <div class="code-tag">{{estado.codigo}}</div>
+                  <div class="status-indicator" [class.active]="estado.activo">
+                    <mat-icon>{{estado.activo ? 'check_circle' : 'cancel'}}</mat-icon>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <p class="card-description">{{estado.descripcion}}</p>
+                </div>
+                <div class="card-actions">
+                  <button class="action-btn edit-btn" (click)="editarEstado(estado, 'producto')">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button class="action-btn delete-btn" (click)="eliminarEstado(estado.id, 'producto')">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- TAB 4: ESTADOS DE USUARIO -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>people</mat-icon>
+              <span>Usuarios</span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+            <!-- Botón Agregar Flotante -->
+            <button class="btn-add-floating" (click)="abrirModalAgregar('usuario')">
+              <mat-icon>add</mat-icon>
+              Nuevo Estado
+            </button>
+
+            <div class="estados-grid">
+              <div class="estado-card" *ngFor="let estado of listaEstadosUsuario; let i = index">
+                <div class="card-badge">#{{i + 1}}</div>
+                <div class="card-header">
+                  <div class="code-tag">{{estado.codigo}}</div>
+                  <div class="status-indicator" [class.active]="estado.activo">
+                    <mat-icon>{{estado.activo ? 'check_circle' : 'cancel'}}</mat-icon>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <p class="card-description">{{estado.descripcion}}</p>
+                </div>
+                <div class="card-actions">
+                  <button class="action-btn edit-btn" (click)="editarEstado(estado, 'usuario')">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button class="action-btn delete-btn" (click)="eliminarEstado(estado.id, 'usuario')">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL AGREGAR -->
+<div class="modal-overlay" *ngIf="mostrarModalAgregar" (click)="cerrarModalAgregar()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon">add_circle</mat-icon>
+        {{tituloModal}}
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModalAgregar()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-content">
+      <!-- Formulario Item -->
+      <form [formGroup]="formularioItem" *ngIf="tipoModalAgregar === 'item'">
+        <div class="form-grid-modal">
+          <div class="form-group">
+            <label class="form-label"><mat-icon class="label-icon">code</mat-icon> Código</label>
+            <input type="text" class="form-control custom-input" formControlName="codigo" placeholder="EN_CARRITO" maxlength="30">
+            <div *ngIf="validoItem('codigo')" class="text-danger">Campo requerido (máx. 30 caracteres)</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><mat-icon class="label-icon">toggle_on</mat-icon> Estado Activo</label>
+            <mat-slide-toggle formControlName="activo" color="primary">
+              {{formularioItem.get('activo')?.value ? 'Activo' : 'Inactivo'}}
+            </mat-slide-toggle>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label"><mat-icon class="label-icon">description</mat-icon> Descripción</label>
+            <input type="text" class="form-control custom-input" formControlName="descripcion" placeholder="Items en el carrito" maxlength="100">
+            <div *ngIf="validoItem('descripcion')" class="text-danger">Campo requerido (máx. 100 caracteres)</div>
+          </div>
+        </div>
+      </form>
+
+      <!-- Formulario Orden -->
+      <form [formGroup]="formularioOrden" *ngIf="tipoModalAgregar === 'orden'">
+        <div class="form-grid-modal">
+          <div class="form-group">
+            <label class="form-label"><mat-icon class="label-icon">code</mat-icon> Código</label>
+            <input type="text" class="form-control custom-input" formControlName="codigo" placeholder="PENDIENTE" maxlength="30">
+            <div *ngIf="validoOrden('codigo')" class="text-danger">Campo requerido (máx. 30 caracteres)</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><mat-icon class="label-icon">toggle_on</mat-icon> Estado Activo</label>
+            <mat-slide-toggle formControlName="activo" color="primary">
+              {{formularioOrden.get('activo')?.value ? 'Activo' : 'Inactivo'}}
+            </mat-slide-toggle>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label"><mat-icon class="label-icon">description</mat-icon> Descripción</label>
+            <input type="text" class="form-control custom-input" formControlName="descripcion" placeholder="Orden pendiente de procesamiento" maxlength="100">
+            <div *ngIf="validoOrden('descripcion')" class="text-danger">Campo requerido (máx. 100 caracteres)</div>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label"><mat-icon class="label-icon">sort</mat-icon> Orden en el Flujo</label>
+            <input type="number" class="form-control custom-input" formControlName="orden_flujo" placeholder="1, 2, 3..." min="0">
+            <small class="text-muted">Define el orden de este estado en el flujo de órdenes</small>
+          </div>
+        </div>
+      </form>
+
+      <!-- Formulario Producto -->
+      <form [formGroup]="formularioProducto" *ngIf="tipoModalAgregar === 'producto'">
+        <div class="form-grid-modal">
+          <div class="form-group">
+            <label class="form-label"><mat-icon class="label-icon">code</mat-icon> Código</label>
+            <input type="text" class="form-control custom-input" formControlName="codigo" placeholder="DISPONIBLE" maxlength="30">
+            <div *ngIf="validoProducto('codigo')" class="text-danger">Campo requerido (máx. 30 caracteres)</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><mat-icon class="label-icon">toggle_on</mat-icon> Estado Activo</label>
+            <mat-slide-toggle formControlName="activo" color="primary">
+              {{formularioProducto.get('activo')?.value ? 'Activo' : 'Inactivo'}}
+            </mat-slide-toggle>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label"><mat-icon class="label-icon">description</mat-icon> Descripción</label>
+            <input type="text" class="form-control custom-input" formControlName="descripcion" placeholder="Producto disponible para venta" maxlength="100">
+            <div *ngIf="validoProducto('descripcion')" class="text-danger">Campo requerido (máx. 100 caracteres)</div>
+          </div>
+        </div>
+      </form>
+
+      <!-- Formulario Usuario -->
+      <form [formGroup]="formularioUsuario" *ngIf="tipoModalAgregar === 'usuario'">
+        <div class="form-grid-modal">
+          <div class="form-group">
+            <label class="form-label"><mat-icon class="label-icon">code</mat-icon> Código</label>
+            <input type="text" class="form-control custom-input" formControlName="codigo" placeholder="ACTIVO" maxlength="30">
+            <div *ngIf="validoUsuario('codigo')" class="text-danger">Campo requerido (máx. 30 caracteres)</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><mat-icon class="label-icon">toggle_on</mat-icon> Estado Activo</label>
+            <mat-slide-toggle formControlName="activo" color="primary">
+              {{formularioUsuario.get('activo')?.value ? 'Activo' : 'Inactivo'}}
+            </mat-slide-toggle>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label"><mat-icon class="label-icon">description</mat-icon> Descripción</label>
+            <input type="text" class="form-control custom-input" formControlName="descripcion" placeholder="Usuario activo en el sistema" maxlength="100">
+            <div *ngIf="validoUsuario('descripcion')" class="text-danger">Campo requerido (máx. 100 caracteres)</div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cerrarModalAgregar()">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+      <button class="btn-save" (click)="guardarNuevoEstado()" [disabled]="getFormularioActual().invalid">
+        <mat-icon>save</mat-icon>
+        Crear Estado
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR -->
+<div class="modal-overlay" *ngIf="mostrarModalEditar" (click)="cerrarModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon">edit</mat-icon>
+        Editar {{tituloModal}}
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-content">
+      <form [formGroup]="formularioEdicion">
+        <div class="form-grid-modal">
+          <div class="form-group">
+            <label class="form-label"><mat-icon class="label-icon">code</mat-icon> Código</label>
+            <input type="text" class="form-control custom-input" formControlName="codigo" placeholder="CODIGO_ESTADO" maxlength="30">
+            <div *ngIf="formularioEdicion.get('codigo')?.invalid && formularioEdicion.get('codigo')?.touched" class="text-danger">
+              El código es requerido (máx. 30 caracteres)
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><mat-icon class="label-icon">toggle_on</mat-icon> Estado Activo</label>
+            <mat-slide-toggle formControlName="activo" color="primary">
+              {{formularioEdicion.get('activo')?.value ? 'Activo' : 'Inactivo'}}
+            </mat-slide-toggle>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label"><mat-icon class="label-icon">description</mat-icon> Descripción</label>
+            <input type="text" class="form-control custom-input" formControlName="descripcion" placeholder="Descripción del estado" maxlength="100">
+            <div *ngIf="formularioEdicion.get('descripcion')?.invalid && formularioEdicion.get('descripcion')?.touched" class="text-danger">
+              La descripción es requerida (máx. 100 caracteres)
+            </div>
+          </div>
+
+          <div class="form-group full-width" *ngIf="esOrden">
+            <label class="form-label"><mat-icon class="label-icon">sort</mat-icon> Orden en el Flujo</label>
+            <input type="number" class="form-control custom-input" formControlName="orden_flujo" placeholder="1, 2, 3..." min="0">
+            <small class="text-muted">Define el orden de este estado en el flujo de órdenes</small>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cerrarModal()">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+      <button class="btn-save" (click)="actualizarEstado()" [disabled]="formularioEdicion.invalid">
+        <mat-icon>save</mat-icon>
+        Guardar Cambios
+      </button>
+    </div>
+  </div>
+</div>

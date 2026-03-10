@@ -1,0 +1,967 @@
+<div class="comprobantes-wrapper">
+
+  <!-- ========================================
+       HEADER CON DEGRADADO
+       ======================================== -->
+  <div class="comprobantes-header">
+    <div class="header-content">
+      <div class="header-icon-wrapper">
+        <mat-icon class="header-icon">receipt_long</mat-icon>
+      </div>
+      <div class="header-text">
+        <h1 class="header-title">Gestión de Comprobantes</h1>
+        <p class="header-subtitle">Administra y verifica los comprobantes de pago del sistema</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="comprobantes-container">
+
+    <!-- ========================================
+         STATS CARDS
+         ======================================== -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper">
+          <mat-icon>description</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{totalComprobantes}}</h4>
+          <p class="stat-label">Total Comprobantes</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper pendiente">
+          <mat-icon>pending_actions</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{totalPendientes}}</h4>
+          <p class="stat-label">Pendientes</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper verificado">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{totalVerificados}}</h4>
+          <p class="stat-label">Verificados</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper rechazado">
+          <mat-icon>cancel</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{totalRechazados}}</h4>
+          <p class="stat-label">Rechazados</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         TABS CONTAINER
+         ======================================== -->
+    <div class="tabs-wrapper">
+      <mat-tab-group class="modern-tabs" animationDuration="300ms">
+
+        <!-- ============================================
+             TAB 1: COMPROBANTES PENDIENTES (CARDS)
+             ============================================ -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>pending_actions</mat-icon>
+              <span>Pendientes</span>
+              <span class="tab-badge" *ngIf="totalPendientes > 0">
+                {{totalPendientes}}
+              </span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+
+            <!-- Loading -->
+            <div class="loading-state" *ngIf="cargando">
+              <div class="spinner-wrapper">
+                <div class="modern-spinner"></div>
+              </div>
+              <p class="loading-text">Cargando comprobantes pendientes...</p>
+            </div>
+
+            <!-- Grid de Cards Pendientes -->
+            <div *ngIf="!cargando && ordenesFiltradasPendientes.length > 0" class="cards-grid">
+              <div class="comprobante-card" *ngFor="let element of ordenesFiltradasPendientes">
+
+                <!-- Header de la Card -->
+                <div class="card-header">
+                  <span class="status-badge pendiente">
+                    <mat-icon>pending_actions</mat-icon>
+                    PENDIENTE
+                  </span>
+                  <div class="card-datetime">
+                    <span class="date-badge">
+                      <mat-icon>event</mat-icon>
+                      {{ (element.Orden || element.orden)?.fecha | date:'dd/MM/yyyy' }}
+                    </span>
+                    <span class="time-badge">
+                      <mat-icon>schedule</mat-icon>
+                      {{ (element.Orden || element.orden)?.fecha | date:'HH:mm' }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Contenido Principal -->
+                <div class="card-body">
+
+                  <!-- Orden -->
+                  <div class="card-info-row">
+                    <div class="info-icon">
+                      <mat-icon>qr_code_2</mat-icon>
+                    </div>
+                    <div class="info-content">
+                      <span class="info-label">ORDEN</span>
+                      <code class="order-code">{{ (element.Orden || element.orden)?.token_orden }}</code>
+                    </div>
+                  </div>
+
+                  <!-- Monto -->
+                  <div class="card-info-row highlight">
+                    <div class="info-icon">
+                      <mat-icon>payments</mat-icon>
+                    </div>
+                    <div class="info-content">
+                      <span class="info-label">MONTO</span>
+                      <span class="amount-value">${{ (element.Orden || element.orden)?.total | number:'1.2-2' }}</span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Footer con Acciones -->
+                <div class="card-footer">
+                  <button mat-icon-button class="card-action-btn details"
+                          (click)="abrirModalDetalles(element)"
+                          matTooltip="Ver Detalles"
+                          matTooltipPosition="above">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+
+                  <button mat-icon-button class="card-action-btn receipt"
+                          *ngIf="(element.Comprobante || element.comprobante)?.url_comprobante"
+                          (click)="verComprobante((element.Comprobante || element.comprobante).url_comprobante)"
+                          matTooltip="Ver Comprobante"
+                          matTooltipPosition="above">
+                    <mat-icon>receipt_long</mat-icon>
+                  </button>
+
+                  <button mat-icon-button class="card-action-btn verify"
+                          (click)="abrirModalVerificar(element)"
+                          matTooltip="Verificar"
+                          matTooltipPosition="above">
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+
+                  <button mat-icon-button class="card-action-btn reject"
+                          (click)="abrirModalRechazar(element)"
+                          matTooltip="Rechazar"
+                          matTooltipPosition="above">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="!cargando && ordenesFiltradasPendientes.length === 0" class="empty-state">
+              <div class="empty-icon-wrapper">
+                <mat-icon>pending_actions</mat-icon>
+              </div>
+              <h3 class="empty-title">No hay comprobantes pendientes</h3>
+              <p class="empty-subtitle">Todos los comprobantes han sido procesados</p>
+            </div>
+
+          </div>
+        </mat-tab>
+
+        <!-- ============================================
+             TAB 2: PAGOS VERIFICADOS (TABLA SORTABLE)
+             ============================================ -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>check_circle</mat-icon>
+              <span>Pagos Verificados</span>
+              <span class="tab-badge verificado" *ngIf="totalVerificados > 0">
+                {{totalVerificados}}
+              </span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+
+            <!-- Action Bar con Filtros -->
+            <div class="action-bar" *ngIf="ordenesFiltradasVerificadas.length > 0">
+              <div class="filters-container">
+                <div class="search-box">
+                  <mat-icon>search</mat-icon>
+                  <input type="text"
+                         placeholder="Buscar por código de orden..."
+                         class="search-input"
+                         [(ngModel)]="filtroOrdenVerificada"
+                         (ngModelChange)="aplicarFiltrosVerificados()">
+                </div>
+                <!-- ✅ NUEVO: Filtro por ID -->
+                <div class="search-box">
+                  <mat-icon>tag</mat-icon>
+                  <input type="text"
+                         placeholder="Buscar por ID..."
+                         class="search-input"
+                         [(ngModel)]="filtroIdVerificado"
+                         (ngModelChange)="aplicarFiltrosVerificados()">
+                </div>
+                <div class="search-box">
+                  <mat-icon>calendar_today</mat-icon>
+                  <input type="date"
+                         placeholder="Filtrar por fecha..."
+                         class="search-input"
+                         [(ngModel)]="filtroFechaVerificadaStr"
+                         (ngModelChange)="onFechaVerificadaChange($event)">
+                </div>
+                <button class="btn-clear-filters" (click)="limpiarFiltrosVerificados()" *ngIf="filtroOrdenVerificada || filtroIdVerificado || filtroFechaVerificada">
+                  <mat-icon>clear</mat-icon>
+                  Limpiar filtros
+                </button>
+              </div>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading-state" *ngIf="cargando">
+              <div class="spinner-wrapper">
+                <div class="modern-spinner"></div>
+              </div>
+              <p class="loading-text">Cargando comprobantes verificados...</p>
+            </div>
+
+            <!-- Tabla de Verificados -->
+            <div *ngIf="!cargando && ordenesVerificadasFiltradas.length > 0" class="table-container">
+              <table class="modern-table">
+                <thead>
+                  <tr>
+                    <th class="sortable" (click)="cambiarOrdenamientoVerificados('orden')">
+                      N° Orden
+                      <span class="sort-icon">{{ obtenerIconoOrdenVerificados('orden') }}</span>
+                    </th>
+                    <th class="sortable" (click)="cambiarOrdenamientoVerificados('total')">
+                      Total
+                      <span class="sort-icon">{{ obtenerIconoOrdenVerificados('total') }}</span>
+                    </th>
+                    <th class="sortable" (click)="cambiarOrdenamientoVerificados('fecha')">
+                      Fecha Orden
+                      <span class="sort-icon">{{ obtenerIconoOrdenVerificados('fecha') }}</span>
+                    </th>
+                    <th class="sortable" (click)="cambiarOrdenamientoVerificados('fechaVerificacion')">
+                      Fecha Verificación
+                      <span class="sort-icon">{{ obtenerIconoOrdenVerificados('fechaVerificacion') }}</span>
+                    </th>
+                    <th>Referencia</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let element of ordenesVerificadasPaginadas" class="table-row">
+                    <td>
+                      <div class="orden-info">
+                        <span class="orden-token">{{ (element.Orden || element.orden)?.token_orden }}</span>
+                        <small class="orden-id">ID: {{ (element.Comprobante || element.comprobante)?.id }}</small>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="precio-info">
+                        <strong class="precio-total">${{ (element.Orden || element.orden)?.total | number:'1.2-2' }}</strong>
+                        <small class="precio-envio">Envío: ${{ (element.Orden || element.orden)?.costo_envio | number:'1.2-2' }}</small>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="fecha-info">
+                        {{ (element.Orden || element.orden)?.fecha | date:'dd/MM/yyyy HH:mm' }}
+                      </div>
+                    </td>
+                    <td>
+                      <div class="fecha-info estado-verificado-text">
+                        <mat-icon>check_circle</mat-icon>
+                        {{ (element.Comprobante || element.comprobante)?.fecha_verificacion | date:'dd/MM/yyyy HH:mm' }}
+                      </div>
+                    </td>
+                    <td>
+                      <span class="reference-badge verified">
+                        {{ (element.Comprobante || element.comprobante)?.numero_referencia || 'N/A' }}
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <button class="btn-detalles" (click)="abrirModalDetalles(element)">
+                        <mat-icon>visibility</mat-icon>
+                        Ver detalles
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Paginador -->
+              <mat-paginator
+                [length]="ordenesVerificadasFiltradas.length"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 25, 50, 100]"
+                (page)="onPageChange($event)"
+                showFirstLastButtons
+                class="custom-paginator">
+              </mat-paginator>
+            </div>
+
+            <!-- Sin resultados con filtros -->
+            <div *ngIf="!cargando && ordenesVerificadasFiltradas.length === 0 && (filtroOrdenVerificada || filtroIdVerificado || filtroFechaVerificada)" class="empty-state">
+              <div class="empty-icon-wrapper">
+                <mat-icon>search_off</mat-icon>
+              </div>
+              <h3 class="empty-title">No se encontraron resultados</h3>
+              <p class="empty-subtitle">Intenta ajustar los filtros de búsqueda</p>
+            </div>
+
+            <!-- Empty State inicial -->
+            <div *ngIf="!cargando && ordenesFiltradasVerificadas.length === 0 && !filtroOrdenVerificada && !filtroIdVerificado && !filtroFechaVerificada" class="empty-state">
+              <div class="empty-icon-wrapper">
+                <mat-icon>check_circle</mat-icon>
+              </div>
+              <h3 class="empty-title">No hay comprobantes verificados</h3>
+              <p class="empty-subtitle">Los comprobantes verificados aparecerán aquí</p>
+            </div>
+
+          </div>
+        </mat-tab>
+
+        <!-- ============================================
+             TAB 3: PAGOS RECHAZADOS (TABLA SORTABLE)
+             ============================================ -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>cancel</mat-icon>
+              <span>Pagos Rechazados</span>
+              <span class="tab-badge rechazado" *ngIf="totalRechazados > 0">
+                {{totalRechazados}}
+              </span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+
+            <!-- Action Bar con Filtros -->
+            <div class="action-bar" *ngIf="ordenesFiltradasRechazadas.length > 0">
+              <div class="filters-container">
+                <div class="search-box">
+                  <mat-icon>search</mat-icon>
+                  <input type="text"
+                         placeholder="Buscar por código de orden..."
+                         class="search-input"
+                         [(ngModel)]="filtroOrdenRechazada"
+                         (ngModelChange)="aplicarFiltrosRechazados()">
+                </div>
+                <!-- ✅ NUEVO: Filtro por ID -->
+                <div class="search-box">
+                  <mat-icon>tag</mat-icon>
+                  <input type="text"
+                         placeholder="Buscar por ID..."
+                         class="search-input"
+                         [(ngModel)]="filtroIdRechazado"
+                         (ngModelChange)="aplicarFiltrosRechazados()">
+                </div>
+                <div class="search-box">
+                  <mat-icon>calendar_today</mat-icon>
+                  <input type="date"
+                         placeholder="Filtrar por fecha..."
+                         class="search-input"
+                         [(ngModel)]="filtroFechaRechazadaStr"
+                         (ngModelChange)="onFechaRechazadaChange($event)">
+                </div>
+                <button class="btn-clear-filters" (click)="limpiarFiltrosRechazados()" *ngIf="filtroOrdenRechazada || filtroIdRechazado || filtroFechaRechazada">
+                  <mat-icon>clear</mat-icon>
+                  Limpiar filtros
+                </button>
+              </div>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading-state" *ngIf="cargando">
+              <div class="spinner-wrapper">
+                <div class="modern-spinner"></div>
+              </div>
+              <p class="loading-text">Cargando comprobantes rechazados...</p>
+            </div>
+
+            <!-- Tabla de Rechazados -->
+            <div *ngIf="!cargando && ordenesRechazadasFiltradas.length > 0" class="table-container">
+              <table class="modern-table">
+                <thead>
+                  <tr>
+                    <th class="sortable" (click)="cambiarOrdenamientoRechazados('orden')">
+                      N° Orden
+                      <span class="sort-icon">{{ obtenerIconoOrdenRechazados('orden') }}</span>
+                    </th>
+                    <th class="sortable" (click)="cambiarOrdenamientoRechazados('total')">
+                      Total
+                      <span class="sort-icon">{{ obtenerIconoOrdenRechazados('total') }}</span>
+                    </th>
+                    <th class="sortable" (click)="cambiarOrdenamientoRechazados('fecha')">
+                      Fecha Orden
+                      <span class="sort-icon">{{ obtenerIconoOrdenRechazados('fecha') }}</span>
+                    </th>
+                    <th class="sortable" (click)="cambiarOrdenamientoRechazados('fechaRechazo')">
+                      Fecha Rechazo
+                      <span class="sort-icon">{{ obtenerIconoOrdenRechazados('fechaRechazo') }}</span>
+                    </th>
+                    <th>Referencia</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let element of ordenesRechazadasPaginadas" class="table-row">
+                    <td>
+                      <div class="orden-info">
+                        <span class="orden-token">{{ (element.Orden || element.orden)?.token_orden }}</span>
+                        <small class="orden-id">ID: {{ (element.Comprobante || element.comprobante)?.id }}</small>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="precio-info">
+                        <strong class="precio-total">${{ (element.Orden || element.orden)?.total | number:'1.2-2' }}</strong>
+                        <small class="precio-envio">Envío: ${{ (element.Orden || element.orden)?.costo_envio | number:'1.2-2' }}</small>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="fecha-info">
+                        {{ (element.Orden || element.orden)?.fecha | date:'dd/MM/yyyy HH:mm' }}
+                      </div>
+                    </td>
+                    <td>
+                      <div class="fecha-info estado-rechazado-text">
+                        <mat-icon>cancel</mat-icon>
+                        {{ (element.Comprobante || element.comprobante)?.fecha_verificacion | date:'dd/MM/yyyy HH:mm' }}
+                      </div>
+                    </td>
+                    <td>
+                      <span class="reference-badge rejected">
+                        {{ (element.Comprobante || element.comprobante)?.numero_referencia || 'N/A' }}
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <div class="acciones-group">
+                        <button class="btn-detalles" (click)="abrirModalDetalles(element)">
+                          <mat-icon>visibility</mat-icon>
+                          Ver detalles
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Paginador -->
+              <mat-paginator
+                [length]="ordenesRechazadasFiltradas.length"
+                [pageSize]="pageSizeRechazados"
+                [pageSizeOptions]="[5, 10, 25, 50, 100]"
+                (page)="onPageChangeRechazados($event)"
+                showFirstLastButtons
+                class="custom-paginator">
+              </mat-paginator>
+            </div>
+
+            <!-- Sin resultados con filtros -->
+            <div *ngIf="!cargando && ordenesRechazadasFiltradas.length === 0 && (filtroOrdenRechazada || filtroIdRechazado || filtroFechaRechazada)" class="empty-state">
+              <div class="empty-icon-wrapper">
+                <mat-icon>search_off</mat-icon>
+              </div>
+              <h3 class="empty-title">No se encontraron resultados</h3>
+              <p class="empty-subtitle">Intenta ajustar los filtros de búsqueda</p>
+            </div>
+
+            <!-- Empty State inicial -->
+            <div *ngIf="!cargando && ordenesFiltradasRechazadas.length === 0 && !filtroOrdenRechazada && !filtroIdRechazado && !filtroFechaRechazada" class="empty-state">
+              <div class="empty-icon-wrapper">
+                <mat-icon>cancel</mat-icon>
+              </div>
+              <h3 class="empty-title">No hay comprobantes rechazados</h3>
+              <p class="empty-subtitle">Los comprobantes rechazados aparecerán aquí</p>
+            </div>
+
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ========================================
+     MODAL: VER DETALLES DEL COMPROBANTE
+     ======================================== -->
+<div class="modal-overlay" *ngIf="mostrarModalDetalles" (click)="cerrarModalDetalles()">
+  <div class="modal-container modal-detalles" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon-modal">receipt_long</mat-icon>
+        Detalles del Comprobante
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModalDetalles()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-content" *ngIf="elementoSeleccionado">
+
+      <!-- Información del Cliente -->
+      <div class="info-card cliente-card">
+        <div class="info-card-header">
+          <mat-icon>person</mat-icon>
+          <h3>Información del Cliente</h3>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Nombre completo:</label>
+            <span>{{ (elementoSeleccionado.Usuario || elementoSeleccionado.usuario)?.nombre }} {{ (elementoSeleccionado.Usuario || elementoSeleccionado.usuario)?.apellido }}</span>
+          </div>
+          <div class="info-item">
+            <label>Email:</label>
+            <span>{{ (elementoSeleccionado.Orden || elementoSeleccionado.orden)?.email || (elementoSeleccionado.Usuario || elementoSeleccionado.usuario)?.email }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información de la Orden -->
+      <div class="info-card orden-principal">
+        <div class="info-card-header">
+          <mat-icon>info</mat-icon>
+          <h3>Información de la Orden</h3>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Código de Orden:</label>
+            <span class="text-orden fw-bold">
+              {{ (elementoSeleccionado.Orden || elementoSeleccionado.orden)?.token_orden }}
+            </span>
+          </div>
+          <div class="info-item">
+            <label>ID Comprobante:</label>
+            <span class="text-id fw-bold"> #{{ (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.id }}</span>
+          </div>
+          <div class="info-item">
+            <label>Fecha de Orden:</label>
+            <span>{{ (elementoSeleccionado.Orden || elementoSeleccionado.orden)?.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Estado:</label>
+            <span class="badge" [ngClass]="obtenerClaseBadgeEstado(elementoSeleccionado)">
+              {{ obtenerEstadoTexto(elementoSeleccionado) }}
+            </span>
+          </div>
+          <!-- ✅ NUEVO: Mostrar Referencia y Fecha subida para PENDIENTES -->
+          <div class="info-item" *ngIf="esPendiente(elementoSeleccionado)">
+            <label>Referencia:</label>
+            <span>{{ (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.numero_referencia || 'N/A' }}</span>
+          </div>
+          <div class="info-item" *ngIf="esPendiente(elementoSeleccionado)">
+            <label>Fecha subida:</label>
+            <span>{{ (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.fecha_subida | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Costo de envío:</label>
+            <span>${{ (elementoSeleccionado.Orden || elementoSeleccionado.orden)?.costo_envio | number:'1.2-2' }}</span>
+          </div>
+          <div class="info-item total-destacado">
+            <label>Total:</label>
+            <span class="precio-destacado">${{ (elementoSeleccionado.Orden || elementoSeleccionado.orden)?.total | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Productos (dropdown colapsible) -->
+      <div class="info-card productos-card">
+        <!-- Header clickable que actúa como toggle -->
+        <div class="info-card-header productos-dropdown-header" (click)="productosExpandidos = !productosExpandidos">
+          <div class="productos-header-left">
+            <mat-icon>inventory_2</mat-icon>
+            <h3>Productos de esta orden ({{ obtenerItems((elementoSeleccionado.Orden || elementoSeleccionado.orden)?.id).length }})</h3>
+          </div>
+          <mat-icon class="chevron-icon" [ngClass]="{'chevron-open': productosExpandidos}">keyboard_arrow_down</mat-icon>
+
+        </div>
+        <!-- Cuerpo colapsible -->
+        <div class="productos-body" [ngClass]="{'productos-body-open': productosExpandidos}">
+          <div class="productos-list">
+            <div *ngFor="let item of obtenerItems((elementoSeleccionado.Orden || elementoSeleccionado.orden)?.id)" class="producto-item">
+              <div class="producto-imagen">
+                <img
+                  [src]="obtenerRutaImagen(obtenerProducto(item.productoId))"
+                  [alt]="obtenerProducto(item.productoId)?.nombre_producto"
+                  (error)="manejarErrorImagen($event)">
+              </div>
+              <div class="producto-info">
+                <h4 class="producto-nombre">{{ obtenerProducto(item.productoId)?.nombre_producto }}</h4>
+                <p class="producto-descripcion">{{ obtenerProducto(item.productoId)?.descripcion }}</p>
+                <div class="producto-detalles ">
+                  <span class="badge cart d-inline-flex align-items-center justify-content-center gap-1">
+                    <mat-icon>shopping_cart</mat-icon>
+                    Cantidad: {{ item.cantidad }}
+                  </span>
+                  <span class="badge bg-success">
+                    <mat-icon>attach_money</mat-icon>
+                    Precio: ${{ obtenerProducto(item.productoId)?.precio_ahora | number:'1.2-2' }}
+                  </span>
+                  <span class="badge bg-info">
+                    <mat-icon>calculate</mat-icon>
+                    Subtotal: ${{ calcularSubtotal(item) | number:'1.2-2' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información del Pago (SOLO para verificados y rechazados) -->
+      <div class="info-card comprobante-card" *ngIf="!esPendiente(elementoSeleccionado)">
+        <div class="info-card-header">
+          <mat-icon>payments</mat-icon>
+          <h3>Información del Pago</h3>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Referencia:</label>
+            <span>{{ (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.numero_referencia || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Fecha subida:</label>
+            <span>{{ (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.fecha_subida | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Fecha verificación:</label>
+            <span>{{ (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.fecha_verificacion | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Estado comprobante:</label>
+            <span class="badge" [ngClass]="(elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.verificado ? 'estado-verificado' : 'estado-rechazado'">
+              <mat-icon>{{ (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.verificado ? 'check_circle' : 'pending_actions' }}</mat-icon>
+              {{ (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.verificado ? 'Verificado' : 'Rechazado' }}
+            </span>
+          </div>
+          <!-- ✅ NUEVO: Mostrar administrador que verificó -->
+          <div class="info-item admin-verificador" *ngIf="(elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.verificado && (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.verificado_por">
+            <label>
+              <mat-icon class="admin-icon">verified_user</mat-icon>
+              Verificado por:
+            </label>
+            <span class="admin-nombre">
+              <mat-icon>person</mat-icon>
+              {{ obtenerNombreAdmin((elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.verificado_por) }}
+            </span>
+          </div>
+          <!-- ✅ NUEVO: Mostrar administrador que rechazó -->
+          <div class="info-item admin-verificador rechazado" *ngIf="(elementoSeleccionado.Orden || elementoSeleccionado.orden)?.estadoOrdenId === 9 && (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.verificado_por">
+            <label>
+              <mat-icon class="admin-icon">cancel</mat-icon>
+              Rechazado por:
+            </label>
+            <span class="admin-nombre">
+              <mat-icon>person</mat-icon>
+              {{ obtenerNombreAdmin((elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.verificado_por) }}
+            </span>
+          </div>
+        </div>
+        <div class="comprobante-url-row" *ngIf="(elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.url_comprobante">
+          <button class="btn-ver-comprobante" (click)="verComprobante((elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante).url_comprobante)">
+            <mat-icon>open_in_new</mat-icon>
+            Ver Comprobante
+          </button>
+        </div>
+      </div>
+
+      <!-- Información de Entrega -->
+      <div class="info-card entrega-card">
+        <div class="info-card-header">
+          <mat-icon>local_shipping</mat-icon>
+          <h3>Información de Entrega</h3>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Dirección:</label>
+            <span>{{ (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.direccion_entrega || (elementoSeleccionado.Orden || elementoSeleccionado.orden)?.direccion_1 || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Observaciones:</label>
+            <span>{{ (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.observaciones || 'Ninguna' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Motivo de rechazo (solo si está rechazado) -->
+      <div class="info-card rechazo-card" *ngIf="(elementoSeleccionado.Orden || elementoSeleccionado.orden)?.estadoOrdenId === 9">
+        <div class="info-card-header">
+          <mat-icon class="text-danger">report_problem</mat-icon>
+          <h3>Motivo del Rechazo</h3>
+        </div>
+        <div class="rechazo-content">
+          <p class="rechazo-mensaje">
+            <mat-icon>info</mat-icon>
+            {{ (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.motivo_rechazo || 'No se especificó motivo' }}
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-close-modal" (click)="cerrarModalDetalles()">
+        <mat-icon>close</mat-icon>
+        Cerrar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ========================================
+     MODAL: VERIFICAR COMPROBANTE
+     ======================================== -->
+<div class="modal-overlay" *ngIf="mostrarModalVerificar" (click)="cerrarModalVerificar()">
+  <div class="modal-container modal-verificar" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon-modal icon-verificar">check_circle</mat-icon>
+        Verificar Comprobante
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModalVerificar()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-content" *ngIf="elementoSeleccionado">
+
+      <div class="modal-icon-wrapper verificar-icon">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+
+      <p class="modal-question">
+        ¿Estás seguro de que deseas <strong>verificar</strong> este comprobante?
+      </p>
+
+      <div class="info-card orden-resumen">
+        <div class="info-card-header">
+          <mat-icon>info</mat-icon>
+          <h3>Resumen</h3>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Cliente:</label>
+            <span>{{ (elementoSeleccionado.Usuario || elementoSeleccionado.usuario)?.nombre }} {{ (elementoSeleccionado.Usuario || elementoSeleccionado.usuario)?.apellido }}</span>
+          </div>
+          <div class="info-item verificado">
+            <label>Orden:</label>
+            <span class="badge">{{ (elementoSeleccionado.Orden || elementoSeleccionado.orden)?.token_orden }}</span>
+          </div>
+          <div class="info-item">
+            <label>Total:</label>
+            <span class="precio-destacado">${{ (elementoSeleccionado.Orden || elementoSeleccionado.orden)?.total | number:'1.2-2' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Referencia:</label>
+            <span>{{ (elementoSeleccionado.Comprobante || elementoSeleccionado.comprobante)?.numero_referencia || 'N/A' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="modal-nota">Esta acción procesará la orden y notificará al cliente por email.</p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel-modal" (click)="cerrarModalVerificar()">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+      <button class="btn-confirm-modal btn-verificar" (click)="confirmarVerificar()">
+        <mat-icon>check_circle</mat-icon>
+        Sí, verificar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ========================================
+     MODAL: RECHAZAR COMPROBANTE
+     ======================================== -->
+<div class="modal-overlay" *ngIf="mostrarModalRechazar" (click)="cerrarModalRechazar()">
+  <div class="modal-container modal-rechazar" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon-modal icon-rechazar">cancel</mat-icon>
+        Rechazar Comprobante
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModalRechazar()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-content" *ngIf="elementoSeleccionado">
+
+      <div class="modal-icon-wrapper rechazar-icon">
+        <mat-icon>cancel</mat-icon>
+      </div>
+
+      <p class="modal-question">
+        ¿Estás seguro de que deseas <strong>rechazar</strong> este comprobante?
+      </p>
+
+      <div class="info-card orden-resumen">
+        <div class="info-card-header">
+          <mat-icon>info</mat-icon>
+          <h3>Resumen</h3>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Cliente:</label>
+            <span>{{ (elementoSeleccionado.Usuario || elementoSeleccionado.usuario)?.nombre }} {{ (elementoSeleccionado.Usuario || elementoSeleccionado.usuario)?.apellido }}</span>
+          </div>
+          <div class="info-item rechazado">
+            <label>Orden:</label>
+            <span class="badge">{{ (elementoSeleccionado.Orden || elementoSeleccionado.orden)?.token_orden }}</span>
+          </div>
+          <div class="info-item">
+            <label>Total:</label>
+            <span class="precio-destacado">${{ (elementoSeleccionado.Orden || elementoSeleccionado.orden)?.total | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="motivo-section">
+        <label class="motivo-label">
+          <mat-icon>report_problem</mat-icon>
+          Motivo del rechazo <span class="required">*</span>
+        </label>
+        <textarea class="textarea-motivo"
+                  [(ngModel)]="motivoRechazo"
+                  placeholder="Ej: El comprobante no coincide con el monto de la orden..."
+                  rows="4"></textarea>
+        <p class="motivo-error" *ngIf="motivoRechazoError">{{ motivoRechazoError }}</p>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel-modal" (click)="cerrarModalRechazar()">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+      <button class="btn-confirm-modal btn-rechazar" (click)="confirmarRechazar()">
+        <mat-icon>cancel</mat-icon>
+        Rechazar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ========================================
+     MODAL: MOTIVO DEL RECHAZO
+     ======================================== -->
+<div class="modal-overlay" *ngIf="mostrarModalMotivoRechazo" (click)="cerrarModalMotivoRechazo()">
+  <div class="modal-container modal-motivo" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon-modal icon-rechazar">report_problem</mat-icon>
+        Motivo del Rechazo
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModalMotivoRechazo()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-content">
+      <div class="info-card rechazo-card">
+        <div class="info-card-header">
+          <mat-icon class="text-danger">report_problem</mat-icon>
+          <h3>Motivo del Rechazo</h3>
+        </div>
+        <div class="rechazo-content">
+          <p class="rechazo-mensaje">
+            <mat-icon>info</mat-icon>
+            {{ motivoRechazaTexto }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-close-modal" (click)="cerrarModalMotivoRechazo()">
+        <mat-icon>close</mat-icon>
+        Cerrar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ========================================
+     MODAL: MENSAJE GENÉRICO (éxito / error / info)
+     ======================================== -->
+<div class="modal-overlay" *ngIf="mostrarModalMensaje" (click)="cerrarModalMensaje()">
+  <div class="modal-container modal-mensaje" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon-modal" [ngClass]="tipoMensaje">
+          {{ tipoMensaje === 'exito' ? 'check_circle' : tipoMensaje === 'error' ? 'error' : 'info' }}
+        </mat-icon>
+        {{ tituloMensaje }}
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModalMensaje()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-content">
+      <div class="mensaje-icon-wrapper" [ngClass]="tipoMensaje + '-icon'">
+        <mat-icon>{{ tipoMensaje === 'exito' ? 'check_circle' : tipoMensaje === 'error' ? 'error' : 'info' }}</mat-icon>
+      </div>
+      <p class="mensaje-texto">{{ mensajeTexto }}</p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-close-modal" (click)="cerrarModalMensaje()">
+        <mat-icon>close</mat-icon>
+        Entendido
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========================================
+     SPINNER FULLSCREEN (verificar / rechazar)
+     ======================================== -->
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#fff" type="square-jelly-box" [fullScreen]="true">
+  <p style="color: white; font-size: 1.1rem; margin-top: 1rem; font-weight: 600;">{{ mensajeSpinner }}</p>
+</ngx-spinner>

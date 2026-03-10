@@ -1,0 +1,400 @@
+/* ==============================================
+   GLOBAL STYLES - NAVBAR COMPENSATION
+   ============================================== */
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  padding-top: 60px; /* Altura del navbar desktop */
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+
+/* Contenedor principal */
+app-root {
+  display: block;
+  min-height: 100vh;
+}
+
+/* Router outlet */
+router-outlet {
+  display: none;
+}
+
+router-outlet ~ * {
+  display: block;
+}
+
+/* Footer */
+app-footer {
+  display: block;
+  width: 100%;
+}
+
+/* Responsive - Ajustar padding para móviles */
+@media (max-width: 768px) {
+  body {
+    padding-top: 65px; /* Altura del navbar en mobile */
+  }
+}
+
+/* Prevenir scroll horizontal */
+body, html {
+  overflow-x: hidden;
+}
+
+
+
+/* ========================================
+   ADMIN PANEL - GLOBAL STYLES
+   Tema: Artesanía - Colores Cálidos y Maderosos
+   ======================================== */
+
+/* ========================================
+   VARIABLES DE COLOR - PALETA CÁLIDA
+   ======================================== */
+:root {
+  /* Colores Principales - Tonos Madera */
+  --wood-primary: #8B4513;        /* Marrón Madera */
+  --wood-secondary: #D2691E;      /* Chocolate */
+  --wood-tertiary: #CD853F;       /* Peru */
+  --wood-light: #DEB887;          /* BurlyWood */
+  --wood-lighter: #F5DEB3;        /* Wheat */
+
+  /* Acentos Cálidos */
+  --accent-warm: #FF8C42;         /* Naranja Cálido */
+  --accent-terracotta: #E07A5F;   /* Terracota */
+  --accent-gold: #F4A460;         /* Sandy Brown */
+
+  /* Backgrounds */
+  --bg-primary: #e1c3b6;          /* Marrón Oscuro */
+  --bg-secondary: #3E2723;        /* Marrón Medio */
+  --bg-card: #4E342E;             /* Marrón Card */
+  --bg-hover: #5D4037;            /* Marrón Hover */
+
+  /* Estados */
+  --success: #66BB6A;             /* Verde */
+  --warning: #FFA726;             /* Naranja */
+  --error: #EF5350;               /* Rojo */
+  --info: #42A5F5;                /* Azul */
+
+  /* Sombras */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.6);
+
+  /* Bordes */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Espaciado */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+}
+
+
+
+/* ========================================
+   CONTENEDORES
+   ======================================== */
+.container {
+  padding: var(--spacing-lg);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   MAT-TAB-GROUP - PESTAÑAS MEJORADAS
+   ======================================== */
+.mat-mdc-tab-group {
+  background: transparent !important;
+  color: rgb(34, 34, 34) !important;
+}
+
+.mat-mdc-tab-header {
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 1rem !important;
+}
+
+.mat-mdc-tab-labels {
+  gap: 0.5rem;
+}
+
+.mat-mdc-tab {
+  color: var(--text-secondary) !important;
+  opacity: 1 !important;
+  min-width: 140px !important;
+  padding: 0 24px !important;
+  transition: all 0.3s ease !important;
+}
+
+.mat-mdc-tab.mdc-tab--active {
+  background: linear-gradient(135deg,
+    rgba(250, 225, 214, 0.384) 0%,
+    rgba(253, 224, 205, 0.3) 100%);
+    color: black;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.mat-mdc-tab .mdc-tab__text-label {
+  color: inherit !important;
+  font-weight: 500 !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mat-mdc-tab-body-wrapper {
+  backdrop-filter: blur(5px);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  min-height: 400px;
+}
+
+/* Indicador de tab activo */
+.mat-mdc-tab-header-pagination-chevron {
+  border-color: var(--accent-warm) !important;
+}
+
+.mdc-tab-indicator__content--underline {
+  border-color: transparent !important;
+}
+
+/* ========================================
+   BADGES Y ESTADOS
+   ======================================== */
+.badge {
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  box-shadow: var(--shadow-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge.bg-danger {
+  background: linear-gradient(135deg, #EF5350, #E53935) !important;
+  color: white !important;
+}
+
+.badge.bg-primary {
+  background: linear-gradient(135deg, var(--wood-primary), var(--wood-secondary)) !important;
+  color: white !important;
+}
+
+.badge.bg-success {
+  background: linear-gradient(135deg, #66BB6A, #43A047) !important;
+  color: white !important;
+}
+
+.badge.bg-warning {
+  background: linear-gradient(135deg, #FFA726, #FB8C00) !important;
+  color: white !important;
+}
+
+.badge.bg-info {
+  background: linear-gradient(135deg, #42A5F5, #1E88E5) !important;
+  color: white !important;
+}
+
+
+/* ========================================
+   FORMULARIOS
+   ======================================== */
+.form-control,
+.form-select {
+  background: rgba(249, 242, 241, 0.6) !important;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(139, 69, 19, 0.3) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--text-primary) !important;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background: rgba(255, 210, 178, 0.8) !important;
+  border-color: var(--accent-warm) !important;
+  box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.2) !important;
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.7;
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-label .label-icon {
+  color: var(--accent-warm);
+  font-size: 1.2rem;
+}
+
+
+
+/* ========================================
+   SPINNERS Y LOADING
+   ======================================== */
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: var(--accent-warm) !important;
+}
+
+.spinner-border {
+  border-color: var(--accent-warm) !important;
+  border-right-color: transparent !important;
+}
+
+/* ========================================
+   ICONOS
+   ======================================== */
+
+.icon-large {
+  font-size: 4rem !important;
+  width: 4rem !important;
+  height: 4rem !important;
+  opacity: 0.5;
+}
+
+/* ========================================
+   UTILIDADES DE TEXTO
+   ======================================== */
+.text-white {
+  color: var(--text-primary) !important;
+}
+
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+.text-success {
+  color: var(--success) !important;
+  font-weight: 600;
+}
+
+.text-danger {
+  color: var(--error) !important;
+  font-weight: 600;
+}
+
+.text-warning {
+  color: var(--warning) !important;
+  font-weight: 600;
+}
+
+.text-info {
+  color: var(--info) !important;
+}
+
+/* ========================================
+   SOMBRAS Y EFECTOS
+   ======================================== */
+.shadow {
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.shadow-sm {
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.shadow-lg {
+  box-shadow: var(--shadow-xl) !important;
+}
+
+/* ========================================
+   ANIMACIONES
+   ======================================== */
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-sm);
+  }
+
+  .mat-mdc-tab {
+    min-width: 100px !important;
+    padding: 0 12px !important;
+  }
+
+  .mat-mdc-header-cell,
+  .mat-mdc-cell {
+    padding: 8px !important;
+    font-size: 0.85rem !important;
+  }
+}
+
+
+/* ========================================
+   BOTÓN AGREGAR DESTACADO
+   ======================================== */
+.btn-agregar {
+  background: linear-gradient(135deg, var(--accent-warm), var(--accent-terracotta)) !important;
+  color: white !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 0.75rem 2rem !important;
+  font-weight: 700 !important;
+  box-shadow: var(--shadow-lg) !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-agregar:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-xl) !important;
+  background: linear-gradient(135deg, var(--accent-terracotta), var(--accent-gold)) !important;
+}
+
+/* ========================================
+   MAT-SLIDE-TOGGLE
+   ======================================== */
+.mat-mdc-slide-toggle.mat-primary {
+  --mdc-switch-selected-track-color: var(--accent-warm) !important;
+  --mdc-switch-selected-handle-color: var(--wood-light) !important;
+  --mdc-switch-selected-hover-track-color: var(--accent-terracotta) !important;
+}

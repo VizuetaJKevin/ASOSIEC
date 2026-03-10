@@ -1,0 +1,157 @@
+<div class="roles-wrapper">
+
+  <!-- Header con degradado dorado -->
+  <div class="roles-header">
+    <div class="header-content">
+      <div class="header-icon-wrapper">
+        <mat-icon class="header-icon">admin_panel_settings</mat-icon>
+      </div>
+      <div class="header-text">
+        <h1 class="header-title">Gestión de Roles</h1>
+        <p class="header-subtitle">Administra los roles y permisos del sistema</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="roles-container">
+
+    <!-- Tabs Container -->
+    <div class="tabs-wrapper">
+      <mat-tab-group class="modern-tabs" animationDuration="300ms">
+
+        <!-- TAB 1: LISTA DE ROLES -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>list</mat-icon>
+              <span>Lista de Roles</span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+
+            <!-- Roles Grid -->
+            <div class="roles-grid">
+              <div class="role-card" *ngFor="let rol of listaRoles; let i = index">
+                <div class="card-number">#{{rol.id}}</div>
+                <div class="card-icon-wrapper">
+                  <mat-icon class="role-icon">shield</mat-icon>
+                </div>
+                <h3 class="role-name">{{rol.descripcion}}</h3>
+                <div class="role-divider"></div>
+                <div class="card-actions">
+                  <button class="action-btn edit-btn" (click)="abrirModalEditar(rol)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Editar</span>
+                  </button>
+                  <button class="action-btn delete-btn" (click)="eliminar(rol.id)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Eliminar</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </mat-tab>
+
+        <!-- TAB 2: REGISTRAR ROL -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>add_circle</mat-icon>
+              <span>Nuevo Rol</span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+
+            <div class="register-container">
+              <div class="register-icon-wrapper">
+                <mat-icon>shield_with_plus</mat-icon>
+              </div>
+
+              <h2 class="register-title">Crear Nuevo Rol</h2>
+              <p class="register-subtitle">Define un nuevo rol para el sistema</p>
+
+              <form [formGroup]="Formulario" class="register-form" (ngSubmit)="agregarDescripcion()">
+                <div class="form-group-large">
+                  <label class="form-label-large">
+                    <mat-icon>label</mat-icon>
+                    Nombre del Rol
+                  </label>
+                  <input formControlName="descripcion"
+                         type="text"
+                         class="form-input-large"
+                         placeholder="Ej: Administrador, Vendedor, Cliente">
+                  <div *ngIf="valido('descripcion')" class="error-msg">
+                    <mat-icon>error</mat-icon>
+                    El nombre del rol es obligatorio
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-submit-large" [disabled]="Formulario.invalid">
+                  <mat-icon>add_circle</mat-icon>
+                  Crear Rol
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL EDITAR -->
+<div class="modal-overlay" *ngIf="mostrarModalEditar" (click)="cerrarModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon">edit</mat-icon>
+        Editar Rol
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-content">
+      <div class="modal-icon-display">
+        <mat-icon>shield</mat-icon>
+      </div>
+
+      <form [formGroup]="formularioEdicion">
+        <div class="form-group">
+          <label class="form-label">
+            <mat-icon class="label-icon">label</mat-icon>
+            Nombre del Rol
+          </label>
+          <input type="text"
+                 class="form-control custom-input"
+                 formControlName="descripcion"
+                 placeholder="Nombre del rol">
+          <div *ngIf="formularioEdicion.get('descripcion')?.invalid && formularioEdicion.get('descripcion')?.touched" class="text-danger">
+            El nombre del rol es requerido
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cerrarModal()">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+      <button class="btn-save" (click)="actualizarRol()" [disabled]="formularioEdicion.invalid">
+        <mat-icon>save</mat-icon>
+        Guardar Cambios
+      </button>
+    </div>
+
+  </div>
+</div>

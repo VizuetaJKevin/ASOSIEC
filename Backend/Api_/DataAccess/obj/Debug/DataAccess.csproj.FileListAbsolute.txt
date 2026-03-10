@@ -43,3 +43,17 @@ C:\Users\Usuario\Desktop\Api_\DataAccess\obj\Debug\DataAccess.csproj.CoreCompile
 C:\Users\Usuario\Desktop\Api_\DataAccess\obj\Debug\DataAccess.csproj.CopyComplete
 C:\Users\Usuario\Desktop\Api_\DataAccess\obj\Debug\DataAccess.dll
 C:\Users\Usuario\Desktop\Api_\DataAccess\obj\Debug\DataAccess.pdb
+C:\Users\Usuario\Desktop\Backend\Api_\DataAccess\bin\Debug\DataAccess.dll
+C:\Users\Usuario\Desktop\Backend\Api_\DataAccess\bin\Debug\DataAccess.pdb
+C:\Users\Usuario\Desktop\Backend\Api_\DataAccess\bin\Debug\Entidad.dll
+C:\Users\Usuario\Desktop\Backend\Api_\DataAccess\bin\Debug\System.Memory.dll
+C:\Users\Usuario\Desktop\Backend\Api_\DataAccess\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Usuario\Desktop\Backend\Api_\DataAccess\bin\Debug\System.ValueTuple.dll
+C:\Users\Usuario\Desktop\Backend\Api_\DataAccess\bin\Debug\Entidad.pdb
+C:\Users\Usuario\Desktop\Backend\Api_\DataAccess\obj\Debug\DataAccess.csproj.AssemblyReference.cache
+C:\Users\Usuario\Desktop\Backend\Api_\DataAccess\obj\Debug\DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\Desktop\Backend\Api_\DataAccess\obj\Debug\DataAccess.csproj.Up2Date
+C:\Users\Usuario\Desktop\Backend\Api_\DataAccess\obj\Debug\DataAccess.dll
+C:\Users\Usuario\Desktop\Backend\Api_\DataAccess\obj\Debug\DataAccess.pdb
+C:\Users\Usuario\Desktop\Sistema de ventas online - final\Backend\Api_\DataAccess\obj\Debug\DataAccess.csproj.AssemblyReference.cache
+C:\Users\Usuario\Desktop\Sistema de ventas online - final\Backend\Api_\DataAccess\obj\Debug\DataAccess.csproj.CoreCompileInputs.cache

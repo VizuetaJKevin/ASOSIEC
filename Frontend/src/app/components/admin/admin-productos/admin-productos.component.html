@@ -1,0 +1,1990 @@
+<div class="productos-wrapper">
+  <!-- ========================================
+       HEADER CON DEGRADADO
+       ======================================== -->
+  <div class="productos-header">
+    <div class="header-content">
+      <div class="header-icon-wrapper">
+        <mat-icon class="header-icon">inventory_2</mat-icon>
+      </div>
+      <div class="header-text">
+        <h1 class="header-title">Gestión de Productos</h1>
+        <p class="header-subtitle">Administra tu catálogo de productos artesanales</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="productos-container">
+
+    <!-- Panel de Vendedor Badge -->
+    <div *ngIf="esVendedor" class="vendor-panel-badge">
+      <div class="vendor-badge-icon">
+        <mat-icon>store</mat-icon>
+      </div>
+      <div class="vendor-badge-content">
+        <h3>Panel de Vendedor</h3>
+        <p>Estás gestionando tus propios productos</p>
+      </div>
+    </div>
+
+    <!-- ========================================
+         STATS CARDS
+         ======================================== -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper">
+          <mat-icon>inventory</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{todosLosProductos.length}}</h4>
+          <p class="stat-label">Total Productos</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper verificado">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{productosDisponibles}}</h4>
+          <p class="stat-label">Disponibles</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper pendiente">
+          <mat-icon>warning</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{productosStockBajo}}</h4>
+          <p class="stat-label">Stock Bajo</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper rechazado">
+          <mat-icon>remove_shopping_cart</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{productosAgotados}}</h4>
+          <p class="stat-label">Agotados</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ============================================ -->
+    <!-- ✅ PESTAÑAS DE ESTADOS -->
+    <!-- ============================================ -->
+    <div class="tabs-wrapper" *ngIf="!cargando">
+      <mat-tab-group
+        [(selectedIndex)]="tabActiva"
+        (selectedIndexChange)="onTabChange($event)"
+        class="modern-tabs"
+        animationDuration="300ms">
+
+        <!-- Pestaña: Pendientes -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>schedule</mat-icon>
+              <span>Pendientes</span>
+              <span class="tab-badge" *ngIf="totalPendientes > 0">{{totalPendientes}}</span>
+            </div>
+          </ng-template>
+
+          <!-- Contenido del Tab -->
+          <div class="tab-content">
+            <!-- Action Bar -->
+            <div class="action-bar">
+              <div class="filters-group">
+                <!-- Filtro por nombre -->
+                <div class="search-box">
+                  <mat-icon>search</mat-icon>
+                  <input
+                    type="text"
+                    placeholder="Buscar productos..."
+                    class="search-input"
+                    [(ngModel)]="filtroNombre"
+                    (input)="aplicarFiltros()">
+                  <button
+                    *ngIf="filtroNombre"
+                    mat-icon-button
+                    class="clear-btn"
+                    (click)="filtroNombre = ''; aplicarFiltros()"
+                    matTooltip="Limpiar">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+
+                <!-- Filtro por vendedor (solo para admins) -->
+                <div class="search-box" *ngIf="!esVendedor">
+                  <mat-icon>store</mat-icon>
+                  <input
+                    type="text"
+                    placeholder="Buscar por vendedor..."
+                    class="search-input"
+                    [(ngModel)]="filtroVendedor"
+                    (input)="aplicarFiltros()">
+                  <button
+                    *ngIf="filtroVendedor"
+                    mat-icon-button
+                    class="clear-btn"
+                    (click)="filtroVendedor = ''; aplicarFiltros()"
+                    matTooltip="Limpiar">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+
+                <!-- Botón limpiar filtros -->
+                <button
+                  mat-stroked-button
+                  class="btn-clear-filters"
+                  *ngIf="filtroNombre || filtroVendedor"
+                  (click)="limpiarFiltros()">
+                  <mat-icon>filter_alt_off</mat-icon>
+                  <span>Limpiar filtros</span>
+                </button>
+              </div>
+
+              <button mat-raised-button class="btn-add-product" (click)="abrirModalAgregar()">
+                <mat-icon>add_circle</mat-icon>
+                <span>Agregar Producto</span>
+              </button>
+            </div>
+
+            <!-- Info de resultados -->
+            <div class="results-info">
+              <span class="results-count">{{ infoPaginacion }}</span>
+              <div class="pagination-size">
+                <span>Mostrar:</span>
+                <select
+                  class="pagination-select"
+                  [(ngModel)]="productosPorPagina"
+                  (change)="cambiarProductosPorPagina(productosPorPagina)">
+                  <option *ngFor="let opcion of opcionesPaginacion" [value]="opcion">
+                    {{ opcion }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Products Table -->
+            <div *ngIf="productosFiltrados.length > 0" class="products-table-container">
+              <div class="table-wrapper">
+                <table class="products-table">
+                  <thead>
+                    <tr>
+                      <th class="th-image">Imagen</th>
+                      <th class="th-product sortable" (click)="ordenarPor('nombre_producto')" [class.sorted]="esColumnaOrdenada('nombre_producto')">
+                        <div class="th-content">
+                          <span>Producto</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('nombre_producto') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-category sortable" (click)="ordenarPor('categoria')" [class.sorted]="esColumnaOrdenada('categoria')">
+                        <div class="th-content">
+                          <span>Categoría</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('categoria') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-stock sortable" (click)="ordenarPor('stock')" [class.sorted]="esColumnaOrdenada('stock')">
+                        <div class="th-content">
+                          <span>Stock</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('stock') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-price sortable" (click)="ordenarPor('precio')" [class.sorted]="esColumnaOrdenada('precio')">
+                        <div class="th-content">
+                          <span>Precio</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('precio') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-vendor sortable" *ngIf="!esVendedor" (click)="ordenarPor('vendedor')" [class.sorted]="esColumnaOrdenada('vendedor')">
+                        <div class="th-content">
+                          <span>Vendedor</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('vendedor') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-status sortable" (click)="ordenarPor('estado')" [class.sorted]="esColumnaOrdenada('estado')">
+                        <div class="th-content">
+                          <span>Estado</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('estado') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-actions">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let producto of productosPaginados" class="product-row">
+                      <!-- Image -->
+                      <td class="td-image">
+                        <div class="product-image-thumb">
+                          <img [src]="obtenerRutaImagen(producto)"
+                               [alt]="producto.nombre_producto"
+                               (error)="manejarErrorImagen($event)">
+                          <div class="image-overlay">
+                            <mat-icon>zoom_in</mat-icon>
+                          </div>
+                        </div>
+                      </td>
+
+                      <!-- Product Info -->
+                      <td class="td-product">
+                        <div class="product-info">
+                          <h4 class="product-name">{{producto.nombre_producto}}</h4>
+                          <p class="product-description">{{producto.descripcion | slice:0:50}}{{producto.descripcion.length > 50 ? '...' : ''}}</p>
+                        </div>
+                      </td>
+
+                      <!-- Category -->
+                      <td class="td-category">
+                        <div class="category-tag">
+                          <span class="category-icon">{{obtenerIconoCategoria(producto.categoria_producto_Id)}}</span>
+                          <span class="category-text">{{obtenerNombreCategoria(producto.categoria_producto_Id)}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Stock -->
+                      <td class="td-stock">
+                        <div class="stock-indicator" [ngClass]="{
+                          'stock-critical': producto.stock < 5,
+                          'stock-warning': producto.stock >= 5 && producto.stock < 10,
+                          'stock-good': producto.stock >= 10
+                        }">
+                          <mat-icon>inventory</mat-icon>
+                          <span>{{producto.stock}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Price -->
+                      <td class="td-price">
+                        <div class="price-info">
+                          <span class="price-current">${{producto.precio_ahora | number:'1.2-2'}}</span>
+                          <span class="price-before" *ngIf="producto.precio_antes > producto.precio_ahora">
+                            ${{producto.precio_antes | number:'1.2-2'}}
+                          </span>
+                        </div>
+                      </td>
+
+                      <!-- Vendor (only for admin) -->
+                      <td class="td-vendor" *ngIf="!esVendedor">
+                        <div class="vendor-info">
+                          <mat-icon>store</mat-icon>
+                          <span>{{obtenerNombreVendedor(producto.vendedorId) | slice:0:20}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Status -->
+                      <td class="td-status">
+                        <div class="status-badge" [ngClass]="{
+                          'status-available': producto.estadoProductoId === 1,
+                          'status-out': producto.estadoProductoId === 2,
+                          'status-discontinued': producto.estadoProductoId === 3,
+                          'status-pending': producto.estadoProductoId === 4,
+                          'status-rejected': producto.estadoProductoId === 5
+                        }">
+                          <mat-icon>
+                            {{producto.estadoProductoId === 1 ? 'check_circle' :
+                              producto.estadoProductoId === 2 ? 'remove_shopping_cart' :
+                              producto.estadoProductoId === 3 ? 'block' :
+                              producto.estadoProductoId === 4 ? 'schedule' : 'cancel'}}
+                          </mat-icon>
+                          <span>
+                            {{producto.estadoProductoId === 1 ? 'Disponible' :
+                              producto.estadoProductoId === 2 ? 'Agotado' :
+                              producto.estadoProductoId === 3 ? 'Descontinuado' :
+                              producto.estadoProductoId === 4 ? 'Pendiente' : 'Rechazado'}}
+                          </span>
+                        </div>
+                      </td>
+
+                      <!-- Actions -->
+                      <td class="td-actions">
+                        <div class="action-buttons">
+
+                          <!-- ✅ BOTONES DE APROBACIÓN (solo admin y productos pendientes) -->
+                          <div class="approval-buttons" *ngIf="esAdmin && producto.estadoProductoId === 4">
+                            <button mat-icon-button
+                                    class="action-btn-table approve-btn"
+                                    (click)="aprobarProducto(producto)"
+                                    matTooltip="Aprobar producto">
+                              <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-icon-button
+                                    class="action-btn-table reject-btn"
+                                    (click)="rechazarProducto(producto)"
+                                    matTooltip="Rechazar producto">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                          </div>
+
+                          <!-- BOTONES NORMALES -->
+                          <button mat-icon-button
+                                  class="action-btn-table edit-btn-table"
+                                  (click)="abrirModalEditar(producto)"
+                                  matTooltip="Editar">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                          <button mat-icon-button
+                                  class="action-btn-table delete-btn-table"
+                                  (click)="eliminar(producto.id)"
+                                  matTooltip="Eliminar">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <div class="pagination-container" *ngIf="totalPaginas > 1">
+                <div class="pagination">
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPagina(paginaActual - 1)"
+                          [disabled]="paginaActual === 0">
+                    <mat-icon>chevron_left</mat-icon>
+                  </button>
+
+                  <ng-container *ngFor="let pagina of obtenerPaginasVisibles()">
+                    <button *ngIf="pagina >= 0"
+                            mat-button
+                            class="pagination-number"
+                            [class.active]="pagina === paginaActual"
+                            (click)="irAPagina(pagina)">
+                      {{ pagina + 1 }}
+                    </button>
+                    <span *ngIf="pagina < 0" class="pagination-ellipsis">...</span>
+                  </ng-container>
+
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPagina(paginaActual + 1)"
+                          [disabled]="paginaActual === totalPaginas - 1">
+                    <mat-icon>chevron_right</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="productosFiltrados.length === 0" class="empty-state">
+              <div class="empty-icon-wrapper">
+                <mat-icon>schedule</mat-icon>
+              </div>
+              <h3 class="empty-title">No hay productos pendientes</h3>
+              <p class="empty-subtitle">Los productos pendientes de aprobación aparecerán aquí</p>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Pestaña: Disponibles -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>check_circle</mat-icon>
+              <span>Disponibles</span>
+              <span class="tab-badge verificado" *ngIf="totalDisponibles > 0">{{totalDisponibles}}</span>
+            </div>
+          </ng-template>
+          <!-- El mismo contenido se duplicará aquí -->
+          <div class="tab-content">
+            <!-- Action Bar -->
+            <div class="action-bar">
+              <div class="filters-group">
+                <!-- Filtro por nombre -->
+                <div class="search-box">
+                  <mat-icon>search</mat-icon>
+                  <input
+                    type="text"
+                    placeholder="Buscar productos..."
+                    class="search-input"
+                    [(ngModel)]="filtroNombre"
+                    (input)="aplicarFiltros()">
+                  <button
+                    *ngIf="filtroNombre"
+                    mat-icon-button
+                    class="clear-btn"
+                    (click)="filtroNombre = ''; aplicarFiltros()"
+                    matTooltip="Limpiar">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+
+                <!-- Filtro por vendedor (solo para admins) -->
+                <div class="search-box" *ngIf="!esVendedor">
+                  <mat-icon>store</mat-icon>
+                  <input
+                    type="text"
+                    placeholder="Buscar por vendedor..."
+                    class="search-input"
+                    [(ngModel)]="filtroVendedor"
+                    (input)="aplicarFiltros()">
+                  <button
+                    *ngIf="filtroVendedor"
+                    mat-icon-button
+                    class="clear-btn"
+                    (click)="filtroVendedor = ''; aplicarFiltros()"
+                    matTooltip="Limpiar">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+
+                <!-- Botón limpiar filtros -->
+                <button
+                  mat-stroked-button
+                  class="btn-clear-filters"
+                  *ngIf="filtroNombre || filtroVendedor"
+                  (click)="limpiarFiltros()">
+                  <mat-icon>filter_alt_off</mat-icon>
+                  <span>Limpiar filtros</span>
+                </button>
+              </div>
+
+              <button mat-raised-button class="btn-add-product" (click)="abrirModalAgregar()">
+                <mat-icon>add_circle</mat-icon>
+                <span>Agregar Producto</span>
+              </button>
+            </div>
+
+            <!-- Info de resultados -->
+            <div class="results-info">
+              <span class="results-count">{{ infoPaginacion }}</span>
+              <div class="pagination-size">
+                <span>Mostrar:</span>
+                <select
+                  class="pagination-select"
+                  [(ngModel)]="productosPorPagina"
+                  (change)="cambiarProductosPorPagina(productosPorPagina)">
+                  <option *ngFor="let opcion of opcionesPaginacion" [value]="opcion">
+                    {{ opcion }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Products Table -->
+            <div *ngIf="productosFiltrados.length > 0" class="products-table-container">
+              <div class="table-wrapper">
+                <table class="products-table">
+                  <thead>
+                    <tr>
+                      <th class="th-image">Imagen</th>
+                      <th class="th-product sortable" (click)="ordenarPor('nombre_producto')" [class.sorted]="esColumnaOrdenada('nombre_producto')">
+                        <div class="th-content">
+                          <span>Producto</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('nombre_producto') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-category sortable" (click)="ordenarPor('categoria')" [class.sorted]="esColumnaOrdenada('categoria')">
+                        <div class="th-content">
+                          <span>Categoría</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('categoria') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-stock sortable" (click)="ordenarPor('stock')" [class.sorted]="esColumnaOrdenada('stock')">
+                        <div class="th-content">
+                          <span>Stock</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('stock') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-price sortable" (click)="ordenarPor('precio')" [class.sorted]="esColumnaOrdenada('precio')">
+                        <div class="th-content">
+                          <span>Precio</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('precio') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-vendor sortable" *ngIf="!esVendedor" (click)="ordenarPor('vendedor')" [class.sorted]="esColumnaOrdenada('vendedor')">
+                        <div class="th-content">
+                          <span>Vendedor</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('vendedor') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-status sortable" (click)="ordenarPor('estado')" [class.sorted]="esColumnaOrdenada('estado')">
+                        <div class="th-content">
+                          <span>Estado</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('estado') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-actions">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let producto of productosPaginados" class="product-row">
+                      <!-- Image -->
+                      <td class="td-image">
+                        <div class="product-image-thumb">
+                          <img [src]="obtenerRutaImagen(producto)"
+                               [alt]="producto.nombre_producto"
+                               (error)="manejarErrorImagen($event)">
+                          <div class="image-overlay">
+                            <mat-icon>zoom_in</mat-icon>
+                          </div>
+                        </div>
+                      </td>
+
+                      <!-- Product Info -->
+                      <td class="td-product">
+                        <div class="product-info">
+                          <h4 class="product-name">{{producto.nombre_producto}}</h4>
+                          <p class="product-description">{{producto.descripcion | slice:0:50}}{{producto.descripcion.length > 50 ? '...' : ''}}</p>
+                        </div>
+                      </td>
+
+                      <!-- Category -->
+                      <td class="td-category">
+                        <div class="category-tag">
+                          <span class="category-icon">{{obtenerIconoCategoria(producto.categoria_producto_Id)}}</span>
+                          <span class="category-text">{{obtenerNombreCategoria(producto.categoria_producto_Id)}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Stock -->
+                      <td class="td-stock">
+                        <div class="stock-indicator" [ngClass]="{
+                          'stock-critical': producto.stock < 5,
+                          'stock-warning': producto.stock >= 5 && producto.stock < 10,
+                          'stock-good': producto.stock >= 10
+                        }">
+                          <mat-icon>inventory</mat-icon>
+                          <span>{{producto.stock}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Price -->
+                      <td class="td-price">
+                        <div class="price-info">
+                          <span class="price-current">${{producto.precio_ahora | number:'1.2-2'}}</span>
+                          <span class="price-before" *ngIf="producto.precio_antes > producto.precio_ahora">
+                            ${{producto.precio_antes | number:'1.2-2'}}
+                          </span>
+                        </div>
+                      </td>
+
+                      <!-- Vendor (only for admin) -->
+                      <td class="td-vendor" *ngIf="!esVendedor">
+                        <div class="vendor-info">
+                          <mat-icon>store</mat-icon>
+                          <span>{{obtenerNombreVendedor(producto.vendedorId) | slice:0:20}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Status -->
+                      <td class="td-status">
+                        <div class="status-badge" [ngClass]="{
+                          'status-available': producto.estadoProductoId === 1,
+                          'status-out': producto.estadoProductoId === 2,
+                          'status-discontinued': producto.estadoProductoId === 3,
+                          'status-pending': producto.estadoProductoId === 4,
+                          'status-rejected': producto.estadoProductoId === 5
+                        }">
+                          <mat-icon>
+                            {{producto.estadoProductoId === 1 ? 'check_circle' :
+                              producto.estadoProductoId === 2 ? 'remove_shopping_cart' :
+                              producto.estadoProductoId === 3 ? 'block' :
+                              producto.estadoProductoId === 4 ? 'schedule' : 'cancel'}}
+                          </mat-icon>
+                          <span>
+                            {{producto.estadoProductoId === 1 ? 'Disponible' :
+                              producto.estadoProductoId === 2 ? 'Agotado' :
+                              producto.estadoProductoId === 3 ? 'Descontinuado' :
+                              producto.estadoProductoId === 4 ? 'Pendiente' : 'Rechazado'}}
+                          </span>
+                        </div>
+                      </td>
+
+                      <!-- Actions -->
+                      <td class="td-actions">
+                        <div class="action-buttons">
+
+                          <!-- ✅ BOTONES DE APROBACIÓN (solo admin y productos pendientes) -->
+                          <div class="approval-buttons" *ngIf="esAdmin && producto.estadoProductoId === 4">
+                            <button mat-icon-button
+                                    class="action-btn-table approve-btn"
+                                    (click)="aprobarProducto(producto)"
+                                    matTooltip="Aprobar producto">
+                              <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-icon-button
+                                    class="action-btn-table reject-btn"
+                                    (click)="rechazarProducto(producto)"
+                                    matTooltip="Rechazar producto">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                          </div>
+
+                          <!-- BOTONES NORMALES -->
+                          <button mat-icon-button
+                                  class="action-btn-table edit-btn-table"
+                                  (click)="abrirModalEditar(producto)"
+                                  matTooltip="Editar">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                          <button mat-icon-button
+                                  class="action-btn-table delete-btn-table"
+                                  (click)="eliminar(producto.id)"
+                                  matTooltip="Eliminar">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <div class="pagination-container" *ngIf="totalPaginas > 1">
+                <div class="pagination">
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPagina(paginaActual - 1)"
+                          [disabled]="paginaActual === 0">
+                    <mat-icon>chevron_left</mat-icon>
+                  </button>
+
+                  <ng-container *ngFor="let pagina of obtenerPaginasVisibles()">
+                    <button *ngIf="pagina >= 0"
+                            mat-button
+                            class="pagination-number"
+                            [class.active]="pagina === paginaActual"
+                            (click)="irAPagina(pagina)">
+                      {{ pagina + 1 }}
+                    </button>
+                    <span *ngIf="pagina < 0" class="pagination-ellipsis">...</span>
+                  </ng-container>
+
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPagina(paginaActual + 1)"
+                          [disabled]="paginaActual === totalPaginas - 1">
+                    <mat-icon>chevron_right</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="productosFiltrados.length === 0" class="empty-state">
+              <div class="empty-icon-wrapper">
+                <mat-icon>schedule</mat-icon>
+              </div>
+              <h3 class="empty-title">No hay productos pendientes</h3>
+              <p class="empty-subtitle">Los productos pendientes de aprobación aparecerán aquí</p>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Pestaña: Agotados -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>warning</mat-icon>
+              <span>Agotados</span>
+              <span class="tab-badge rechazado" *ngIf="totalAgotados > 0">{{totalAgotados}}</span>
+            </div>
+          </ng-template>
+          <!-- El mismo contenido se duplicará aquí -->
+          <div class="tab-content">
+            <!-- Action Bar -->
+            <div class="action-bar">
+              <div class="filters-group">
+                <!-- Filtro por nombre -->
+                <div class="search-box">
+                  <mat-icon>search</mat-icon>
+                  <input
+                    type="text"
+                    placeholder="Buscar productos..."
+                    class="search-input"
+                    [(ngModel)]="filtroNombre"
+                    (input)="aplicarFiltros()">
+                  <button
+                    *ngIf="filtroNombre"
+                    mat-icon-button
+                    class="clear-btn"
+                    (click)="filtroNombre = ''; aplicarFiltros()"
+                    matTooltip="Limpiar">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+
+                <!-- Filtro por vendedor (solo para admins) -->
+                <div class="search-box" *ngIf="!esVendedor">
+                  <mat-icon>store</mat-icon>
+                  <input
+                    type="text"
+                    placeholder="Buscar por vendedor..."
+                    class="search-input"
+                    [(ngModel)]="filtroVendedor"
+                    (input)="aplicarFiltros()">
+                  <button
+                    *ngIf="filtroVendedor"
+                    mat-icon-button
+                    class="clear-btn"
+                    (click)="filtroVendedor = ''; aplicarFiltros()"
+                    matTooltip="Limpiar">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+
+                <!-- Botón limpiar filtros -->
+                <button
+                  mat-stroked-button
+                  class="btn-clear-filters"
+                  *ngIf="filtroNombre || filtroVendedor"
+                  (click)="limpiarFiltros()">
+                  <mat-icon>filter_alt_off</mat-icon>
+                  <span>Limpiar filtros</span>
+                </button>
+              </div>
+
+              <button mat-raised-button class="btn-add-product" (click)="abrirModalAgregar()">
+                <mat-icon>add_circle</mat-icon>
+                <span>Agregar Producto</span>
+              </button>
+            </div>
+
+            <!-- Info de resultados -->
+            <div class="results-info">
+              <span class="results-count">{{ infoPaginacion }}</span>
+              <div class="pagination-size">
+                <span>Mostrar:</span>
+                <select
+                  class="pagination-select"
+                  [(ngModel)]="productosPorPagina"
+                  (change)="cambiarProductosPorPagina(productosPorPagina)">
+                  <option *ngFor="let opcion of opcionesPaginacion" [value]="opcion">
+                    {{ opcion }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Products Table -->
+            <div *ngIf="productosFiltrados.length > 0" class="products-table-container">
+              <div class="table-wrapper">
+                <table class="products-table">
+                  <thead>
+                    <tr>
+                      <th class="th-image">Imagen</th>
+                      <th class="th-product sortable" (click)="ordenarPor('nombre_producto')" [class.sorted]="esColumnaOrdenada('nombre_producto')">
+                        <div class="th-content">
+                          <span>Producto</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('nombre_producto') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-category sortable" (click)="ordenarPor('categoria')" [class.sorted]="esColumnaOrdenada('categoria')">
+                        <div class="th-content">
+                          <span>Categoría</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('categoria') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-stock sortable" (click)="ordenarPor('stock')" [class.sorted]="esColumnaOrdenada('stock')">
+                        <div class="th-content">
+                          <span>Stock</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('stock') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-price sortable" (click)="ordenarPor('precio')" [class.sorted]="esColumnaOrdenada('precio')">
+                        <div class="th-content">
+                          <span>Precio</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('precio') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-vendor sortable" *ngIf="!esVendedor" (click)="ordenarPor('vendedor')" [class.sorted]="esColumnaOrdenada('vendedor')">
+                        <div class="th-content">
+                          <span>Vendedor</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('vendedor') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-status sortable" (click)="ordenarPor('estado')" [class.sorted]="esColumnaOrdenada('estado')">
+                        <div class="th-content">
+                          <span>Estado</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('estado') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-actions">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let producto of productosPaginados" class="product-row">
+                      <!-- Image -->
+                      <td class="td-image">
+                        <div class="product-image-thumb">
+                          <img [src]="obtenerRutaImagen(producto)"
+                               [alt]="producto.nombre_producto"
+                               (error)="manejarErrorImagen($event)">
+                          <div class="image-overlay">
+                            <mat-icon>zoom_in</mat-icon>
+                          </div>
+                        </div>
+                      </td>
+
+                      <!-- Product Info -->
+                      <td class="td-product">
+                        <div class="product-info">
+                          <h4 class="product-name">{{producto.nombre_producto}}</h4>
+                          <p class="product-description">{{producto.descripcion | slice:0:50}}{{producto.descripcion.length > 50 ? '...' : ''}}</p>
+                        </div>
+                      </td>
+
+                      <!-- Category -->
+                      <td class="td-category">
+                        <div class="category-tag">
+                          <span class="category-icon">{{obtenerIconoCategoria(producto.categoria_producto_Id)}}</span>
+                          <span class="category-text">{{obtenerNombreCategoria(producto.categoria_producto_Id)}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Stock -->
+                      <td class="td-stock">
+                        <div class="stock-indicator" [ngClass]="{
+                          'stock-critical': producto.stock < 5,
+                          'stock-warning': producto.stock >= 5 && producto.stock < 10,
+                          'stock-good': producto.stock >= 10
+                        }">
+                          <mat-icon>inventory</mat-icon>
+                          <span>{{producto.stock}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Price -->
+                      <td class="td-price">
+                        <div class="price-info">
+                          <span class="price-current">${{producto.precio_ahora | number:'1.2-2'}}</span>
+                          <span class="price-before" *ngIf="producto.precio_antes > producto.precio_ahora">
+                            ${{producto.precio_antes | number:'1.2-2'}}
+                          </span>
+                        </div>
+                      </td>
+
+                      <!-- Vendor (only for admin) -->
+                      <td class="td-vendor" *ngIf="!esVendedor">
+                        <div class="vendor-info">
+                          <mat-icon>store</mat-icon>
+                          <span>{{obtenerNombreVendedor(producto.vendedorId) | slice:0:20}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Status -->
+                      <td class="td-status">
+                        <div class="status-badge" [ngClass]="{
+                          'status-available': producto.estadoProductoId === 1,
+                          'status-out': producto.estadoProductoId === 2,
+                          'status-discontinued': producto.estadoProductoId === 3,
+                          'status-pending': producto.estadoProductoId === 4,
+                          'status-rejected': producto.estadoProductoId === 5
+                        }">
+                          <mat-icon>
+                            {{producto.estadoProductoId === 1 ? 'check_circle' :
+                              producto.estadoProductoId === 2 ? 'remove_shopping_cart' :
+                              producto.estadoProductoId === 3 ? 'block' :
+                              producto.estadoProductoId === 4 ? 'schedule' : 'cancel'}}
+                          </mat-icon>
+                          <span>
+                            {{producto.estadoProductoId === 1 ? 'Disponible' :
+                              producto.estadoProductoId === 2 ? 'Agotado' :
+                              producto.estadoProductoId === 3 ? 'Descontinuado' :
+                              producto.estadoProductoId === 4 ? 'Pendiente' : 'Rechazado'}}
+                          </span>
+                        </div>
+                      </td>
+
+                      <!-- Actions -->
+                      <td class="td-actions">
+                        <div class="action-buttons">
+
+                          <!-- ✅ BOTONES DE APROBACIÓN (solo admin y productos pendientes) -->
+                          <div class="approval-buttons" *ngIf="esAdmin && producto.estadoProductoId === 4">
+                            <button mat-icon-button
+                                    class="action-btn-table approve-btn"
+                                    (click)="aprobarProducto(producto)"
+                                    matTooltip="Aprobar producto">
+                              <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-icon-button
+                                    class="action-btn-table reject-btn"
+                                    (click)="rechazarProducto(producto)"
+                                    matTooltip="Rechazar producto">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                          </div>
+
+                          <!-- BOTONES NORMALES -->
+                          <button mat-icon-button
+                                  class="action-btn-table edit-btn-table"
+                                  (click)="abrirModalEditar(producto)"
+                                  matTooltip="Editar">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                          <button mat-icon-button
+                                  class="action-btn-table delete-btn-table"
+                                  (click)="eliminar(producto.id)"
+                                  matTooltip="Eliminar">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <div class="pagination-container" *ngIf="totalPaginas > 1">
+                <div class="pagination">
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPagina(paginaActual - 1)"
+                          [disabled]="paginaActual === 0">
+                    <mat-icon>chevron_left</mat-icon>
+                  </button>
+
+                  <ng-container *ngFor="let pagina of obtenerPaginasVisibles()">
+                    <button *ngIf="pagina >= 0"
+                            mat-button
+                            class="pagination-number"
+                            [class.active]="pagina === paginaActual"
+                            (click)="irAPagina(pagina)">
+                      {{ pagina + 1 }}
+                    </button>
+                    <span *ngIf="pagina < 0" class="pagination-ellipsis">...</span>
+                  </ng-container>
+
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPagina(paginaActual + 1)"
+                          [disabled]="paginaActual === totalPaginas - 1">
+                    <mat-icon>chevron_right</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="productosFiltrados.length === 0" class="empty-state">
+              <div class="empty-icon-wrapper">
+                <mat-icon>schedule</mat-icon>
+              </div>
+              <h3 class="empty-title">No hay productos pendientes</h3>
+              <p class="empty-subtitle">Los productos pendientes de aprobación aparecerán aquí</p>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Pestaña: Descontinuados -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>block</mat-icon>
+              <span>Descontinuados</span>
+              <span class="tab-badge" style="background: linear-gradient(135deg, #6a6a6a 0%, #4a4a4a 100%);" *ngIf="totalDescontinuados > 0">{{totalDescontinuados}}</span>
+            </div>
+          </ng-template>
+          <!-- El mismo contenido se duplicará aquí -->
+          <div class="tab-content">
+            <!-- Action Bar -->
+            <div class="action-bar">
+              <div class="filters-group">
+                <!-- Filtro por nombre -->
+                <div class="search-box">
+                  <mat-icon>search</mat-icon>
+                  <input
+                    type="text"
+                    placeholder="Buscar productos..."
+                    class="search-input"
+                    [(ngModel)]="filtroNombre"
+                    (input)="aplicarFiltros()">
+                  <button
+                    *ngIf="filtroNombre"
+                    mat-icon-button
+                    class="clear-btn"
+                    (click)="filtroNombre = ''; aplicarFiltros()"
+                    matTooltip="Limpiar">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+
+                <!-- Filtro por vendedor (solo para admins) -->
+                <div class="search-box" *ngIf="!esVendedor">
+                  <mat-icon>store</mat-icon>
+                  <input
+                    type="text"
+                    placeholder="Buscar por vendedor..."
+                    class="search-input"
+                    [(ngModel)]="filtroVendedor"
+                    (input)="aplicarFiltros()">
+                  <button
+                    *ngIf="filtroVendedor"
+                    mat-icon-button
+                    class="clear-btn"
+                    (click)="filtroVendedor = ''; aplicarFiltros()"
+                    matTooltip="Limpiar">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+
+                <!-- Botón limpiar filtros -->
+                <button
+                  mat-stroked-button
+                  class="btn-clear-filters"
+                  *ngIf="filtroNombre || filtroVendedor"
+                  (click)="limpiarFiltros()">
+                  <mat-icon>filter_alt_off</mat-icon>
+                  <span>Limpiar filtros</span>
+                </button>
+              </div>
+
+              <button mat-raised-button class="btn-add-product" (click)="abrirModalAgregar()">
+                <mat-icon>add_circle</mat-icon>
+                <span>Agregar Producto</span>
+              </button>
+            </div>
+
+            <!-- Info de resultados -->
+            <div class="results-info">
+              <span class="results-count">{{ infoPaginacion }}</span>
+              <div class="pagination-size">
+                <span>Mostrar:</span>
+                <select
+                  class="pagination-select"
+                  [(ngModel)]="productosPorPagina"
+                  (change)="cambiarProductosPorPagina(productosPorPagina)">
+                  <option *ngFor="let opcion of opcionesPaginacion" [value]="opcion">
+                    {{ opcion }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Products Table -->
+            <div *ngIf="productosFiltrados.length > 0" class="products-table-container">
+              <div class="table-wrapper">
+                <table class="products-table">
+                  <thead>
+                    <tr>
+                      <th class="th-image">Imagen</th>
+                      <th class="th-product sortable" (click)="ordenarPor('nombre_producto')" [class.sorted]="esColumnaOrdenada('nombre_producto')">
+                        <div class="th-content">
+                          <span>Producto</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('nombre_producto') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-category sortable" (click)="ordenarPor('categoria')" [class.sorted]="esColumnaOrdenada('categoria')">
+                        <div class="th-content">
+                          <span>Categoría</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('categoria') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-stock sortable" (click)="ordenarPor('stock')" [class.sorted]="esColumnaOrdenada('stock')">
+                        <div class="th-content">
+                          <span>Stock</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('stock') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-price sortable" (click)="ordenarPor('precio')" [class.sorted]="esColumnaOrdenada('precio')">
+                        <div class="th-content">
+                          <span>Precio</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('precio') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-vendor sortable" *ngIf="!esVendedor" (click)="ordenarPor('vendedor')" [class.sorted]="esColumnaOrdenada('vendedor')">
+                        <div class="th-content">
+                          <span>Vendedor</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('vendedor') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-status sortable" (click)="ordenarPor('estado')" [class.sorted]="esColumnaOrdenada('estado')">
+                        <div class="th-content">
+                          <span>Estado</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('estado') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-actions">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let producto of productosPaginados" class="product-row">
+                      <!-- Image -->
+                      <td class="td-image">
+                        <div class="product-image-thumb">
+                          <img [src]="obtenerRutaImagen(producto)"
+                               [alt]="producto.nombre_producto"
+                               (error)="manejarErrorImagen($event)">
+                          <div class="image-overlay">
+                            <mat-icon>zoom_in</mat-icon>
+                          </div>
+                        </div>
+                      </td>
+
+                      <!-- Product Info -->
+                      <td class="td-product">
+                        <div class="product-info">
+                          <h4 class="product-name">{{producto.nombre_producto}}</h4>
+                          <p class="product-description">{{producto.descripcion | slice:0:50}}{{producto.descripcion.length > 50 ? '...' : ''}}</p>
+                        </div>
+                      </td>
+
+                      <!-- Category -->
+                      <td class="td-category">
+                        <div class="category-tag">
+                          <span class="category-icon">{{obtenerIconoCategoria(producto.categoria_producto_Id)}}</span>
+                          <span class="category-text">{{obtenerNombreCategoria(producto.categoria_producto_Id)}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Stock -->
+                      <td class="td-stock">
+                        <div class="stock-indicator" [ngClass]="{
+                          'stock-critical': producto.stock < 5,
+                          'stock-warning': producto.stock >= 5 && producto.stock < 10,
+                          'stock-good': producto.stock >= 10
+                        }">
+                          <mat-icon>inventory</mat-icon>
+                          <span>{{producto.stock}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Price -->
+                      <td class="td-price">
+                        <div class="price-info">
+                          <span class="price-current">${{producto.precio_ahora | number:'1.2-2'}}</span>
+                          <span class="price-before" *ngIf="producto.precio_antes > producto.precio_ahora">
+                            ${{producto.precio_antes | number:'1.2-2'}}
+                          </span>
+                        </div>
+                      </td>
+
+                      <!-- Vendor (only for admin) -->
+                      <td class="td-vendor" *ngIf="!esVendedor">
+                        <div class="vendor-info">
+                          <mat-icon>store</mat-icon>
+                          <span>{{obtenerNombreVendedor(producto.vendedorId) | slice:0:20}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Status -->
+                      <td class="td-status">
+                        <div class="status-badge" [ngClass]="{
+                          'status-available': producto.estadoProductoId === 1,
+                          'status-out': producto.estadoProductoId === 2,
+                          'status-discontinued': producto.estadoProductoId === 3,
+                          'status-pending': producto.estadoProductoId === 4,
+                          'status-rejected': producto.estadoProductoId === 5
+                        }">
+                          <mat-icon>
+                            {{producto.estadoProductoId === 1 ? 'check_circle' :
+                              producto.estadoProductoId === 2 ? 'remove_shopping_cart' :
+                              producto.estadoProductoId === 3 ? 'block' :
+                              producto.estadoProductoId === 4 ? 'schedule' : 'cancel'}}
+                          </mat-icon>
+                          <span>
+                            {{producto.estadoProductoId === 1 ? 'Disponible' :
+                              producto.estadoProductoId === 2 ? 'Agotado' :
+                              producto.estadoProductoId === 3 ? 'Descontinuado' :
+                              producto.estadoProductoId === 4 ? 'Pendiente' : 'Rechazado'}}
+                          </span>
+                        </div>
+                      </td>
+
+                      <!-- Actions -->
+                      <td class="td-actions">
+                        <div class="action-buttons">
+
+                          <!-- ✅ BOTONES DE APROBACIÓN (solo admin y productos pendientes) -->
+                          <div class="approval-buttons" *ngIf="esAdmin && producto.estadoProductoId === 4">
+                            <button mat-icon-button
+                                    class="action-btn-table approve-btn"
+                                    (click)="aprobarProducto(producto)"
+                                    matTooltip="Aprobar producto">
+                              <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-icon-button
+                                    class="action-btn-table reject-btn"
+                                    (click)="rechazarProducto(producto)"
+                                    matTooltip="Rechazar producto">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                          </div>
+
+                          <!-- BOTONES NORMALES -->
+                          <button mat-icon-button
+                                  class="action-btn-table edit-btn-table"
+                                  (click)="abrirModalEditar(producto)"
+                                  matTooltip="Editar">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                          <button mat-icon-button
+                                  class="action-btn-table delete-btn-table"
+                                  (click)="eliminar(producto.id)"
+                                  matTooltip="Eliminar">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <div class="pagination-container" *ngIf="totalPaginas > 1">
+                <div class="pagination">
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPagina(paginaActual - 1)"
+                          [disabled]="paginaActual === 0">
+                    <mat-icon>chevron_left</mat-icon>
+                  </button>
+
+                  <ng-container *ngFor="let pagina of obtenerPaginasVisibles()">
+                    <button *ngIf="pagina >= 0"
+                            mat-button
+                            class="pagination-number"
+                            [class.active]="pagina === paginaActual"
+                            (click)="irAPagina(pagina)">
+                      {{ pagina + 1 }}
+                    </button>
+                    <span *ngIf="pagina < 0" class="pagination-ellipsis">...</span>
+                  </ng-container>
+
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPagina(paginaActual + 1)"
+                          [disabled]="paginaActual === totalPaginas - 1">
+                    <mat-icon>chevron_right</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="productosFiltrados.length === 0" class="empty-state">
+              <div class="empty-icon-wrapper">
+                <mat-icon>schedule</mat-icon>
+              </div>
+              <h3 class="empty-title">No hay productos pendientes</h3>
+              <p class="empty-subtitle">Los productos pendientes de aprobación aparecerán aquí</p>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Pestaña: Rechazados -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>cancel</mat-icon>
+              <span>Rechazados</span>
+              <span class="tab-badge rechazado" *ngIf="totalRechazados > 0">{{totalRechazados}}</span>
+            </div>
+          </ng-template>
+          <!-- El mismo contenido se duplicará aquí -->
+          <div class="tab-content">
+            <!-- Action Bar -->
+            <div class="action-bar">
+              <div class="filters-group">
+                <!-- Filtro por nombre -->
+                <div class="search-box">
+                  <mat-icon>search</mat-icon>
+                  <input
+                    type="text"
+                    placeholder="Buscar productos..."
+                    class="search-input"
+                    [(ngModel)]="filtroNombre"
+                    (input)="aplicarFiltros()">
+                  <button
+                    *ngIf="filtroNombre"
+                    mat-icon-button
+                    class="clear-btn"
+                    (click)="filtroNombre = ''; aplicarFiltros()"
+                    matTooltip="Limpiar">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+
+                <!-- Filtro por vendedor (solo para admins) -->
+                <div class="search-box" *ngIf="!esVendedor">
+                  <mat-icon>store</mat-icon>
+                  <input
+                    type="text"
+                    placeholder="Buscar por vendedor..."
+                    class="search-input"
+                    [(ngModel)]="filtroVendedor"
+                    (input)="aplicarFiltros()">
+                  <button
+                    *ngIf="filtroVendedor"
+                    mat-icon-button
+                    class="clear-btn"
+                    (click)="filtroVendedor = ''; aplicarFiltros()"
+                    matTooltip="Limpiar">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+
+                <!-- Botón limpiar filtros -->
+                <button
+                  mat-stroked-button
+                  class="btn-clear-filters"
+                  *ngIf="filtroNombre || filtroVendedor"
+                  (click)="limpiarFiltros()">
+                  <mat-icon>filter_alt_off</mat-icon>
+                  <span>Limpiar filtros</span>
+                </button>
+              </div>
+
+              <button mat-raised-button class="btn-add-product" (click)="abrirModalAgregar()">
+                <mat-icon>add_circle</mat-icon>
+                <span>Agregar Producto</span>
+              </button>
+            </div>
+
+            <!-- Info de resultados -->
+            <div class="results-info">
+              <span class="results-count">{{ infoPaginacion }}</span>
+              <div class="pagination-size">
+                <span>Mostrar:</span>
+                <select
+                  class="pagination-select"
+                  [(ngModel)]="productosPorPagina"
+                  (change)="cambiarProductosPorPagina(productosPorPagina)">
+                  <option *ngFor="let opcion of opcionesPaginacion" [value]="opcion">
+                    {{ opcion }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Products Table -->
+            <div *ngIf="productosFiltrados.length > 0" class="products-table-container">
+              <div class="table-wrapper">
+                <table class="products-table">
+                  <thead>
+                    <tr>
+                      <th class="th-image">Imagen</th>
+                      <th class="th-product sortable" (click)="ordenarPor('nombre_producto')" [class.sorted]="esColumnaOrdenada('nombre_producto')">
+                        <div class="th-content">
+                          <span>Producto</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('nombre_producto') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-category sortable" (click)="ordenarPor('categoria')" [class.sorted]="esColumnaOrdenada('categoria')">
+                        <div class="th-content">
+                          <span>Categoría</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('categoria') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-stock sortable" (click)="ordenarPor('stock')" [class.sorted]="esColumnaOrdenada('stock')">
+                        <div class="th-content">
+                          <span>Stock</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('stock') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-price sortable" (click)="ordenarPor('precio')" [class.sorted]="esColumnaOrdenada('precio')">
+                        <div class="th-content">
+                          <span>Precio</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('precio') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-vendor sortable" *ngIf="!esVendedor" (click)="ordenarPor('vendedor')" [class.sorted]="esColumnaOrdenada('vendedor')">
+                        <div class="th-content">
+                          <span>Vendedor</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('vendedor') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-status sortable" (click)="ordenarPor('estado')" [class.sorted]="esColumnaOrdenada('estado')">
+                        <div class="th-content">
+                          <span>Estado</span>
+                          <mat-icon class="sort-icon">{{ obtenerIconoOrden('estado') }}</mat-icon>
+                        </div>
+                      </th>
+                      <th class="th-actions">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let producto of productosPaginados" class="product-row">
+                      <!-- Image -->
+                      <td class="td-image">
+                        <div class="product-image-thumb">
+                          <img [src]="obtenerRutaImagen(producto)"
+                               [alt]="producto.nombre_producto"
+                               (error)="manejarErrorImagen($event)">
+                          <div class="image-overlay">
+                            <mat-icon>zoom_in</mat-icon>
+                          </div>
+                        </div>
+                      </td>
+
+                      <!-- Product Info -->
+                      <td class="td-product">
+                        <div class="product-info">
+                          <h4 class="product-name">{{producto.nombre_producto}}</h4>
+                          <p class="product-description">{{producto.descripcion | slice:0:50}}{{producto.descripcion.length > 50 ? '...' : ''}}</p>
+                        </div>
+                      </td>
+
+                      <!-- Category -->
+                      <td class="td-category">
+                        <div class="category-tag">
+                          <span class="category-icon">{{obtenerIconoCategoria(producto.categoria_producto_Id)}}</span>
+                          <span class="category-text">{{obtenerNombreCategoria(producto.categoria_producto_Id)}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Stock -->
+                      <td class="td-stock">
+                        <div class="stock-indicator" [ngClass]="{
+                          'stock-critical': producto.stock < 5,
+                          'stock-warning': producto.stock >= 5 && producto.stock < 10,
+                          'stock-good': producto.stock >= 10
+                        }">
+                          <mat-icon>inventory</mat-icon>
+                          <span>{{producto.stock}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Price -->
+                      <td class="td-price">
+                        <div class="price-info">
+                          <span class="price-current">${{producto.precio_ahora | number:'1.2-2'}}</span>
+                          <span class="price-before" *ngIf="producto.precio_antes > producto.precio_ahora">
+                            ${{producto.precio_antes | number:'1.2-2'}}
+                          </span>
+                        </div>
+                      </td>
+
+                      <!-- Vendor (only for admin) -->
+                      <td class="td-vendor" *ngIf="!esVendedor">
+                        <div class="vendor-info">
+                          <mat-icon>store</mat-icon>
+                          <span>{{obtenerNombreVendedor(producto.vendedorId) | slice:0:20}}</span>
+                        </div>
+                      </td>
+
+                      <!-- Status -->
+                      <td class="td-status">
+                        <div class="status-badge" [ngClass]="{
+                          'status-available': producto.estadoProductoId === 1,
+                          'status-out': producto.estadoProductoId === 2,
+                          'status-discontinued': producto.estadoProductoId === 3,
+                          'status-pending': producto.estadoProductoId === 4,
+                          'status-rejected': producto.estadoProductoId === 5
+                        }">
+                          <mat-icon>
+                            {{producto.estadoProductoId === 1 ? 'check_circle' :
+                              producto.estadoProductoId === 2 ? 'remove_shopping_cart' :
+                              producto.estadoProductoId === 3 ? 'block' :
+                              producto.estadoProductoId === 4 ? 'schedule' : 'cancel'}}
+                          </mat-icon>
+                          <span>
+                            {{producto.estadoProductoId === 1 ? 'Disponible' :
+                              producto.estadoProductoId === 2 ? 'Agotado' :
+                              producto.estadoProductoId === 3 ? 'Descontinuado' :
+                              producto.estadoProductoId === 4 ? 'Pendiente' : 'Rechazado'}}
+                          </span>
+                        </div>
+                      </td>
+
+                      <!-- Actions -->
+                      <td class="td-actions">
+                        <div class="action-buttons">
+
+                          <!-- ✅ BOTONES DE APROBACIÓN (solo admin y productos pendientes) -->
+                          <div class="approval-buttons" *ngIf="esAdmin && producto.estadoProductoId === 4">
+                            <button mat-icon-button
+                                    class="action-btn-table approve-btn"
+                                    (click)="aprobarProducto(producto)"
+                                    matTooltip="Aprobar producto">
+                              <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-icon-button
+                                    class="action-btn-table reject-btn"
+                                    (click)="rechazarProducto(producto)"
+                                    matTooltip="Rechazar producto">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                          </div>
+
+                          <!-- BOTONES NORMALES -->
+                          <button mat-icon-button
+                                  class="action-btn-table edit-btn-table"
+                                  (click)="abrirModalEditar(producto)"
+                                  matTooltip="Editar">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                          <button mat-icon-button
+                                  class="action-btn-table delete-btn-table"
+                                  (click)="eliminar(producto.id)"
+                                  matTooltip="Eliminar">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <div class="pagination-container" *ngIf="totalPaginas > 1">
+                <div class="pagination">
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPagina(paginaActual - 1)"
+                          [disabled]="paginaActual === 0">
+                    <mat-icon>chevron_left</mat-icon>
+                  </button>
+
+                  <ng-container *ngFor="let pagina of obtenerPaginasVisibles()">
+                    <button *ngIf="pagina >= 0"
+                            mat-button
+                            class="pagination-number"
+                            [class.active]="pagina === paginaActual"
+                            (click)="irAPagina(pagina)">
+                      {{ pagina + 1 }}
+                    </button>
+                    <span *ngIf="pagina < 0" class="pagination-ellipsis">...</span>
+                  </ng-container>
+
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPagina(paginaActual + 1)"
+                          [disabled]="paginaActual === totalPaginas - 1">
+                    <mat-icon>chevron_right</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="productosFiltrados.length === 0" class="empty-state">
+              <div class="empty-icon-wrapper">
+                <mat-icon>schedule</mat-icon>
+              </div>
+              <h3 class="empty-title">No hay productos pendientes</h3>
+              <p class="empty-subtitle">Los productos pendientes de aprobación aparecerán aquí</p>
+            </div>
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+    </div>
+
+    <!-- Loading State Global -->
+    <div *ngIf="cargando" class="loading-state">
+      <div class="spinner-wrapper">
+        <div class="modern-spinner"></div>
+      </div>
+      <p class="loading-text">Cargando productos...</p>
+    </div>
+
+    <!-- Empty State Global (cuando no hay productos disponibles) -->
+    <div *ngIf="!cargando && todosLosProductos.length === 0" class="empty-state">
+      <div class="empty-icon-wrapper">
+        <mat-icon>inbox</mat-icon>
+      </div>
+      <h3 class="empty-title">No hay productos registrados</h3>
+      <p class="empty-subtitle">Comienza agregando tu primer producto al catálogo</p>
+      <button mat-raised-button class="btn-empty-action" (click)="abrirModalAgregar()">
+        <mat-icon>add_circle</mat-icon>
+        Agregar Primer Producto
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL AGREGAR PRODUCTO -->
+<div class="modal-overlay" *ngIf="mostrarModalAgregar" (click)="cerrarModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon">add_circle</mat-icon>
+        Nuevo Producto
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-content">
+      <form [formGroup]="formularioProducto">
+        <div class="form-grid">
+
+          <!-- Nombre Producto -->
+          <div class="form-group">
+            <label class="form-label">
+              <mat-icon class="label-icon">shopping_bag</mat-icon>
+              Nombre Producto *
+            </label>
+            <input type="text"
+                   class="form-control custom-input"
+                   formControlName="nombre_producto"
+                   placeholder="Ingresa el nombre del producto">
+          </div>
+
+          <!-- Descripción -->
+          <div class="form-group">
+            <label class="form-label">
+              <mat-icon class="label-icon">description</mat-icon>
+              Descripción *
+            </label>
+            <input type="text"
+                   class="form-control custom-input"
+                   formControlName="descripcion"
+                   placeholder="Descripción del producto">
+          </div>
+
+          <!-- Categoría -->
+          <div class="form-group">
+            <label class="form-label">
+              <mat-icon class="label-icon">category</mat-icon>
+              Categoría *
+            </label>
+            <select class="form-select custom-select" formControlName="categoria_producto_Id">
+              <option *ngFor="let categoria of Listacategoria_prod" [value]="categoria.id">
+                {{categoria.nombre_categoria}}
+              </option>
+            </select>
+          </div>
+
+          <!-- Stock -->
+          <div class="form-group">
+            <label class="form-label">
+              <mat-icon class="label-icon">inventory</mat-icon>
+              Stock *
+            </label>
+            <input type="number"
+                   class="form-control custom-input"
+                   formControlName="stock"
+                   placeholder="Stock del producto"
+                   min="0">
+          </div>
+
+          <!-- Precio Ahora -->
+          <div class="form-group">
+            <label class="form-label">
+              <mat-icon class="label-icon">price_check</mat-icon>
+              Precio Ahora *
+            </label>
+            <input type="number"
+                   class="form-control custom-input"
+                   formControlName="precio_ahora"
+                   placeholder="Precio actual"
+                   min="0"
+                   step="0.01">
+          </div>
+
+          <!-- Precio Antes -->
+          <div class="form-group">
+            <label class="form-label">
+              <mat-icon class="label-icon">attach_money</mat-icon>
+              Precio Antes *
+            </label>
+            <input type="number"
+                   class="form-control custom-input"
+                   formControlName="precio_antes"
+                   placeholder="Precio anterior"
+                   min="0"
+                   step="0.01">
+          </div>
+
+          <!-- Campo de carga de imagen -->
+          <div class="form-group full-width">
+            <label class="form-label">
+              <mat-icon class="label-icon">image</mat-icon>
+              Imagen del Producto *
+            </label>
+
+            <input
+              type="file"
+              class="form-control custom-input"
+              accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+              (change)="onImagenSeleccionada($event)"
+              [disabled]="subiendoImagen">
+
+            <small class="hint-text">
+              <mat-icon>info</mat-icon>
+              Selecciona una imagen para el producto. Formatos: JPG, PNG, WEBP, GIF
+            </small>
+
+            <div *ngIf="previsualizacionImagen" class="mt-3" style="text-align: center;">
+              <p style="margin-bottom: 10px; font-weight: 600; color: #667eea;">Imagen seleccionada:</p>
+              <img
+                [src]="previsualizacionImagen"
+                alt="Previsualización"
+                style="max-width: 300px; max-height: 300px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+              <br>
+              <button
+                type="button"
+                class="btn-cancel mt-2"
+                (click)="limpiarImagen()"
+                style="padding: 8px 16px; font-size: 14px;">
+                <mat-icon>delete</mat-icon>
+                Cambiar imagen
+              </button>
+            </div>
+
+            <div *ngIf="subiendoImagen" class="mt-2">
+              <div class="modern-spinner" style="margin: 0 auto;"></div>
+              <p style="text-align: center; margin-top: 10px; color: #667eea;">Subiendo imagen...</p>
+            </div>
+          </div>
+
+          <!-- Estado (solo admin) -->
+          <div class="form-group" *ngIf="!esVendedor">
+            <label class="form-label">
+              <mat-icon class="label-icon">toggle_on</mat-icon>
+              Estado *
+            </label>
+            <select class="form-select custom-select" formControlName="estadoProductoId">
+              <option *ngFor="let estado of ListaEstadosProducto" [value]="estado.id">
+                {{estado.descripcion}}
+              </option>
+            </select>
+          </div>
+
+          <!-- Vendedor (solo admin) -->
+          <div class="form-group" *ngIf="!esVendedor">
+            <label class="form-label">
+              <mat-icon class="label-icon">person_pin</mat-icon>
+              Vendedor *
+            </label>
+            <select class="form-select custom-select" formControlName="vendedorId">
+              <option *ngFor="let vendedor of ListaVendedores" [value]="vendedor.id">
+                {{vendedor.nombre_comercial}}
+              </option>
+            </select>
+          </div>
+
+          <!-- Info para vendedor -->
+          <div class="form-group" *ngIf="esVendedor">
+            <div class="info-box">
+              <mat-icon>info</mat-icon>
+              <p>Tú eres el vendedor de este producto</p>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cerrarModal()">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+      <button class="btn-save" (click)="guardarProducto()" [disabled]="formularioProducto.invalid">
+        <mat-icon>save</mat-icon>
+        Registrar Producto
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL EDITAR PRODUCTO (similar al anterior con datos prellenados) -->
+<div class="modal-overlay" *ngIf="mostrarModalEditar" (click)="cerrarModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon">edit</mat-icon>
+        Editar Producto
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-content">
+      <form [formGroup]="formularioProducto">
+        <div class="form-grid">
+
+          <!-- Nombre Producto -->
+          <div class="form-group">
+            <label class="form-label">
+              <mat-icon class="label-icon">shopping_bag</mat-icon>
+              Nombre Producto *
+            </label>
+            <input type="text"
+                   class="form-control custom-input"
+                   formControlName="nombre_producto"
+                   placeholder="Ingresa el nombre del producto">
+          </div>
+
+          <!-- Descripción -->
+          <div class="form-group">
+            <label class="form-label">
+              <mat-icon class="label-icon">description</mat-icon>
+              Descripción *
+            </label>
+            <input type="text"
+                   class="form-control custom-input"
+                   formControlName="descripcion"
+                   placeholder="Descripción del producto">
+          </div>
+
+          <!-- Categoría -->
+          <div class="form-group">
+            <label class="form-label">
+              <mat-icon class="label-icon">category</mat-icon>
+              Categoría *
+            </label>
+            <select class="form-select custom-select" formControlName="categoria_producto_Id">
+              <option *ngFor="let categoria of Listacategoria_prod" [value]="categoria.id">
+                {{categoria.nombre_categoria}}
+              </option>
+            </select>
+          </div>
+
+          <!-- Stock -->
+          <div class="form-group">
+            <label class="form-label">
+              <mat-icon class="label-icon">inventory</mat-icon>
+              Stock *
+            </label>
+            <input type="number"
+                   class="form-control custom-input"
+                   formControlName="stock"
+                   placeholder="Stock del producto"
+                   min="0">
+          </div>
+
+          <!-- Precio Ahora -->
+          <div class="form-group">
+            <label class="form-label">
+              <mat-icon class="label-icon">price_check</mat-icon>
+              Precio Ahora *
+            </label>
+            <input type="number"
+                   class="form-control custom-input"
+                   formControlName="precio_ahora"
+                   placeholder="Precio actual"
+                   min="0"
+                   step="0.01">
+          </div>
+
+          <!-- Precio Antes -->
+          <div class="form-group">
+            <label class="form-label">
+              <mat-icon class="label-icon">attach_money</mat-icon>
+              Precio Antes *
+            </label>
+            <input type="number"
+                   class="form-control custom-input"
+                   formControlName="precio_antes"
+                   placeholder="Precio anterior"
+                   min="0"
+                   step="0.01">
+          </div>
+
+          <!-- Campo de carga de imagen -->
+          <div class="form-group full-width">
+            <label class="form-label">
+              <mat-icon class="label-icon">image</mat-icon>
+              Imagen del Producto *
+            </label>
+
+            <input
+              type="file"
+              class="form-control custom-input"
+              accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+              (change)="onImagenSeleccionada($event)"
+              [disabled]="subiendoImagen">
+
+            <small class="hint-text">
+              <mat-icon>info</mat-icon>
+              Selecciona una nueva imagen si deseas cambiarla. Formatos: JPG, PNG, WEBP, GIF
+            </small>
+
+            <div *ngIf="previsualizacionImagen" class="mt-3" style="text-align: center;">
+              <p style="margin-bottom: 10px; font-weight: 600; color: #667eea;">Nueva imagen:</p>
+              <img
+                [src]="previsualizacionImagen"
+                alt="Previsualización"
+                style="max-width: 300px; max-height: 300px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+              <br>
+              <button
+                type="button"
+                class="btn-cancel mt-2"
+                (click)="limpiarImagen()"
+                style="padding: 8px 16px; font-size: 14px;">
+                <mat-icon>delete</mat-icon>
+                Cancelar cambio
+              </button>
+            </div>
+
+            <div *ngIf="!previsualizacionImagen && formularioProducto.get('url_Img')?.value" class="mt-3" style="text-align: center;">
+              <p style="margin-bottom: 10px; font-weight: 600;">Imagen actual:</p>
+              <img
+                [src]="formularioProducto.get('url_Img')?.value"
+                alt="Imagen actual"
+                style="max-width: 300px; max-height: 300px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            </div>
+
+            <div *ngIf="subiendoImagen" class="mt-2">
+              <div class="modern-spinner" style="margin: 0 auto;"></div>
+              <p style="text-align: center; margin-top: 10px; color: #667eea;">Subiendo imagen...</p>
+            </div>
+          </div>
+
+          <!-- Estado -->
+          <div class="form-group">
+            <label class="form-label">
+              <mat-icon class="label-icon">toggle_on</mat-icon>
+              Estado *
+            </label>
+            <select class="form-select custom-select" formControlName="estadoProductoId">
+              <option *ngFor="let estado of estadosPermitidos" [value]="estado.id">
+                {{estado.descripcion}}
+              </option>
+            </select>
+            <!-- ✅ NUEVO: Mensaje informativo para vendedores -->
+            <small *ngIf="esVendedor" class="form-text text-muted">
+              <mat-icon style="font-size: 14px; vertical-align: middle;">info</mat-icon>
+              Solo puedes cambiar entre: Disponible, Agotado y Descontinuado
+            </small>
+          </div>
+
+          <!-- Vendedor (solo admin) -->
+          <div class="form-group" *ngIf="!esVendedor">
+            <label class="form-label">
+              <mat-icon class="label-icon">person_pin</mat-icon>
+              Vendedor *
+            </label>
+            <select class="form-select custom-select" formControlName="vendedorId">
+              <option *ngFor="let vendedor of ListaVendedores" [value]="vendedor.id">
+                {{vendedor.nombre_comercial}}
+              </option>
+            </select>
+          </div>
+
+          <!-- Info para vendedor -->
+          <div class="form-group" *ngIf="esVendedor">
+            <div class="info-box">
+              <mat-icon>info</mat-icon>
+              <p>Tú eres el vendedor de este producto</p>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cerrarModal()">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+      <button class="btn-save" (click)="guardarProducto()" [disabled]="formularioProducto.invalid">
+        <mat-icon>save</mat-icon>
+        Guardar Cambios
+      </button>
+    </div>
+
+  </div>
+</div>

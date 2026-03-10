@@ -1,0 +1,228 @@
+<header class="main-header">
+  <nav class="navbar">
+    <div class="navbar-content">
+
+      <!-- Logo -->
+      <a routerLink="/" class="logo-link">
+        <div class="logo">
+          <img src="/assets/Images/home/logo.png" alt="ASOSIEC Logo" class="logo-img">
+          <div class="logo-text">
+            <span class="logo-title">ASOSIEC</span>
+            <span class="logo-subtitle">Asosiación Artesanal Ecoamigable</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="nav-menu" *ngIf="user.rolid === 0 || user.rolid === 2 || user.rolid === 3">
+        <a routerLink="/productos" routerLinkActive="active" class="nav-item">
+          <mat-icon>storefront</mat-icon>
+          <span>Tienda</span>
+        </a>
+        <a routerLink="/about" routerLinkActive="active" class="nav-item">
+          <mat-icon>info</mat-icon>
+          <span>Nosotros</span>
+        </a>
+        <a routerLink="/contact" routerLinkActive="active" class="nav-item">
+          <mat-icon>mail_outline</mat-icon>
+          <span>Contacto</span>
+        </a>
+      </div>
+
+      <!-- Right Actions -->
+      <div class="nav-actions">
+
+        <!-- Shopping Cart -->
+        <a routerLink="/carrito" class="icon-btn cart-btn" *ngIf="user.rolid === 0 || user.rolid === 2">
+          <mat-icon>shopping_cart</mat-icon>
+          <span class="cart-count" *ngIf="itemsTotal > 0">{{ itemsTotal }}</span>
+        </a>
+
+        <!-- Admin Menu -->
+        <button mat-button class="user-menu-btn admin-btn"
+                [matMenuTriggerFor]="adminMenu"
+                *ngIf="user.rolid === 1">
+          <div class="admin-btn-inner">
+            <div class="admin-scan-line"></div>
+            <div class="admin-icon-wrap">
+              <mat-icon>shield</mat-icon>
+            </div>
+            <div class="admin-text-wrap">
+              <span class="admin-label">ADMIN</span>
+              <span class="admin-sublabel">Panel de control</span>
+            </div>
+            <mat-icon class="arrow">keyboard_arrow_down</mat-icon>
+          </div>
+        </button>
+
+        <mat-menu #adminMenu="matMenu" class="custom-menu admin-menu">
+          <div class="admin-menu-header">
+            <mat-icon>shield</mat-icon>
+            <span>Panel de Administrador</span>
+          </div>
+          <button mat-menu-item routerLink="/adm-usuarios">
+            <mat-icon>people</mat-icon>
+            <span>Usuarios</span>
+          </button>
+          <button mat-menu-item routerLink="/adm-productos">
+            <mat-icon>inventory_2</mat-icon>
+            <span>Productos</span>
+          </button>
+          <button mat-menu-item routerLink="/adm-estados" class="menu-item-red">
+            <mat-icon>toggle_on</mat-icon>
+            <span>Estados</span>
+          </button>
+          <button mat-menu-item routerLink="/adm-roles" class="menu-item-red">
+            <mat-icon>badge</mat-icon>
+            <span>Roles</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item routerLink="/adm-comprobantes" class="menu-item-comprobantes">
+            <mat-icon>receipt_long</mat-icon>
+            <span>Comprobantes</span>
+            <span class="comprobantes-badge" *ngIf="comprobantesPendientes > 0">{{comprobantesPendientes}}</span>
+          </button>
+          <button mat-menu-item routerLink="/adm-dashboard">
+            <mat-icon>analytics</mat-icon>
+            <span>Reportes</span>
+          </button>
+          <button mat-menu-item routerLink="/adm-devoluciones">
+            <mat-icon>assignment_return</mat-icon>
+            <span>Devoluciones</span>
+          </button>
+          <button mat-menu-item routerLink="/adm-audit">
+            <mat-icon>history</mat-icon>
+            <span>Auditoría</span>
+          </button>
+          <button mat-menu-item routerLink="/adm-configuracion">
+            <mat-icon>tune</mat-icon>
+            <span>Configuración</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item class="logout-item" (click)="Logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Cerrar Sesión</span>
+          </button>
+        </mat-menu>
+
+        <!-- Vendedor Menu -->
+        <button mat-button class="user-menu-btn vendedor-btn"
+                [matMenuTriggerFor]="vendedorMenu"
+                *ngIf="user.rolid === 3">
+          <div class="vendedor-btn-inner">
+            <div class="vendedor-pulse-ring"></div>
+            <div class="vendedor-icon-wrap">
+              <mat-icon>storefront</mat-icon>
+            </div>
+            <div class="vendedor-text-wrap">
+              <span class="vendedor-label">VENDEDOR</span>
+              <span class="vendedor-sublabel">Mi tienda</span>
+            </div>
+            <mat-icon class="arrow">keyboard_arrow_down</mat-icon>
+          </div>
+        </button>
+
+        <mat-menu #vendedorMenu="matMenu" class="custom-menu vendedor-menu">
+          <div class="vendedor-menu-header">
+            <mat-icon>storefront</mat-icon>
+            <span>Panel de Vendedor</span>
+          </div>
+          <button mat-menu-item routerLink="/adm-productos">
+            <mat-icon>inventory</mat-icon>
+            <span>Mis Productos</span>
+          </button>
+          <button mat-menu-item routerLink="/adm-dashboard">
+            <mat-icon>assessment</mat-icon>
+            <span>Reportes</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>Mi Perfil</span>
+          </button>
+          <button mat-menu-item class="logout-item" (click)="Logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Cerrar Sesión</span>
+          </button>
+        </mat-menu>
+
+        <!-- Cliente Menu -->
+        <button mat-button class="user-menu-btn cliente-btn"
+                [matMenuTriggerFor]="clienteMenu"
+                *ngIf="user.rolid === 2">
+          <div class="cliente-btn-inner">
+            <!-- Partículas orbitales -->
+            <div class="orbit-ring orbit-ring-1">
+              <div class="orbit-dot"></div>
+            </div>
+            <div class="orbit-ring orbit-ring-2">
+              <div class="orbit-dot"></div>
+            </div>
+            <div class="orbit-ring orbit-ring-3">
+              <div class="orbit-dot"></div>
+            </div>
+            <div class="cliente-avatar-pill">
+              {{ user.nombre.charAt(0).toUpperCase() }}
+            </div>
+            <span class="user-name">{{ user.nombre }}</span>
+            <mat-icon class="arrow">keyboard_arrow_down</mat-icon>
+          </div>
+        </button>
+
+        <mat-menu #clienteMenu="matMenu" class="custom-menu cliente-menu">
+          <div class="menu-user-card">
+            <div class="avatar-large">
+              {{ user.nombre.charAt(0).toUpperCase() }}{{ user.apellido.charAt(0).toUpperCase() }}
+            </div>
+            <div class="user-info">
+              <div class="name">{{ user.nombre }} {{ user.apellido }}</div>
+              <div class="email">{{ user.email }}</div>
+            </div>
+          </div>
+          <button mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>Mi Perfil</span>
+          </button>
+          <button mat-menu-item routerLink="/historial-compras">
+            <mat-icon>shopping_bag</mat-icon>
+            <span>Mis Compras</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item class="logout-item" (click)="Logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Cerrar Sesión</span>
+          </button>
+        </mat-menu>
+
+        <!-- Login Button -->
+        <a routerLink="/login" class="login-btn" *ngIf="user.id === 0">
+          <mat-icon>login</mat-icon>
+          <span>Iniciar Sesión</span>
+        </a>
+
+        <!-- Mobile Menu Toggle -->
+        <button mat-icon-button class="mobile-menu-btn"
+                [matMenuTriggerFor]="mobileMenu"
+                *ngIf="user.rolid === 0 || user.rolid === 2 || user.rolid === 3">
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <mat-menu #mobileMenu="matMenu" class="custom-menu mobile-menu">
+          <button mat-menu-item routerLink="/productos">
+            <mat-icon>storefront</mat-icon>
+            <span>Tienda</span>
+          </button>
+          <button mat-menu-item routerLink="/about">
+            <mat-icon>info</mat-icon>
+            <span>Nosotros</span>
+          </button>
+          <button mat-menu-item routerLink="/contact">
+            <mat-icon>mail_outline</mat-icon>
+            <span>Contacto</span>
+          </button>
+        </mat-menu>
+
+      </div>
+    </div>
+  </nav>
+</header>

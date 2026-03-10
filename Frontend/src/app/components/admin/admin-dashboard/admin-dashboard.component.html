@@ -1,0 +1,453 @@
+<div class="dashboard-wrapper">
+
+  <!-- Header con degradado -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <div class="header-icon-wrapper">
+        <mat-icon class="header-icon">dashboard</mat-icon>
+      </div>
+      <div class="header-text">
+        <h1 class="header-title">Dashboard Administrativo</h1>
+        <p class="header-subtitle">Vista general de métricas y estadísticas del sistema</p>
+      </div>
+      <mat-card class="update-card">
+          <div class="update-content">
+            <mat-icon class="update-icon">schedule</mat-icon>
+            <div class="update-info">
+              <span class="update-label">Última actualización</span>
+              <span class="update-time">{{ getCurrentDate() }}</span>
+            </div>
+          </div>
+        </mat-card>
+      <div class="export-buttons">
+        <button mat-raised-button class="btn-export btn-excel" (click)="exportarExcel()">
+          <mat-icon>table_view</mat-icon>
+          <span>Exportar Excel</span>
+        </button>
+        <button mat-raised-button class="btn-export btn-pdf" (click)="exportarPDF()">
+          <mat-icon>picture_as_pdf</mat-icon>
+          <span>Exportar PDF</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-container">
+
+  <!-- LOADER -->
+  <div *ngIf="cargando" class="loading-container">
+    <mat-spinner diameter="60"></mat-spinner>
+    <p class="loading-text">Cargando dashboard...</p>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div *ngIf="!cargando" class="dashboard-content">
+    <!-- KPI CARDS -->
+    <div class="kpi-container" *ngIf="kpis">
+
+      <!-- KPI: Ventas -->
+      <mat-card class="kpi-card primary-card">
+        <mat-card-content>
+          <div class="kpi-header">
+            <div class="kpi-icon-box primary-bg">
+              <mat-icon>attach_money</mat-icon>
+            </div>
+            <div class="kpi-details">
+              <p class="kpi-label">Ventas Este Mes</p>
+              <h2 class="kpi-value">${{ kpis.ventas_mes_actual | number:'1.2-2' }}</h2>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="kpi-footer" [ngClass]="kpis.crecimiento_porcentaje >= 0 ? 'positive' : 'negative'">
+            <mat-icon class="trend-icon">{{ kpis.crecimiento_porcentaje >= 0 ? 'trending_up' : 'trending_down' }}</mat-icon>
+            <span class="trend-text">{{ kpis.crecimiento_porcentaje | number:'1.1-1' }}% vs mes anterior</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- KPI: Órdenes -->
+      <mat-card class="kpi-card warning-card">
+        <mat-card-content>
+          <div class="kpi-header">
+            <div class="kpi-icon-box warning-bg">
+              <mat-icon>pending_actions</mat-icon>
+            </div>
+            <div class="kpi-details">
+              <p class="kpi-label">Órdenes Pendientes</p>
+              <h2 class="kpi-value">{{ kpis.ordenes_pendientes }}</h2>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="kpi-footer">
+            <mat-icon class="trend-icon">check_circle</mat-icon>
+            <span class="trend-text">{{ kpis.ordenes_completadas_mes }} completadas este mes</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- KPI: Productos -->
+      <mat-card class="kpi-card success-card">
+        <mat-card-content>
+          <div class="kpi-header">
+            <div class="kpi-icon-box success-bg">
+              <mat-icon>inventory_2</mat-icon>
+            </div>
+            <div class="kpi-details">
+              <p class="kpi-label">Total Productos</p>
+              <h2 class="kpi-value">{{ kpis.total_productos }}</h2>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="kpi-footer" [ngClass]="kpis.productos_sin_stock > 0 ? 'negative' : 'neutral'">
+            <mat-icon class="trend-icon">{{ kpis.productos_sin_stock > 0 ? 'warning' : 'check' }}</mat-icon>
+            <span class="trend-text">{{ kpis.productos_sin_stock }} sin stock</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- KPI: Vendedores -->
+      <mat-card class="kpi-card info-card">
+        <mat-card-content>
+          <div class="kpi-header">
+            <div class="kpi-icon-box info-bg">
+              <mat-icon>store</mat-icon>
+            </div>
+            <div class="kpi-details">
+              <p class="kpi-label">Vendedores Activos</p>
+              <h2 class="kpi-value">{{ kpis.vendedores_activos }}</h2>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="kpi-footer" *ngIf="kpis.solicitudes_pendientes && kpis.solicitudes_pendientes > 0">
+            <mat-icon class="trend-icon">person_add</mat-icon>
+            <span class="trend-text">{{ kpis.solicitudes_pendientes }} solicitudes pendientes</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- TABS SECTION -->
+    <mat-card class="tabs-card">
+      <mat-tab-group [(selectedIndex)]="tabIndex" animationDuration="300ms" class="custom-tabs">
+
+        <!-- TAB 1: ✅ ACTUALIZADO - Ventas Semanales (Últimos 7 días) -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">show_chart</mat-icon>
+            <span class="tab-text">Ventas Semanales</span>
+          </ng-template>
+
+          <div class="tab-content-wrapper">
+            <mat-card class="chart-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>bar_chart</mat-icon>
+                  Ventas de los Últimos 7 Días
+                </mat-card-title>
+                <mat-card-subtitle>Tendencia diaria de ventas</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="chart-container">
+                  <canvas baseChart
+                    [data]="barChartVentasData"
+                    [options]="barChartVentasOptions"
+                    [type]="barChartVentasType">
+                  </canvas>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Empty state si no hay datos -->
+            <mat-card *ngIf="ventasSemanales.length === 0" class="empty-card">
+              <mat-card-content>
+                <div class="empty-state">
+                  <mat-icon class="empty-icon">info</mat-icon>
+                  <h3 class="empty-title">Sin ventas esta semana</h3>
+                  <p class="empty-text">No se han registrado ventas en los últimos 7 días</p>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </mat-tab>
+
+        <!-- TAB 2: Top Productos -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">bar_chart</mat-icon>
+            <span class="tab-text">Top Productos</span>
+          </ng-template>
+
+          <div class="tab-content-wrapper">
+
+            <!-- Gráfica de productos -->
+            <mat-card class="chart-card" *ngIf="productosMasVendidos.length > 0">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>bar_chart</mat-icon>
+                  Top 10 Productos Más Vendidos
+                </mat-card-title>
+                <mat-card-subtitle>Productos con mejor rendimiento</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="chart-container">
+                  <canvas baseChart
+                    [data]="barChartProductosData"
+                    [options]="barChartProductosOptions"
+                    [type]="barChartProductosType">
+                  </canvas>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Tabla de productos -->
+            <mat-card class="table-card" *ngIf="productosMasVendidos.length > 0">
+              <mat-card-header>
+                <mat-card-title>Detalle de Productos</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <table mat-table [dataSource]="productosMasVendidos" class="products-table">
+
+                  <ng-container matColumnDef="producto">
+                    <th mat-header-cell *matHeaderCellDef>Producto</th>
+                    <td mat-cell *matCellDef="let producto">
+                      <div class="product-info">
+                        <img [src]= "producto.url_img" [alt]="producto.nombre_producto" class="product-image">
+                        <span class="product-name">{{ producto.nombre_producto }}</span>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="cantidad">
+                    <th mat-header-cell *matHeaderCellDef>Cantidad Vendida</th>
+                    <td mat-cell *matCellDef="let producto">
+                      <mat-chip class="quantity-chip">{{ producto.cantidad_vendida }}</mat-chip>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef>Total Generado</th>
+                    <td mat-cell *matCellDef="let producto">
+                      <span class="total-amount">${{ producto.total_generado | number:'1.2-2' }}</span>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsProductos"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsProductos;" class="table-row"></tr>
+                </table>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Empty state -->
+            <mat-card *ngIf="productosMasVendidos.length === 0" class="empty-card">
+              <mat-card-content>
+                <div class="empty-state">
+                  <mat-icon class="empty-icon">shopping_bag</mat-icon>
+                  <h3 class="empty-title">Sin productos vendidos</h3>
+                  <p class="empty-text">Aún no se han registrado ventas de productos</p>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+          </div>
+        </mat-tab>
+
+        <!-- TAB 3: Vendedores -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">people</mat-icon>
+            <span class="tab-text">Vendedores</span>
+          </ng-template>
+
+          <div class="tab-content-wrapper">
+
+            <!-- Gráfica de vendedores -->
+            <mat-card class="chart-card" *ngIf="ventasPorVendedor.length > 0">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>people</mat-icon>
+                  Ventas por Vendedor
+                </mat-card-title>
+                <mat-card-subtitle>Rendimiento del equipo de ventas</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="chart-container">
+                  <canvas baseChart
+                    [data]="barChartVendedoresData"
+                    [options]="barChartVendedoresOptions"
+                    [type]="barChartVendedoresType">
+                  </canvas>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Tabla de vendedores -->
+            <mat-card class="table-card" *ngIf="ventasPorVendedor.length > 0">
+              <mat-card-header>
+                <mat-card-title>Detalle de Vendedores</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <table mat-table [dataSource]="ventasPorVendedor" class="vendors-table">
+
+                  <ng-container matColumnDef="vendedor">
+                    <th mat-header-cell *matHeaderCellDef>Vendedor</th>
+                    <td mat-cell *matCellDef="let vendedor">
+                      <div class="vendor-info">
+                        <div class="vendor-avatar">{{ vendedor.nombre_vendedor.charAt(0) }}</div>
+                        <span class="vendor-name">{{ vendedor.nombre_vendedor }}</span>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="productos">
+                    <th mat-header-cell *matHeaderCellDef>Productos Vendidos</th>
+                    <td mat-cell *matCellDef="let vendedor">{{ vendedor.total_productos_vendidos }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="ordenes">
+                    <th mat-header-cell *matHeaderCellDef>Órdenes</th>
+                    <td mat-cell *matCellDef="let vendedor">
+                      <mat-chip class="orders-chip">{{ vendedor.cantidad_ordenes }}</mat-chip>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef>Total Ventas</th>
+                    <td mat-cell *matCellDef="let vendedor">
+                      <span class="total-amount">${{ vendedor.total_ventas | number:'1.2-2' }}</span>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsVendedores"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsVendedores;" class="table-row"></tr>
+                </table>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Empty state -->
+            <mat-card *ngIf="ventasPorVendedor.length === 0" class="empty-card">
+              <mat-card-content>
+                <div class="empty-state">
+                  <mat-icon class="empty-icon">store</mat-icon>
+                  <h3 class="empty-title">Sin ventas de vendedores</h3>
+                  <p class="empty-text">Los vendedores aún no han realizado ventas</p>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+          </div>
+        </mat-tab>
+
+        <!-- TAB 4: Comprobantes -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">receipt_long</mat-icon>
+            <span class="tab-text">Comprobantes</span>
+            <mat-chip *ngIf="comprobantesPendientes.length > 0" class="badge-chip">
+              {{ comprobantesPendientes.length }}
+            </mat-chip>
+          </ng-template>
+
+          <div class="tab-content-wrapper">
+
+            <!-- Empty State -->
+            <mat-card *ngIf="comprobantesPendientes.length === 0" class="empty-card">
+              <mat-card-content>
+                <div class="empty-state">
+                  <mat-icon class="empty-icon">check_circle</mat-icon>
+                  <h3 class="empty-title">Todo en orden</h3>
+                  <p class="empty-text">No hay comprobantes pendientes de verificación</p>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Comprobantes Grid -->
+            <!-- Comprobantes Grid -->
+            <div *ngIf="comprobantesPendientes.length > 0" class="comprobantes-grid">
+              <mat-card *ngFor="let item of comprobantesPendientes" class="comprobante-card">
+
+                <mat-card-header class="comprobante-header">
+                  <div class="header-badges">
+                    <mat-chip class="status-chip pending">Pendiente</mat-chip>
+                    <mat-chip class="days-chip">
+                      {{ calcularDiasPendientes(item.Comprobante?.fecha_subida || item.comprobante?.fecha_subida) }} días
+                    </mat-chip>
+                  </div>
+                </mat-card-header>
+
+                <mat-card-content class="comprobante-body">
+                  <div class="info-row">
+                    <mat-icon class="info-icon">person</mat-icon>
+                    <div class="info-content">
+                      <span class="info-label">Cliente</span>
+                      <span class="info-value">
+                        {{ (item.Usuario?.nombre || item.usuario?.nombre) }}
+                        {{ (item.Usuario?.apellido || item.usuario?.apellido) }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="info-row">
+                    <mat-icon class="info-icon">email</mat-icon>
+                    <div class="info-content">
+                      <span class="info-label">Email</span>
+                      <span class="info-value small">
+                        {{ (item.Usuario?.email || item.usuario?.email) }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="info-row">
+                    <mat-icon class="info-icon">confirmation_number</mat-icon>
+                    <div class="info-content">
+                      <span class="info-label">Orden</span>
+                      <span class="info-value">
+                        {{ (item.Orden?.token_orden || item.orden?.token_orden) }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="info-row">
+                    <mat-icon class="info-icon">attach_money</mat-icon>
+                    <div class="info-content">
+                      <span class="info-label">Monto</span>
+                      <span class="info-value amount">
+                        ${{ (item.Orden?.total || item.orden?.total) | number:'1.2-2' }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="info-row">
+                    <mat-icon class="info-icon">tag</mat-icon>
+                    <div class="info-content">
+                      <span class="info-label">Referencia</span>
+                      <span class="info-value">
+                        {{ (item.Comprobante?.numero_referencia || item.comprobante?.numero_referencia) }}
+                      </span>
+                    </div>
+                  </div>
+                </mat-card-content>
+
+                <mat-card-actions class="comprobante-actions">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    class="action-btn"
+                    (click)="abrirComprobante(item.Comprobante?.url_comprobante || item.comprobante?.url_comprobante)">
+                    <mat-icon>visibility</mat-icon>
+                    Ver Comprobante
+                  </button>
+                </mat-card-actions>
+
+              </mat-card>
+            </div>
+
+          </div>
+        </mat-tab>
+
+
+      </mat-tab-group>
+    </mat-card>
+
+  </div>
+  </div>
+</div>

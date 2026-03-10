@@ -1,0 +1,788 @@
+<div class="devoluciones-wrapper">
+
+  <!-- ========================================
+       HEADER CON DEGRADADO
+       ======================================== -->
+  <div class="devoluciones-header">
+    <div class="header-content">
+      <div class="header-icon-wrapper">
+        <mat-icon class="header-icon">assignment_return</mat-icon>
+      </div>
+      <div class="header-text">
+        <h1 class="header-title">Gestión de Devoluciones</h1>
+        <p class="header-subtitle">Administra solicitudes de reembolsos y cambios de productos</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="devoluciones-container">
+
+    <!-- ========================================
+         STATS CARDS
+         ======================================== -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper">
+          <mat-icon>assignment_return</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{ estadisticas.total }}</h4>
+          <p class="stat-label">Total Solicitudes</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper pendiente">
+          <mat-icon>schedule</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{ estadisticas.pendientes }}</h4>
+          <p class="stat-label">Pendientes</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper verificado">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{ estadisticas.aprobadas }}</h4>
+          <p class="stat-label">Aprobadas</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper rechazado">
+          <mat-icon>cancel</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{ estadisticas.rechazadas }}</h4>
+          <p class="stat-label">Rechazadas</p>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- ========================================
+         ACTION BAR CON FILTROS
+         ======================================== -->
+    <div class="action-bar">
+      <div class="filters-container">
+        <div class="search-box">
+          <mat-icon>search</mat-icon>
+          <input type="text"
+                 placeholder="Buscar por número de orden..."
+                 class="search-input"
+                 [(ngModel)]="filtroNumeroOrden">
+        </div>
+
+        <div class="search-box">
+          <mat-icon>person</mat-icon>
+          <input type="text"
+                 placeholder="Buscar por cliente..."
+                 class="search-input"
+                 [(ngModel)]="filtroCliente">
+        </div>
+
+        <div class="search-box">
+          <mat-icon>calendar_today</mat-icon>
+          <input type="date"
+                 class="search-input"
+                 [(ngModel)]="filtroFechaDesde">
+        </div>
+
+        <div class="search-box">
+          <mat-icon>calendar_today</mat-icon>
+          <input type="date"
+                 class="search-input"
+                 [(ngModel)]="filtroFechaHasta">
+        </div>
+
+        <div class="search-box">
+          <mat-icon>filter_list</mat-icon>
+          <select class="search-input" [(ngModel)]="filtroEstado">
+            <option value="">Todos los estados</option>
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="APROBADO">Aprobada</option>
+            <option value="RECHAZADA">Rechazada</option>
+          </select>
+        </div>
+
+        <button class="btn-clear-filters" (click)="limpiarFiltros()"
+                *ngIf="filtroNumeroOrden || filtroCliente || filtroFechaDesde || filtroFechaHasta || filtroEstado">
+          <mat-icon>clear</mat-icon>
+          Limpiar filtros
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================
+         TABS CONTAINER
+         ======================================== -->
+    <div class="tabs-wrapper">
+      <mat-tab-group class="modern-tabs" animationDuration="300ms">
+
+        <!-- ============================================
+             TAB 1: PENDIENTES (CARDS)
+             ============================================ -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>schedule</mat-icon>
+              <span>Pendientes</span>
+              <span class="tab-badge" *ngIf="estadisticas.pendientes > 0">
+                {{ estadisticas.pendientes }}
+              </span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+
+            <!-- Loading -->
+            <div class="loading-state" *ngIf="cargando">
+              <div class="spinner-wrapper">
+                <div class="modern-spinner"></div>
+              </div>
+              <p class="loading-text">Cargando solicitudes pendientes...</p>
+            </div>
+
+            <!-- Grid de Cards Pendientes -->
+            <div *ngIf="!cargando && obtenerDevolucionesPorEstado('PENDIENTE').length > 0" class="cards-grid">
+              <div class="devolucion-card" *ngFor="let dev of obtenerDevolucionesPorEstado('PENDIENTE')">
+
+                <!-- Header de la Card -->
+                <div class="card-header">
+                  <span class="status-badge pendiente">
+                    <mat-icon>schedule</mat-icon>
+                    PENDIENTE
+                  </span>
+                  <div class="card-datetime">
+                    <span class="date-badge">
+                      <mat-icon>event</mat-icon>
+                      {{ dev.fecha_solicitud | date:'dd/MM/yyyy' }}
+                    </span>
+                    <span class="time-badge">
+                      <mat-icon>schedule</mat-icon>
+                      {{ dev.fecha_solicitud | date:'HH:mm' }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Contenido Principal -->
+                <div class="card-body">
+
+                  <!-- Orden -->
+                  <div class="card-info-row">
+                    <div class="info-icon">
+                      <mat-icon>qr_code_2</mat-icon>
+                    </div>
+                    <div class="info-content">
+                      <span class="info-label">ORDEN</span>
+                      <code class="order-code">{{ dev.token_orden }}</code>
+                    </div>
+                  </div>
+
+                  <!-- Cliente -->
+                  <div class="card-info-row">
+                    <div class="info-icon">
+                      <mat-icon>person</mat-icon>
+                    </div>
+                    <div class="info-content">
+                      <span class="info-label">CLIENTE</span>
+                      <span class="client-name">{{ dev.nombre_usuario }} {{ dev.apellido_usuario }}</span>
+                    </div>
+                  </div>
+
+                  <!-- Tipo -->
+                  <div class="card-info-row highlight">
+                    <div class="info-icon">
+                      <mat-icon>{{ getTipoDevolucionIcono(dev.tipo_devolucion) }}</mat-icon>
+                    </div>
+                    <div class="info-content">
+                      <span class="info-label">TIPO</span>
+                      <span class="tipo-badge" [class.reembolso]="dev.tipo_devolucion === 'REEMBOLSO'">
+                        {{ getTipoDevolucionNombre(dev.tipo_devolucion) }}
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Footer con Acciones -->
+                <div class="card-footer">
+                  <button mat-icon-button class="card-action-btn details"
+                          (click)="verDetalle(dev)"
+                          matTooltip="Ver Detalles"
+                          matTooltipPosition="above">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+
+                  <button mat-icon-button class="card-action-btn photos"
+                          *ngIf="dev.url_foto_1 || dev.url_foto_2 || dev.url_foto_3"
+                          (click)="verFotos(dev)"
+                          matTooltip="Ver Fotos"
+                          matTooltipPosition="above">
+                    <mat-icon>photo_library</mat-icon>
+                  </button>
+
+                  <button mat-icon-button class="card-action-btn approve"
+                          (click)="abrirModalAprobar(dev)"
+                          matTooltip="Aprobar"
+                          matTooltipPosition="above">
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+
+                  <button mat-icon-button class="card-action-btn reject"
+                          (click)="abrirModalRechazar(dev)"
+                          matTooltip="Rechazar"
+                          matTooltipPosition="above">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="!cargando && obtenerDevolucionesPorEstado('PENDIENTE').length === 0" class="empty-state">
+              <div class="empty-icon-wrapper">
+                <mat-icon>schedule</mat-icon>
+              </div>
+              <h3 class="empty-title">No hay devoluciones pendientes</h3>
+              <p class="empty-subtitle">Todas las solicitudes han sido procesadas</p>
+            </div>
+
+          </div>
+        </mat-tab>
+
+        <!-- ============================================
+             TAB 2: TODAS LAS DEVOLUCIONES (TABLA)
+             ============================================ -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>list_alt</mat-icon>
+              <span>Todas las Solicitudes</span>
+              <span class="tab-badge verificado" *ngIf="estadisticas.total > 0">
+                {{ estadisticas.total }}
+              </span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+
+            <!-- Loading -->
+            <div class="loading-state" *ngIf="cargando">
+              <div class="spinner-wrapper">
+                <div class="modern-spinner"></div>
+              </div>
+              <p class="loading-text">Cargando todas las solicitudes...</p>
+            </div>
+
+            <!-- Tabla de Todas las Devoluciones -->
+            <div class="table-container" *ngIf="!cargando && devolucionesFiltradas.length > 0">
+              <table class="modern-table">
+                <thead>
+                  <tr>
+                    <th>Estado</th>
+                    <th>Orden</th>
+                    <th>Cliente</th>
+                    <th>Tipo</th>
+                    <th>Fecha Solicitud</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let dev of devolucionesFiltradas">
+                    <td>
+                      <span class="status-pill" [class]="getClaseEstado(dev.estado_codigo)">
+                        <mat-icon>{{ getIconoEstado(dev.estado_codigo) }}</mat-icon>
+                        {{ dev.estado_descripcion }}
+                      </span>
+                    </td>
+                    <td>
+                      <code class="order-code-table">{{ dev.token_orden }}</code>
+                    </td>
+                    <td>
+                      <div class="client-info">
+                        <span class="client-name-table">{{ dev.nombre_usuario }} {{ dev.apellido_usuario }}</span>
+                        <span class="client-email">{{ dev.email_usuario }}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="tipo-badge-table" [class.reembolso]="dev.tipo_devolucion === 'REEMBOLSO'">
+                        <mat-icon>{{ getTipoDevolucionIcono(dev.tipo_devolucion) }}</mat-icon>
+                        {{ getTipoDevolucionNombre(dev.tipo_devolucion) }}
+                      </span>
+                    </td>
+                    <td>{{ dev.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td>
+                      <div class="acciones-group">
+                        <button mat-icon-button class="btn-detalles"
+                                (click)="verDetalle(dev)"
+                                matTooltip="Ver Detalles">
+                          <mat-icon>visibility</mat-icon>
+                        </button>
+                        <button mat-icon-button class="btn-fotos"
+                                *ngIf="dev.url_foto_1 || dev.url_foto_2 || dev.url_foto_3"
+                                (click)="verFotos(dev)"
+                                matTooltip="Ver Fotos">
+                          <mat-icon>photo_library</mat-icon>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="!cargando && devolucionesFiltradas.length === 0" class="empty-state">
+              <div class="empty-icon-wrapper">
+                <mat-icon>list_alt</mat-icon>
+              </div>
+              <h3 class="empty-title">No se encontraron devoluciones</h3>
+              <p class="empty-subtitle">Intenta ajustar los filtros de búsqueda</p>
+            </div>
+
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ========================================
+     MODAL: DETALLE DE DEVOLUCIÓN
+     ======================================== -->
+<div class="modal-overlay" *ngIf="mostrarModalDetalle" (click)="cerrarModalDetalle()">
+  <div class="modal-container modal-detalle" (click)="$event.stopPropagation()">
+
+    <!-- Header del Modal -->
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon-modal">info</mat-icon>
+        Detalle de Devolución
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModalDetalle()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Contenido del Modal -->
+    <div class="modal-content" *ngIf="devolucionSeleccionada">
+
+      <!-- Información General -->
+      <div class="info-card">
+        <div class="info-card-header">
+          <mat-icon>assignment</mat-icon>
+          <h3>Información General</h3>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Estado:</label>
+            <span class="status-pill" [class]="getClaseEstado(devolucionSeleccionada.estado_codigo)">
+              <mat-icon>{{ getIconoEstado(devolucionSeleccionada.estado_codigo) }}</mat-icon>
+              {{ devolucionSeleccionada.estado_descripcion }}
+            </span>
+          </div>
+          <div class="info-item">
+            <label>Orden:</label>
+            <code class="badge">{{ devolucionSeleccionada.token_orden }}</code>
+          </div>
+          <div class="info-item">
+            <label>Tipo:</label>
+            <span class="tipo-badge-modal" [class.reembolso]="devolucionSeleccionada.tipo_devolucion === 'REEMBOLSO'">
+              <mat-icon>{{ getTipoDevolucionIcono(devolucionSeleccionada.tipo_devolucion) }}</mat-icon>
+              {{ getTipoDevolucionNombre(devolucionSeleccionada.tipo_devolucion) }}
+            </span>
+          </div>
+          <div class="info-item">
+            <label>Fecha Solicitud:</label>
+            <span>{{ formatearFecha(devolucionSeleccionada.fecha_solicitud) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información del Cliente -->
+      <div class="info-card">
+        <div class="info-card-header">
+          <mat-icon>person</mat-icon>
+          <h3>Cliente</h3>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Nombre:</label>
+            <span>{{ devolucionSeleccionada.nombre_usuario }} {{ devolucionSeleccionada.apellido_usuario }}</span>
+          </div>
+          <div class="info-item">
+            <label>Email:</label>
+            <span>{{ devolucionSeleccionada.email_usuario }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Motivo de Devolución -->
+      <div class="info-card" *ngIf="devolucionSeleccionada.motivo">
+        <div class="info-card-header">
+          <mat-icon>comment</mat-icon>
+          <h3>Motivo de la Solicitud</h3>
+        </div>
+        <p class="motivo-text">{{ devolucionSeleccionada.motivo }}</p>
+      </div>
+
+      <!-- Items de Devolución -->
+      <div class="info-card" *ngIf="!cargandoItems">
+        <div class="info-card-header">
+          <mat-icon>inventory_2</mat-icon>
+          <h3>Productos a Devolver</h3>
+        </div>
+
+        <div class="loading-items" *ngIf="cargandoItems">
+          <div class="modern-spinner small"></div>
+          <p>Cargando productos...</p>
+        </div>
+
+        <div class="items-list" *ngIf="!cargandoItems && itemsDevolucion.length > 0">
+          <div class="item-devolucion" *ngFor="let item of itemsDevolucion">
+            <div class="item-image">
+              <img [src]="item.url_imagen || 'assets/placeholder.png'"
+                   [alt]="item.nombre_producto">
+            </div>
+            <div class="item-details">
+              <h4 class="item-name">{{ item.nombre_producto }}</h4>
+              <p class="item-price">
+                <span class="cantidad">Cantidad: {{ item.cantidad }}</span>
+                <span class="precio">${{ item.precio_unitario | number:'1.2-2' }} c/u</span>
+              </p>
+            </div>
+            <div class="item-total">
+              ${{ (item.cantidad * item.precio_unitario) | number:'1.2-2' }}
+            </div>
+          </div>
+
+          <div class="total-devolucion">
+            <strong>Total a Devolver:</strong>
+            <span class="total-amount">${{ calcularTotalDevolucion() | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fotos Adjuntas -->
+      <div class="info-card" *ngIf="devolucionSeleccionada.url_foto_1 || devolucionSeleccionada.url_foto_2 || devolucionSeleccionada.url_foto_3">
+        <div class="info-card-header">
+          <mat-icon>photo_library</mat-icon>
+          <h3>Evidencia Fotográfica</h3>
+        </div>
+
+        <div class="fotos-grid">
+          <div class="foto-thumbnail" *ngIf="devolucionSeleccionada.url_foto_1" (click)="verFotos(devolucionSeleccionada)">
+            <img [src]="devolucionSeleccionada.url_foto_1" alt="Foto 1">
+            <div class="foto-overlay">
+              <mat-icon>zoom_in</mat-icon>
+            </div>
+          </div>
+          <div class="foto-thumbnail" *ngIf="devolucionSeleccionada.url_foto_2" (click)="verFotos(devolucionSeleccionada)">
+            <img [src]="devolucionSeleccionada.url_foto_2" alt="Foto 2">
+            <div class="foto-overlay">
+              <mat-icon>zoom_in</mat-icon>
+            </div>
+          </div>
+          <div class="foto-thumbnail" *ngIf="devolucionSeleccionada.url_foto_3" (click)="verFotos(devolucionSeleccionada)">
+            <img [src]="devolucionSeleccionada.url_foto_3" alt="Foto 3">
+            <div class="foto-overlay">
+              <mat-icon>zoom_in</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Respuesta del Administrador -->
+      <div class="info-card respuesta-admin-card" *ngIf="devolucionSeleccionada.respuesta_admin">
+        <div class="info-card-header">
+          <mat-icon>admin_panel_settings</mat-icon>
+          <h3>Respuesta del Administrador</h3>
+        </div>
+        <p class="respuesta-text">{{ devolucionSeleccionada.respuesta_admin }}</p>
+        <p class="seguimiento-text" *ngIf="devolucionSeleccionada.numero_seguimiento">
+          <mat-icon>local_shipping</mat-icon>
+          <strong>Número de Seguimiento:</strong> {{ devolucionSeleccionada.numero_seguimiento }}
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Footer del Modal -->
+    <div class="modal-actions">
+      <button class="btn-cancel-modal" (click)="cerrarModalDetalle()">
+        <mat-icon>close</mat-icon>
+        Cerrar
+      </button>
+      <button class="btn-confirm-modal btn-aprobar"
+              (click)="abrirModalAprobar(devolucionSeleccionada)"
+              *ngIf="devolucionSeleccionada && puedeProcesar(devolucionSeleccionada)">
+        <mat-icon>check_circle</mat-icon>
+        Aprobar
+      </button>
+      <button class="btn-confirm-modal btn-rechazar"
+              (click)="abrirModalRechazar(devolucionSeleccionada)"
+              *ngIf="devolucionSeleccionada && puedeProcesar(devolucionSeleccionada)">
+        <mat-icon>cancel</mat-icon>
+        Rechazar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ========================================
+     MODAL: APROBAR DEVOLUCIÓN
+     ======================================== -->
+<div class="modal-overlay" *ngIf="mostrarModalRespuesta && accionModal === 'APROBAR'" (click)="cerrarModalRespuesta()">
+  <div class="modal-container modal-accion modal-aprobar" (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon-modal icon-aprobar">check_circle</mat-icon>
+        Aprobar Devolución
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModalRespuesta()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Contenido -->
+    <div class="modal-content" *ngIf="devolucionSeleccionada">
+
+      <div class="modal-icon-wrapper aprobar-icon">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+
+      <p class="modal-question">
+        ¿Estás seguro de que deseas <strong class="text-aprobar">aprobar</strong> esta devolución?
+      </p>
+
+      <div class="info-card orden-resumen">
+        <div class="info-card-header">
+          <mat-icon>info</mat-icon>
+          <h3>Resumen de la Solicitud</h3>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Cliente:</label>
+            <span>{{ devolucionSeleccionada.nombre_usuario }} {{ devolucionSeleccionada.apellido_usuario }}</span>
+          </div>
+          <div class="info-item verificado">
+            <label>Orden:</label>
+            <span class="badge">{{ devolucionSeleccionada.token_orden }}</span>
+          </div>
+          <div class="info-item">
+            <label>Tipo:</label>
+            <span>{{ getTipoDevolucionNombre(devolucionSeleccionada.tipo_devolucion) }}</span>
+          </div>
+        </div>
+      </div>
+
+<!-- Formulario -->
+      <div class="form-section">
+        <label class="form-label">
+          <mat-icon>local_shipping</mat-icon>
+          Número de Seguimiento
+          <span style="font-size:0.8rem; font-weight:400; color:#888;">(opcional)</span>
+        </label>
+        <input type="text"
+               class="form-input"
+               placeholder="Ej: guía de envío para cambios, o dejar vacío para reembolsos"
+               [(ngModel)]="numeroSeguimiento">
+        <p class="form-hint">
+          Para cambios físicos: ingrese el número de guía del courier.<br>
+          Para reembolsos: puede dejarlo vacío, se generará una referencia automática.
+        </p>
+      </div>
+
+      <div class="form-section">
+        <label class="form-label">
+          <mat-icon>comment</mat-icon>
+          Comentarios Adicionales (Opcional)
+        </label>
+        <textarea class="form-textarea"
+                  rows="3"
+                  placeholder="Comentarios para el cliente..."
+                  [(ngModel)]="respuestaAdmin"></textarea>
+      </div>
+
+      <p class="modal-nota aprobar">
+        <mat-icon>info</mat-icon>
+        El cliente será notificado por email con los detalles de la aprobación.
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-actions">
+      <button class="btn-cancel-modal" (click)="cerrarModalRespuesta()" [disabled]="procesandoRespuesta">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+      <button class="btn-confirm-modal btn-aprobar" (click)="procesarRespuesta()" [disabled]="procesandoRespuesta">
+        <mat-icon *ngIf="!procesandoRespuesta">check_circle</mat-icon>
+        <div class="modern-spinner mini" *ngIf="procesandoRespuesta"></div>
+        {{ procesandoRespuesta ? 'Procesando...' : 'Sí, aprobar' }}
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ========================================
+     MODAL: RECHAZAR DEVOLUCIÓN
+     ======================================== -->
+<div class="modal-overlay" *ngIf="mostrarModalRespuesta && accionModal === 'RECHAZAR'" (click)="cerrarModalRespuesta()">
+  <div class="modal-container modal-accion modal-rechazar" (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon-modal icon-rechazar">cancel</mat-icon>
+        Rechazar Devolución
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModalRespuesta()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Contenido -->
+    <div class="modal-content" *ngIf="devolucionSeleccionada">
+
+      <div class="modal-icon-wrapper rechazar-icon">
+        <mat-icon>cancel</mat-icon>
+      </div>
+
+      <p class="modal-question">
+        ¿Estás seguro de que deseas <strong class="text-rechazar">rechazar</strong> esta devolución?
+      </p>
+
+      <div class="info-card orden-resumen">
+        <div class="info-card-header">
+          <mat-icon>info</mat-icon>
+          <h3>Resumen de la Solicitud</h3>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Cliente:</label>
+            <span>{{ devolucionSeleccionada.nombre_usuario }} {{ devolucionSeleccionada.apellido_usuario }}</span>
+          </div>
+          <div class="info-item rechazado">
+            <label>Orden:</label>
+            <span class="badge">{{ devolucionSeleccionada.token_orden }}</span>
+          </div>
+          <div class="info-item">
+            <label>Tipo:</label>
+            <span>{{ getTipoDevolucionNombre(devolucionSeleccionada.tipo_devolucion) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario -->
+      <div class="form-section">
+        <label class="form-label required">
+          <mat-icon>report_problem</mat-icon>
+          Motivo del Rechazo
+        </label>
+        <textarea class="form-textarea"
+                  rows="4"
+                  placeholder="Explique detalladamente el motivo del rechazo..."
+                  [(ngModel)]="respuestaAdmin"></textarea>
+        <p class="form-hint error">Este mensaje será enviado al cliente por email</p>
+      </div>
+
+      <p class="modal-nota rechazar">
+        <mat-icon>warning</mat-icon>
+        Esta acción no puede deshacerse. El cliente será notificado inmediatamente.
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-actions">
+      <button class="btn-cancel-modal" (click)="cerrarModalRespuesta()" [disabled]="procesandoRespuesta">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+      <button class="btn-confirm-modal btn-rechazar" (click)="procesarRespuesta()" [disabled]="procesandoRespuesta">
+        <mat-icon *ngIf="!procesandoRespuesta">cancel</mat-icon>
+        <div class="modern-spinner mini" *ngIf="procesandoRespuesta"></div>
+        {{ procesandoRespuesta ? 'Procesando...' : 'Rechazar' }}
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ========================================
+     MODAL: VISUALIZADOR DE FOTOS
+     ======================================== -->
+<div class="modal-overlay modal-fotos-overlay" *ngIf="mostrarModalFotos" (click)="cerrarModalFotos()">
+  <div class="modal-fotos-container" (click)="$event.stopPropagation()">
+
+    <!-- Botón Cerrar -->
+    <button class="btn-close-fotos" (click)="cerrarModalFotos()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <!-- Contador -->
+    <div class="foto-counter">
+      {{ fotoActualIndex + 1 }} / {{ fotosActuales.length }}
+    </div>
+
+    <!-- Navegación Izquierda -->
+    <button class="btn-nav btn-prev"
+            (click)="anteriorFoto()"
+            *ngIf="fotoActualIndex > 0">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <!-- Imagen -->
+    <div class="foto-display">
+      <img [src]="fotosActuales[fotoActualIndex]" alt="Evidencia fotográfica">
+    </div>
+
+    <!-- Navegación Derecha -->
+    <button class="btn-nav btn-next"
+            (click)="siguienteFoto()"
+            *ngIf="fotoActualIndex < fotosActuales.length - 1">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+
+    <!-- Miniaturas -->
+    <div class="fotos-thumbnails" *ngIf="fotosActuales.length > 1">
+      <div class="thumbnail-item"
+           *ngFor="let foto of fotosActuales; let i = index"
+           [class.active]="i === fotoActualIndex"
+           (click)="fotoActualIndex = i">
+        <img [src]="foto" [alt]="'Foto ' + (i + 1)">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ========================================
+     SPINNER FULLSCREEN
+     ======================================== -->
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)"
+             size="large"
+             color="#fff"
+             type="square-jelly-box"
+             [fullScreen]="true">
+  <p style="color: white; font-size: 1.1rem; margin-top: 1rem; font-weight: 600;">
+    Procesando solicitud...
+  </p>
+</ngx-spinner>

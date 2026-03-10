@@ -1,0 +1,122 @@
+<div class="auth-wrapper">
+
+  <!-- Orbes decorativos del fondo -->
+  <div class="bg-canvas">
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+  </div>
+
+  <!-- Card principal -->
+  <div class="auth-card" [@fadeSlideIn]>
+
+    <!-- Logo con anillo pulsátil -->
+    <div class="logo-wrapper">
+      <div class="logo-ring"></div>
+      <img
+        src="/assets/Images/auth/logo2.png"
+        alt="Logo de la Asociación"
+        class="logo-img"
+        (error)="onLogoError($event)"
+      />
+    </div>
+
+    <h1 class="auth-title">¡Bienvenido de nuevo!</h1>
+    <p class="auth-subtitle">Inicia sesión en tu cuenta</p>
+
+    <form [formGroup]="FormularioLogin" autocomplete="off" class="auth-form">
+
+      <!-- ── Email ── -->
+      <div class="field-group" [class.field-error]="valido('email')">
+        <label class="field-label" for="loginEmail">
+          <!-- Bootstrap Icon -->
+          <span class="label-icon"><i class="bi bi-envelope-fill"></i></span>
+          <!-- Angular Material (alternativa): <mat-icon class="label-icon">email</mat-icon> -->
+          Correo electrónico
+        </label>
+        <div class="input-wrap">
+          <input
+            formControlName="email"
+            type="email"
+            id="loginEmail"
+            class="field-input"
+            placeholder="tu@correo.com"
+          />
+          <span class="input-glow"></span>
+        </div>
+        <p *ngIf="valido('email')" class="field-err-msg">
+          <i class="bi bi-exclamation-circle-fill"></i>
+          Ingresa un correo electrónico válido
+        </p>
+      </div>
+
+      <!-- ── Contraseña ── -->
+      <div class="field-group" [class.field-error]="valido('password')">
+        <label class="field-label" for="loginPassword">
+          <span class="label-icon"><i class="bi bi-lock-fill"></i></span>
+          Contraseña
+        </label>
+        <div class="input-wrap">
+          <input
+            formControlName="password"
+            [type]="mostrarPassword ? 'text' : 'password'"
+            id="loginPassword"
+            class="field-input"
+            placeholder="••••••••"
+          />
+          <button
+            type="button"
+            class="toggle-pw"
+            (click)="toggleMostrarPassword()"
+            [attr.aria-label]="mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+          >
+            <!-- Bootstrap Icon -->
+            <i [class]="mostrarPassword ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill'"></i>
+            <!-- Angular Material (alternativa):
+            <mat-icon>{{ mostrarPassword ? 'visibility_off' : 'visibility' }}</mat-icon> -->
+          </button>
+          <span class="input-glow"></span>
+        </div>
+        <p *ngIf="valido('password')" class="field-err-msg">
+          <i class="bi bi-exclamation-circle-fill"></i>
+          La contraseña es requerida
+        </p>
+      </div>
+
+      <!-- ── ¿Olvidaste tu contraseña? ── -->
+      <div class="forgot-row">
+        <button type="button" class="link-btn" (click)="recuperar()">
+          ¿Olvidaste tu contraseña?
+        </button>
+      </div>
+
+      <!-- ── Botón Login ── -->
+      <div class="d-flex justify-content-center">
+      <button
+        type="button"
+        class="btn-login"
+        (click)="login()"
+        [disabled]="isLoading"
+        [class.loading]="isLoading"
+      >
+        <span class="btn-content">
+          <span *ngIf="isLoading" class="spinner"></span>
+          <i *ngIf="!isLoading" class="bi bi-box-arrow-in-right"></i>
+          <span>{{ isLoading ? 'Verificando...' : 'Iniciar sesión' }}</span>
+        </span>
+        <span class="btn-shine"></span>
+      </button>
+      </div>
+    </form>
+
+    <!-- Divider -->
+    <div class="divider"><span>¿Nuevo aquí?</span></div>
+
+    <!-- Registro -->
+  <div class="d-flex justify-content-center">
+    <button type="button" class="btn-register" (click)="registrar()">
+      <i class="bi bi-person-plus-fill me-2"></i>Crear una cuenta
+    </button>
+  </div>
+  </div>
+</div>

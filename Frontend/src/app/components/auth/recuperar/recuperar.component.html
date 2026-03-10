@@ -1,0 +1,287 @@
+<div class="recovery-container">
+  <!-- Fondo animado -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="gradient-circle circle-3"></div>
+  </div>
+
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+      <div class="col-12 col-md-10 col-lg-6">
+
+        <div class="glass-card" [@fadeInUp]>
+
+          <!-- Header -->
+          <div class="card-header-custom">
+            <div class="icon-container" [@pulse]>
+              <i class="material-icons">
+                {{ pasoActual === 'email' ? 'lock_reset' : pasoActual === 'codigo' ? 'mark_email_read' : 'vpn_key' }}
+              </i>
+            </div>
+            <h1 class="title">Recuperar Contraseña</h1>
+
+            <!-- Indicador de pasos -->
+            <div class="steps-indicator">
+              <div class="step-item" [class.step-done]="pasoActual === 'codigo' || pasoActual === 'password'"
+                                     [class.step-active]="pasoActual === 'email'">
+                <div class="step-circle">
+                  <i class="material-icons" *ngIf="pasoActual !== 'email'; else num1">check</i>
+                  <ng-template #num1>1</ng-template>
+                </div>
+                <span>Correo</span>
+              </div>
+              <div class="step-line" [class.line-done]="pasoActual === 'codigo' || pasoActual === 'password'"></div>
+              <div class="step-item" [class.step-done]="pasoActual === 'password'"
+                                     [class.step-active]="pasoActual === 'codigo'">
+                <div class="step-circle">
+                  <i class="material-icons" *ngIf="pasoActual === 'password'; else num2">check</i>
+                  <ng-template #num2>2</ng-template>
+                </div>
+                <span>Verificar</span>
+              </div>
+              <div class="step-line" [class.line-done]="pasoActual === 'password'"></div>
+              <div class="step-item" [class.step-active]="pasoActual === 'password'">
+                <div class="step-circle">3</div>
+                <span>Contraseña</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══════════════════════════════════════════ -->
+          <!-- PASO 1: Ingresar correo                     -->
+          <!-- ═══════════════════════════════════════════ -->
+          <form [formGroup]="FormularioEmail" *ngIf="pasoActual === 'email'" class="form-content" [@fadeIn]>
+
+            <p class="step-description">
+              Ingresa el correo asociado a tu cuenta y te enviaremos un código de verificación.
+            </p>
+
+            <div class="form-group-custom">
+              <label for="inputEmail" class="form-label-custom">
+                <i class="material-icons">email</i>
+                Correo Electrónico
+              </label>
+              <div class="input-wrapper">
+                <input
+                  formControlName="email"
+                  type="email"
+                  class="form-control-custom"
+                  id="inputEmail"
+                  placeholder="tu@email.com"
+                  [class.error]="valido(FormularioEmail,'email')">
+                <div class="input-icon">
+                  <i class="material-icons">alternate_email</i>
+                </div>
+              </div>
+              <div *ngIf="valido(FormularioEmail,'email')" class="error-message" [@slideDown]>
+                <i class="material-icons">error_outline</i>
+                Por favor, ingresa un correo electrónico válido
+              </div>
+            </div>
+
+            <div class="button-group">
+              <button type="button" (click)="cancelar()" class="btn-custom btn-secondary">
+                <i class="material-icons">arrow_back</i>
+                Cancelar
+              </button>
+              <button type="button" (click)="enviarCodigo()" class="btn-custom btn-primary" [disabled]="isLoading">
+                <span *ngIf="isLoading" class="spinner"></span>
+                <span *ngIf="!isLoading">
+                  <i class="material-icons">send</i>
+                  Enviar Código
+                </span>
+              </button>
+            </div>
+          </form>
+
+          <!-- ═══════════════════════════════════════════ -->
+          <!-- PASO 2: Ingresar código OTP                 -->
+          <!-- ═══════════════════════════════════════════ -->
+          <div *ngIf="pasoActual === 'codigo'" class="form-content" [@fadeIn]>
+
+            <p class="step-description">
+              Ingresa el código de 6 dígitos enviado a <strong>{{ emailVerificado }}</strong>.
+              <br>
+              <small style="color: #adb5bd;">Expira en 15 minutos. Revisa también tu carpeta de spam.</small>
+            </p>
+
+            <form [formGroup]="FormularioCodigo" (paste)="onPegado($event)">
+              <div class="otp-container">
+                <input id="d1" formControlName="d1" class="otp-input" type="text" inputmode="numeric"
+                       maxlength="1" autocomplete="off"
+                       (input)="moverFoco($event, 'd2', null)">
+                <input id="d2" formControlName="d2" class="otp-input" type="text" inputmode="numeric"
+                       maxlength="1" autocomplete="off"
+                       (input)="moverFoco($event, 'd3', 'd1')"
+                       (keydown.backspace)="moverFoco($event, null, 'd1')">
+                <input id="d3" formControlName="d3" class="otp-input" type="text" inputmode="numeric"
+                       maxlength="1" autocomplete="off"
+                       (input)="moverFoco($event, 'd4', 'd2')"
+                       (keydown.backspace)="moverFoco($event, null, 'd2')">
+
+                <span class="otp-divider">—</span>
+
+                <input id="d4" formControlName="d4" class="otp-input" type="text" inputmode="numeric"
+                       maxlength="1" autocomplete="off"
+                       (input)="moverFoco($event, 'd5', 'd3')"
+                       (keydown.backspace)="moverFoco($event, null, 'd3')">
+                <input id="d5" formControlName="d5" class="otp-input" type="text" inputmode="numeric"
+                       maxlength="1" autocomplete="off"
+                       (input)="moverFoco($event, 'd6', 'd4')"
+                       (keydown.backspace)="moverFoco($event, null, 'd4')">
+                <input id="d6" formControlName="d6" class="otp-input" type="text" inputmode="numeric"
+                       maxlength="1" autocomplete="off"
+                       (input)="moverFoco($event, null, 'd5')"
+                       (keydown.backspace)="moverFoco($event, null, 'd5')">
+              </div>
+
+              <!-- Reenviar código -->
+              <div class="resend-container">
+                <span *ngIf="tiempoReenvio > 0" class="resend-timer">
+                  <i class="material-icons" style="font-size:14px;vertical-align:middle;">schedule</i>
+                  Reenviar en {{ tiempoReenvio }}s
+                </span>
+                <button *ngIf="tiempoReenvio === 0" type="button"
+                        class="btn-link-custom" (click)="reenviarCodigo()" [disabled]="isLoading">
+                  <i class="material-icons">refresh</i>
+                  Reenviar código
+                </button>
+              </div>
+
+              <div class="button-group">
+                <button type="button" (click)="volverAlEmail()" class="btn-custom btn-secondary">
+                  <i class="material-icons">arrow_back</i>
+                  Volver
+                </button>
+                <button type="button" (click)="verificarCodigo()" class="btn-custom btn-primary" [disabled]="isLoading">
+                  <span *ngIf="isLoading" class="spinner"></span>
+                  <span *ngIf="!isLoading">
+                    <i class="material-icons">verified</i>
+                    Verificar Código
+                  </span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- ═══════════════════════════════════════════ -->
+          <!-- PASO 3: Nueva contraseña                    -->
+          <!-- ═══════════════════════════════════════════ -->
+          <form [formGroup]="FormularioPassword" *ngIf="pasoActual === 'password'" class="form-content" [@fadeIn]>
+
+            <p class="step-description">
+              Crea una nueva contraseña segura para tu cuenta.
+            </p>
+
+            <!-- Nueva Contraseña -->
+            <div class="form-group-custom">
+              <label for="inputPassword" class="form-label-custom">
+                <i class="material-icons">lock</i>
+                Nueva Contraseña
+              </label>
+              <div class="input-wrapper">
+                <input
+                  formControlName="password"
+                  [type]="mostrarPassword ? 'text' : 'password'"
+                  class="form-control-custom"
+                  id="inputPassword"
+                  placeholder="Mínimo 8 caracteres"
+                  [(ngModel)]="passwordValue"
+                  [class.error]="valido(FormularioPassword,'password')">
+                <button type="button" class="toggle-password" (click)="toggleMostrarPassword()">
+                  <i class="material-icons">{{ mostrarPassword ? 'visibility_off' : 'visibility' }}</i>
+                </button>
+              </div>
+              <app-password-strength [password]="passwordValue" [showRequirements]="true">
+              </app-password-strength>
+              <div *ngIf="valido(FormularioPassword,'password')" class="error-message" [@slideDown]>
+                <i class="material-icons">error_outline</i>
+                La contraseña no cumple los requisitos mínimos
+              </div>
+            </div>
+
+            <!-- Confirmar Contraseña -->
+            <div class="form-group-custom">
+              <label for="inputConfirmPassword" class="form-label-custom">
+                <i class="material-icons">lock</i>
+                Confirmar Contraseña
+              </label>
+              <div class="input-wrapper">
+                <input
+                  formControlName="confirmPassword"
+                  [type]="mostrarConfirmPassword ? 'text' : 'password'"
+                  class="form-control-custom"
+                  id="inputConfirmPassword"
+                  placeholder="Repite tu contraseña"
+                  [(ngModel)]="confirmPasswordValue"
+                  [class.error]="valido(FormularioPassword,'confirmPassword') || FormularioPassword.hasError('passwordMismatch')">
+                <button type="button" class="toggle-password" (click)="toggleMostrarConfirmPassword()">
+                  <i class="material-icons">{{ mostrarConfirmPassword ? 'visibility_off' : 'visibility' }}</i>
+                </button>
+              </div>
+              <div *ngIf="FormularioPassword.hasError('passwordMismatch') && FormularioPassword.get('confirmPassword')?.touched"
+                   class="error-message" [@slideDown]>
+                <i class="material-icons">error_outline</i>
+                Las contraseñas no coinciden
+              </div>
+            </div>
+
+            <div class="button-group">
+              <button type="button" (click)="cancelar()" class="btn-custom btn-secondary">
+                <i class="material-icons">close</i>
+                Cancelar
+              </button>
+              <button type="button" (click)="cambiarPassword()" class="btn-custom btn-primary" [disabled]="isLoading">
+                <span *ngIf="isLoading" class="spinner"></span>
+                <span *ngIf="!isLoading">
+                  <i class="material-icons">check_circle</i>
+                  Guardar Contraseña
+                </span>
+              </button>
+            </div>
+          </form>
+
+          <!-- Footer -->
+          <div class="card-footer-custom">
+            <p>
+              <i class="material-icons">info</i>
+              ¿Recordaste tu contraseña?
+              <a routerLink="/login" class="link-custom">Inicia sesión aquí</a>
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SPINNER FULLSCREEN — Candado dorado (Actualizando contraseña) -->
+<ngx-spinner bdColor="rgba(14, 11, 9, 0.92)" size="large" color="#BF9B6F" type="custom" [fullScreen]="true">
+  <div class="rp-spinner-wrap">
+    <!-- Candado animado -->
+    <div class="rp-lock-scene">
+      <div class="rp-orbit">
+        <div class="rp-orbit-dot"></div>
+      </div>
+      <div class="rp-orbit2">
+        <div class="rp-orbit2-dot"></div>
+      </div>
+      <div class="rp-ring-gold"></div>
+      <div class="rp-orbit-ring"></div>
+      <div class="rp-shackle"></div>
+      <div class="rp-body">
+        <div class="rp-hole"></div>
+      </div>
+    </div>
+    <!-- Mensaje -->
+    <p class="rp-msg">{{ mensajeSpinner }}</p>
+    <!-- Puntitos de espera -->
+    <div class="rp-dots">
+      <span class="rp-dot"></span>
+      <span class="rp-dot"></span>
+      <span class="rp-dot"></span>
+    </div>
+  </div>
+</ngx-spinner>

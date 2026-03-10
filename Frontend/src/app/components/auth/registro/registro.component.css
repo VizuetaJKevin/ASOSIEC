@@ -1,0 +1,503 @@
+/* =============================================
+   WRAPPER – Animated squares background
+   ============================================= */
+.reg-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+}
+
+/* =============================================
+   BACKGROUND
+   ============================================= */
+.reg-host {
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 1px;
+  background-color: #282828;
+  overflow: hidden;
+}
+
+/* Onda blanca superior */
+.reg-host::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  clip-path: ellipse(120% 62% at 50% 0%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Onda gris animada */
+.reg-host::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #e0dfdf;
+  clip-path: ellipse(115% 56% at 50% 0%);
+  opacity: .45;
+  z-index: 0;
+  pointer-events: none;
+  animation: waveDrift 9s ease-in-out infinite alternate;
+}
+
+@keyframes waveDrift {
+  from { clip-path: ellipse(115% 56% at 47% 0%); }
+  to   { clip-path: ellipse(120% 60% at 53% 0%); }
+}
+
+/* Orbes difuminados */
+.bg-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.floating-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(55px);
+  opacity: .16;
+  animation: floatOrb ease-in-out infinite;
+}
+.orb-1 { width:280px; height:280px; top:-70px;  right:-70px; background:#f9c4d2; animation-duration:13s; }
+.orb-2 { width:200px; height:200px; bottom:8%;  left:-50px;  background:#c4c4c4; animation-duration:17s; animation-delay:-5s; }
+.orb-3 { width:130px; height:130px; bottom:22%; right:8%;    background:#ffd0e0; animation-duration:11s; animation-delay:-3s; }
+
+@keyframes floatOrb {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-22px); }
+}
+
+/* =============================================
+   CARD
+   ============================================= */
+.reg-card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 700px;
+  background: rgb(255, 255, 255);
+  backdrop-filter: blur(22px) saturate(1.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  box-shadow:
+    0 12px 52px rgba(123,53,88,.24),
+    0 2px 8px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.95);
+  padding: 72px 52px 44px; /* top aumentado para el logo que sobresale */
+  animation: cardIn .65s cubic-bezier(.22, .68, 0, 1.2) both;
+  margin-top: 62px; /* espacio para que el logo no quede cortado */
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(30px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* =============================================
+   LOGO – idéntico al login
+   ============================================= */
+.logo-wrapper {
+  position: absolute;
+  top: -52px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 156px; height: 106px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-ring {
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b6914, #5c420a);
+  animation: pulseRing 2.6s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes pulseRing {
+  0%,100% { transform: scale(1);    box-shadow: 0 0 0 0   rgba(230,193,166,0.45); }
+  50%      { transform: scale(1.09); box-shadow: 0 0 0 14px rgba(155,63,106,0);    }
+}
+
+.logo-img {
+  position: relative; z-index: 1;
+  width: 156px; height: 106px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  background: linear-gradient(135deg, #252525 0%, #0a0a0a 100%);
+  box-shadow: 0 15px 35px rgba(38, 38, 38, 0.5);
+  animation: logoBreath 3.8s ease-in-out infinite;
+}
+
+@keyframes logoBreath {
+  0%,100% { transform: scale(1);    }
+  50%      { transform: scale(1.04); }
+}
+
+/* =============================================
+   TYPOGRAPHY
+   ============================================= */
+.reg-title {
+  margin: 14px 0 4px;
+  font-family: 'BlackOps';
+  font-size: 1.85rem;
+  font-weight: 700;
+  text-align: center;
+  background: linear-gradient(135deg, #8b6914, #5c420a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -.3px;
+}
+
+.reg-subtitle {
+  margin: 0 0 26px;
+  text-align: center;
+  color: #8a9aaa;
+  font-size: .87rem;
+}
+
+/* =============================================
+   TIPO USUARIO – Role Selector
+   ============================================= */
+.tipo-selector-label {
+  display: block;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #4a4a4b;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.tipo-pills {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 28px;
+  justify-content: center;
+}
+
+.pill-btn {
+  flex: 1;
+  max-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 12px;
+  border-radius: 18px;
+  border: 2px solid rgba(86, 204, 173, 0.22);
+  background: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition:
+    border-color .25s cubic-bezier(.4,0,.2,1),
+    background   .25s cubic-bezier(.4,0,.2,1),
+    box-shadow   .25s cubic-bezier(.4,0,.2,1),
+    transform    .22s cubic-bezier(.4,0,.2,1);
+  color: #667a8a;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.pill-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #8b6914, #5c420a);
+  opacity: 0;
+  transition: opacity .25s cubic-bezier(.4,0,.2,1);
+  border-radius: inherit;
+  z-index: 0;
+}
+
+.pill-btn > * { position: relative; z-index: 1; }
+
+.pill-btn:hover:not(.active) {
+  border-color: rgba(86, 204, 173, 0.5);
+  background: rgba(86, 204, 173, 0.06);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(86, 204, 173, 0.15);
+}
+
+.pill-btn.active {
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 8px 26px rgba(47, 128, 237, 0.32);
+  transform: translateY(-3px);
+}
+
+.pill-btn.active::before {
+  opacity: 1;
+}
+
+.pill-icon {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: rgba(86, 204, 173, 0.12);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .25s cubic-bezier(.4,0,.2,1);
+}
+
+.pill-btn.active .pill-icon {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.pill-icon .material-icons {
+  font-size: 22px;
+  color: #604014;
+  transition: color .25s;
+}
+
+.pill-btn.active .pill-icon .material-icons {
+  color: #fff;
+}
+
+.pill-title {
+  font-size: .88rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: .01em;
+}
+
+.pill-desc {
+  font-size: .73rem;
+  margin: 0;
+  opacity: .75;
+}
+
+/* =============================================
+   VENDOR ALERT
+   ============================================= */
+.vendor-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: linear-gradient(135deg, rgba(47,128,237,0.08) 0%, rgba(86,204,173,0.08) 100%);
+  border: 1px solid rgba(47, 128, 237, 0.22);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 22px;
+  font-size: .82rem;
+  color: #716037;
+  animation: fadeIn .35s ease both;
+}
+
+.vendor-alert .material-icons {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================================
+   DIVIDER BETWEEN SECTIONS
+   ============================================= */
+.section-divider {
+  display: flex; align-items: center; gap: 10px;
+  margin: 4px 0 22px; color: #a0aab4; font-size: .75rem;
+  letter-spacing: .05em; text-transform: uppercase; font-weight: 600;
+}
+.section-divider::before, .section-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(86,204,173,.3), transparent);
+}
+
+/* =============================================
+   FORM FIELDS – matching login style
+   ============================================= */
+.reg-form { display: flex; flex-direction: column; gap: 18px; animation: fadeIn .3s ease both; }
+
+.fields-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field-group { display: flex; flex-direction: column; gap: 7px; }
+
+.field-label {
+  font-size: .77rem;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #161616;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.label-icon {
+  display: flex;
+  align-items: center;
+  color: #643a12;
+}
+.label-icon .material-icons {
+  font-size: 16px;
+  width: 16px; height: 16px;
+  line-height: 16px;
+}
+
+.input-wrap { position: relative; }
+
+.field-input {
+  width: 100%;
+  padding: 13px 18px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(16, 16, 16, 0.16);
+  background: rgba(255, 255, 255, 0.65);
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  font-size: .95rem;
+  color: #2d2d2d;
+  outline: none;
+  transition:
+    border-color .25s cubic-bezier(.4,0,.2,1),
+    box-shadow   .25s cubic-bezier(.4,0,.2,1),
+    background   .25s cubic-bezier(.4,0,.2,1);
+  box-sizing: border-box;
+}
+
+.field-input::placeholder { color: #868686; }
+
+.field-input:focus {
+  border-color: #56ccad;
+  background: #e5e5e5;
+  box-shadow: 0 0 0 4px rgba(86, 204, 173, 0.12);
+}
+
+.input-glow {
+  display: block;
+  position: absolute;
+  bottom: 0; left: 14px; right: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(135deg, #8b6914, #5c420a);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform .25s cubic-bezier(.4,0,.2,1);
+  pointer-events: none;
+}
+
+.field-input:focus ~ .input-glow { transform: scaleX(1); }
+
+.field-group.field-error .field-input {
+  border-color: #e05c7a;
+  background: #fff8f9;
+}
+
+.field-err-msg {
+  font-size: .76rem;
+  color: #e05c7a;
+  margin: 0;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* =============================================
+   PASSWORD STRENGTH WRAPPER
+   ============================================= */
+.strength-wrapper {
+  margin-top: 6px;
+}
+
+/* =============================================
+   ACTION BUTTONS
+   ============================================= */
+.actions-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-submit {
+  position: relative; overflow: hidden;
+  padding: 15px 24px;
+  border-radius: 14px; border: none; cursor: pointer;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  font-size: 1rem; font-weight: 600; letter-spacing: .04em; color: #fbfbfb;
+  background: linear-gradient(135deg, #8b6914, #5c420a);
+  box-shadow: 0 6px 24px rgba(47, 128, 237, 0.32), 0 2px 6px rgba(86, 204, 173, 0.18);
+  transition:
+    transform  .25s cubic-bezier(.4,0,.2,1),
+    box-shadow .25s cubic-bezier(.4,0,.2,1);
+  width: 75%;
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(47, 128, 237, 0.42);
+}
+
+.btn-submit:active { transform: translateY(0); }
+
+.btn-shine {
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.25) 50%, transparent 62%);
+  transform: translateX(-100%);
+}
+.btn-submit:hover .btn-shine { animation: shine .5s ease forwards; }
+
+@keyframes shine { to { transform: translateX(100%); } }
+
+.btn-content {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+
+.btn-cancel {
+  width: 75%;
+  padding: 13px 24px; border-radius: 14px;
+  border: 1.5px solid rgba(86, 204, 173, 0.35);
+  background: transparent;
+  cursor: pointer;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  font-size: .9rem; font-weight: 500;
+  color: #a07830;
+  transition:
+    background  .25s cubic-bezier(.4,0,.2,1),
+    box-shadow  .25s cubic-bezier(.4,0,.2,1),
+    transform   .25s cubic-bezier(.4,0,.2,1);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+
+.btn-cancel:hover {
+  background: rgba(86, 204, 173, 0.07);
+  box-shadow: 0 4px 16px rgba(86, 204, 173, 0.14);
+  transform: translateY(-1px);
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 580px) {
+  .reg-card {
+    padding: 38px 22px 32px;
+    border-radius: 22px;
+  }
+  .reg-title { font-size: 1.6rem; }
+  .fields-row { grid-template-columns: 1fr; }
+  .tipo-pills { flex-direction: column; align-items: center; }
+  .pill-btn { max-width: 100%; width: 100%; flex-direction: row; gap: 12px; padding: 14px 16px; }
+}

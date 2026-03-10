@@ -1,0 +1,970 @@
+<div class="compras-wrapper">
+
+  <!-- Header con degradado -->
+  <div class="compras-header">
+    <div class="header-content">
+      <div class="header-icon-wrapper">
+        <mat-icon class="header-icon">receipt_long</mat-icon>
+      </div>
+      <div class="header-text">
+        <h1 class="header-title">Historial de Compras</h1>
+        <p class="header-subtitle">Revisa todas tus compras realizadas en nuestra tienda</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="compras-container">
+
+    <!-- Spinner de carga -->
+    <div *ngIf="cargando" class="loading-state">
+      <div class="spinner-wrapper">
+        <div class="modern-spinner"></div>
+      </div>
+      <p class="loading-text">Cargando tu historial de compras...</p>
+    </div>
+
+    <!-- Mensaje de error -->
+    <div *ngIf="errorCarga && !cargando" class="alert alert-danger text-center" role="alert">
+      {{ mensajeError }}
+    </div>
+
+    <!-- Sin compras -->
+    <div *ngIf="!cargando && !errorCarga && !tieneCompras()" class="empty-state">
+      <div class="empty-icon-wrapper">
+        <mat-icon>shopping_cart</mat-icon>
+      </div>
+      <h3 class="empty-title">No tienes compras registradas</h3>
+      <p class="empty-subtitle">Aún no has realizado ninguna compra en nuestra tienda.</p>
+      <button class="btn-primary-action" routerLink="/productos">
+        <mat-icon>store</mat-icon>
+        Ir a la tienda
+      </button>
+    </div>
+
+    <!-- Contenido principal -->
+    <div *ngIf="!cargando && !errorCarga && tieneCompras()">
+
+      <!-- ========================================
+           STATS CARDS
+           ======================================== -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon-wrapper">
+            <mat-icon>receipt</mat-icon>
+          </div>
+          <div class="stat-content">
+            <h4 class="stat-value">{{ ListaOrden.length }}</h4>
+            <p class="stat-label">Órdenes Totales</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrapper gastado">
+            <mat-icon>payments</mat-icon>
+          </div>
+          <div class="stat-content">
+            <h4 class="stat-value">${{ calcularTotalGastado() | number:'1.2-2' }}</h4>
+            <p class="stat-label">Total Gastado</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrapper productos">
+            <mat-icon>inventory_2</mat-icon>
+          </div>
+          <div class="stat-content">
+            <h4 class="stat-value">{{ ListaItem.length }}</h4>
+            <p class="stat-label">Productos Comprados</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrapper verificado">
+            <mat-icon>verified</mat-icon>
+          </div>
+          <div class="stat-content">
+            <h4 class="stat-value">{{ obtenerOrdenesVerificadas().length }}</h4>
+            <p class="stat-label">Pagos Verificados</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrapper rechazado">
+            <mat-icon>cancel</mat-icon>
+          </div>
+          <div class="stat-content">
+            <h4 class="stat-value">{{ obtenerOrdenesRechazadas().length }}</h4>
+            <p class="stat-label">Pagos Rechazados</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================
+           TABS CONTAINER
+           ======================================== -->
+      <div class="tabs-wrapper">
+        <mat-tab-group class="modern-tabs" animationDuration="300ms">
+
+          <!-- ============================================
+               TAB 1: PAGOS VERIFICADOS
+               ============================================ -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <div class="tab-label">
+                <mat-icon>verified</mat-icon>
+                <span>Pagos Verificados</span>
+                <span class="tab-badge verificado" *ngIf="obtenerOrdenesVerificadas().length > 0">
+                  {{ obtenerOrdenesVerificadas().length }}
+                </span>
+              </div>
+            </ng-template>
+
+            <div class="tab-content">
+
+              <!-- Action Bar con Filtros -->
+              <div class="action-bar" *ngIf="obtenerOrdenesVerificadas().length > 0">
+                <div class="filters-container">
+                  <div class="search-box">
+                    <mat-icon>search</mat-icon>
+                    <input type="text"
+                           placeholder="Buscar por número de orden..."
+                           class="search-input"
+                           [(ngModel)]="filtroOrdenVerificado">
+                  </div>
+                  <div class="search-box">
+                    <mat-icon>calendar_today</mat-icon>
+                    <input type="date"
+                           placeholder="Filtrar por fecha..."
+                           class="search-input"
+                           [(ngModel)]="filtroFechaVerificado">
+                  </div>
+                  <button class="btn-clear-filters" (click)="limpiarFiltrosVerificado()" *ngIf="filtroOrdenVerificado || filtroFechaVerificado">
+                    <mat-icon>clear</mat-icon>
+                    Limpiar filtros
+                  </button>
+                </div>
+              </div>
+
+              <!-- Empty State -->
+              <div class="empty-state" *ngIf="obtenerOrdenesVerificadas().length === 0">
+                <div class="empty-icon-wrapper">
+                  <mat-icon>check_circle</mat-icon>
+                </div>
+                <h3 class="empty-title">No hay pagos verificados</h3>
+                <p class="empty-subtitle">Aún no tienes órdenes con pago verificado</p>
+              </div>
+
+              <!-- Tabla de órdenes verificadas -->
+              <div class="table-container" *ngIf="obtenerOrdenesVerificadasFiltradas().length > 0">
+                <table class="modern-table">
+                  <thead>
+                    <tr>
+                      <th class="sortable" (click)="cambiarOrdenamiento('fecha')">
+                        N° Orden
+                        <span class="sort-icon">{{ obtenerIconoOrden('fecha') }}</span>
+                      </th>
+                      <th class="sortable" (click)="cambiarOrdenamiento('total')">
+                        Total
+                        <span class="sort-icon">{{ obtenerIconoOrden('total') }}</span>
+                      </th>
+                      <th class="sortable" (click)="cambiarOrdenamiento('fecha')">
+                        Fecha
+                        <span class="sort-icon">{{ obtenerIconoOrden('fecha') }}</span>
+                      </th>
+                      <th>Estado</th>
+                      <th class="text-center">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let orden of obtenerOrdenesVerificadasFiltradas()" class="table-row">
+                      <td>
+                        <div class="orden-info">
+                          <span class="orden-token">{{ orden.token_orden }}</span>
+                          <small class="orden-id">ID: {{ orden.id }}</small>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="precio-info">
+                          <strong class="precio-total">${{ orden.total | number:'1.2-2' }}</strong>
+                          <small class="precio-envio">Envío: ${{ orden.costo_envio | number:'1.2-2' }}</small>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="fecha-info">
+                          {{ formatearFecha(orden.fecha) }}
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge estado-verificado">
+                          <mat-icon>verified</mat-icon>
+                          {{ obtenerEstadoOrden(orden.estadoOrdenId) }}
+                        </span>
+                      </td>
+                      <td class="text-center">
+                        <button class="btn-detalles" (click)="abrirModalDetalles(orden)">
+                          <mat-icon>visibility</mat-icon>
+                          Ver detalles
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- No Results -->
+              <div class="empty-state" *ngIf="obtenerOrdenesVerificadas().length > 0 && obtenerOrdenesVerificadasFiltradas().length === 0">
+                <div class="empty-icon-wrapper">
+                  <mat-icon>search_off</mat-icon>
+                </div>
+                <h3 class="empty-title">No se encontraron resultados</h3>
+                <p class="empty-subtitle">Intenta con otros criterios de búsqueda</p>
+              </div>
+
+            </div>
+          </mat-tab>
+
+          <!-- ============================================
+               TAB 2: PAGOS RECHAZADOS
+               ============================================ -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <div class="tab-label">
+                <mat-icon>cancel</mat-icon>
+                <span>Pagos Rechazados</span>
+                <span class="tab-badge rechazado" *ngIf="obtenerOrdenesRechazadas().length > 0">
+                  {{ obtenerOrdenesRechazadas().length }}
+                </span>
+              </div>
+            </ng-template>
+
+            <div class="tab-content">
+
+              <!-- Action Bar con Filtros -->
+              <div class="action-bar" *ngIf="obtenerOrdenesRechazadas().length > 0">
+                <div class="filters-container">
+                  <div class="search-box">
+                    <mat-icon>search</mat-icon>
+                    <input type="text"
+                           placeholder="Buscar por número de orden..."
+                           class="search-input"
+                           [(ngModel)]="filtroOrdenRechazado">
+                  </div>
+                  <div class="search-box">
+                    <mat-icon>calendar_today</mat-icon>
+                    <input type="date"
+                           placeholder="Filtrar por fecha..."
+                           class="search-input"
+                           [(ngModel)]="filtroFechaRechazado">
+                  </div>
+                  <button class="btn-clear-filters" (click)="limpiarFiltrosRechazado()" *ngIf="filtroOrdenRechazado || filtroFechaRechazado">
+                    <mat-icon>clear</mat-icon>
+                    Limpiar filtros
+                  </button>
+                </div>
+              </div>
+
+              <!-- Empty State -->
+              <div class="empty-state" *ngIf="obtenerOrdenesRechazadas().length === 0">
+                <div class="empty-icon-wrapper">
+                  <mat-icon>check_circle</mat-icon>
+                </div>
+                <h3 class="empty-title">No hay pagos rechazados</h3>
+                <p class="empty-subtitle">¡Excelente! No tienes órdenes rechazadas</p>
+              </div>
+
+              <!-- Tabla de órdenes rechazadas -->
+              <div class="table-container" *ngIf="obtenerOrdenesRechazadasFiltradas().length > 0">
+                <table class="modern-table">
+                  <thead>
+                    <tr>
+                      <th class="sortable" (click)="cambiarOrdenamiento('fecha')">
+                        N° Orden
+                        <span class="sort-icon">{{ obtenerIconoOrden('fecha') }}</span>
+                      </th>
+                      <th class="sortable" (click)="cambiarOrdenamiento('total')">
+                        Total
+                        <span class="sort-icon">{{ obtenerIconoOrden('total') }}</span>
+                      </th>
+                      <th class="sortable" (click)="cambiarOrdenamiento('fecha')">
+                        Fecha
+                        <span class="sort-icon">{{ obtenerIconoOrden('fecha') }}</span>
+                      </th>
+                      <th>Estado</th>
+                      <th class="text-center">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let orden of obtenerOrdenesRechazadasFiltradas()" class="table-row">
+                      <td>
+                        <div class="orden-info">
+                          <span class="orden-token">{{ orden.token_orden }}</span>
+                          <small class="orden-id">ID: {{ orden.id }}</small>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="precio-info">
+                          <strong class="precio-total">${{ orden.total | number:'1.2-2' }}</strong>
+                          <small class="precio-envio">Envío: ${{ orden.costo_envio | number:'1.2-2' }}</small>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="fecha-info">
+                          {{ formatearFecha(orden.fecha) }}
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge estado-rechazado">
+                          <mat-icon>cancel</mat-icon>
+                          PAGO RECHAZADO
+                        </span>
+                      </td>
+                      <td class="text-center">
+                        <div class="acciones-group">
+                          <button class="btn-detalles" (click)="abrirModalDetalles(orden)">
+                            <mat-icon>visibility</mat-icon>
+                            Ver detalles
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- No Results -->
+              <div class="empty-state" *ngIf="obtenerOrdenesRechazadas().length > 0 && obtenerOrdenesRechazadasFiltradas().length === 0">
+                <div class="empty-icon-wrapper">
+                  <mat-icon>search_off</mat-icon>
+                </div>
+                <h3 class="empty-title">No se encontraron resultados</h3>
+                <p class="empty-subtitle">Intenta con otros criterios de búsqueda</p>
+              </div>
+
+            </div>
+          </mat-tab>
+
+        </mat-tab-group>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ========================================
+     MODAL DETALLES DE ORDEN
+     ======================================== -->
+<div class="modal-overlay" *ngIf="mostrarModalDetalles" (click)="cerrarModalDetalles()">
+  <div class="modal-container modal-detalles" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <mat-icon class="header-icon">receipt_long</mat-icon>
+        Detalles de la Orden
+      </h2>
+      <button mat-icon-button class="close-btn" (click)="cerrarModalDetalles()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-content" *ngIf="ordenSeleccionada">
+
+      <!-- Información de la orden -->
+      <div class="info-card orden-principal">
+        <div class="info-card-header">
+          <mat-icon>info</mat-icon>
+          <h3>Información de la Orden</h3>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Número de Orden:</label>
+            <span class="text-orden">{{ ordenSeleccionada.token_orden }}</span>
+          </div>
+          <div class="info-item">
+            <label>ID Interno:</label>
+            <span>{{ ordenSeleccionada.id }}</span>
+          </div>
+          <div class="info-item">
+            <label>Fecha de compra:</label>
+            <span>{{ formatearFecha(ordenSeleccionada.fecha) }}</span>
+          </div>
+          <div class="info-item">
+            <label>Estado:</label>
+            <span class="badge" [ngClass]="obtenerClaseBadgeEstado(ordenSeleccionada.estadoOrdenId)">
+              {{ obtenerEstadoOrden(ordenSeleccionada.estadoOrdenId) }}
+            </span>
+          </div>
+          <div class="info-item">
+            <label>Total productos:</label>
+            <span>${{ ordenSeleccionada.total - ordenSeleccionada.costo_envio | number:'1.2-2' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Costo de envío:</label>
+            <span>${{ ordenSeleccionada.costo_envio | number:'1.2-2' }}</span>
+          </div>
+          <div class="info-item total-destacado">
+            <label>Total pagado:</label>
+            <span class="precio-destacado">${{ ordenSeleccionada.total | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ✅ SECCIÓN DE MOTIVO DE RECHAZO dentro del modal detalles
+           (mismo patrón que admin-comprobantes líneas 679-691:
+            se muestra solo cuando estadoOrdenId === 9 / esOrdenRechazada,
+            y se lee motivo_rechazo desde el comprobante) -->
+      <div class="info-card rechazo-card" *ngIf="esOrdenRechazada(ordenSeleccionada)">
+        <div class="info-card-header">
+          <mat-icon class="text-danger">report_problem</mat-icon>
+          <h3>Motivo del Rechazo</h3>
+        </div>
+        <div class="rechazo-content">
+          <p class="rechazo-mensaje">
+            <mat-icon>info</mat-icon>
+            {{ obtenerMotivoRechazo(ordenSeleccionada) }}
+          </p>
+          <div class="rechazo-instruccion">
+            <mat-icon>help_outline</mat-icon>
+            <span>
+              Por favor, revisa el motivo del rechazo y vuelve a intentar subir tu comprobante de pago.
+              Si tienes dudas, contacta con nuestro equipo de soporte.
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Productos -->
+      <div class="info-card productos-card">
+        <div class="info-card-header">
+          <mat-icon>inventory_2</mat-icon>
+          <h3>Productos de esta orden ({{ obtenerItems(ordenSeleccionada.id).length }})</h3>
+        </div>
+        <div class="productos-list">
+          <div *ngFor="let item of obtenerItems(ordenSeleccionada.id)" class="producto-item">
+            <div class="producto-imagen">
+              <img
+                [src]="obtenerRutaImagen(obtenerProducto(item.productoId))"
+                [alt]="obtenerProducto(item.productoId)?.nombre_producto"
+                (error)="manejarErrorImagen($event)">
+            </div>
+            <div class="producto-info mx-auto">
+              <h4 class="producto-nombre">{{ obtenerProducto(item.productoId)?.nombre_producto }}</h4>
+              <p class="producto-descripcion">{{ obtenerProducto(item.productoId)?.descripcion }}</p>
+              <div class="producto-detalles ">
+                <span class="badge bg-light">
+                  <mat-icon>shopping_cart</mat-icon>
+                  Cantidad: {{ item.cantidad }}
+                </span>
+                <span class="badge bg-success">
+                  <mat-icon>attach_money</mat-icon>
+                  Precio: ${{ obtenerProducto(item.productoId)?.precio_ahora | number:'1.2-2' }}
+                </span>
+                <span class="badge bg-info">
+                  <mat-icon>calculate</mat-icon>
+                  Subtotal: ${{ calcularSubtotal(item) | number:'1.2-2' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información de entrega -->
+      <div class="info-card entrega-card">
+        <div class="info-card-header">
+          <mat-icon>local_shipping</mat-icon>
+          <h3>Información de entrega</h3>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Nombre completo:</label>
+            <span>{{ ordenSeleccionada.nombre }} {{ ordenSeleccionada.apellido }}</span>
+          </div>
+          <div class="info-item">
+            <label>Email:</label>
+            <span>{{ ordenSeleccionada.email }}</span>
+          </div>
+          <div class="info-item">
+            <label>Dirección:</label>
+            <span>{{ ordenSeleccionada.direccion_1 }}</span>
+          </div>
+          <div class="info-item" *ngIf="ordenSeleccionada.direccion_2">
+            <label>Dirección 2:</label>
+            <span>{{ ordenSeleccionada.direccion_2 }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información para devoluciones -->
+      <div class="info-card devolucion-card">
+        <div class="info-card-header">
+          <mat-icon>info</mat-icon>
+          <h3>Información para devoluciones o reclamos</h3>
+        </div>
+        <p class="devolucion-text">
+          Si necesitas realizar una devolución o tienes algún reclamo sobre esta orden,
+          por favor contacta a nuestro servicio al cliente proporcionando los siguientes datos:
+        </p>
+        <ul class="devolucion-list">
+          <li><strong>Número de orden:</strong> {{ ordenSeleccionada.token_orden }}</li>
+          <li><strong>ID de orden:</strong> {{ ordenSeleccionada.id }}</li>
+          <li><strong>Fecha de compra:</strong> {{ formatearFecha(ordenSeleccionada.fecha) }}</li>
+          <li><strong>Email registrado:</strong> {{ ordenSeleccionada.email }}</li>
+        </ul>
+      </div>
+
+    </div>
+
+<div class="modal-actions">
+      <!-- 👇 AGREGAR ESTE BOTÓN NUEVO -->
+      <button class="btn-devolucion"
+              *ngIf="ordenSeleccionada && puedeDevolver(ordenSeleccionada)"
+              (click)="abrirModalDevoluciones(ordenSeleccionada)">
+        <mat-icon>assignment_return</mat-icon>
+        Solicitar Devolución
+        <span class="dias-restantes" *ngIf="diasRestantesParaDevolver(ordenSeleccionada) <= 5">
+          ({{ diasRestantesParaDevolver(ordenSeleccionada) }} días restantes)
+        </span>
+      </button>
+
+      <button class="btn-close-modal" (click)="cerrarModalDetalles()">
+        <mat-icon>close</mat-icon>
+        Cerrar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========================================
+     MODAL DE DEVOLUCIONES - WIZARD DE 4 PASOS
+     ======================================== -->
+<div class="modal-overlay modal-devolucion" *ngIf="mostrarModalDevoluciones" (click)="cerrarModalDevoluciones()">
+  <div class="modal-container modal-devolucion-container" (click)="$event.stopPropagation()">
+
+    <!-- Header del Modal -->
+    <div class="modal-header modal-devolucion-header">
+      <div class="header-content-dev">
+        <mat-icon class="header-icon-dev">assignment_return</mat-icon>
+        <div>
+          <h2 class="modal-title-dev">Solicitud de Devolución</h2>
+          <p class="modal-subtitle-dev" *ngIf="ordenDevolucion">
+            Orden #{{ ordenDevolucion.token_orden }}
+          </p>
+        </div>
+      </div>
+      <button mat-icon-button class="close-btn" (click)="cerrarModalDevoluciones()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Progress Stepper -->
+    <div class="stepper-container">
+      <div class="stepper-wrapper">
+        <div class="step" [class.active]="pasoActualDevolucion >= 1" [class.completed]="pasoActualDevolucion > 1">
+          <div class="step-circle">
+            <mat-icon *ngIf="pasoActualDevolucion > 1">check</mat-icon>
+            <span *ngIf="pasoActualDevolucion <= 1">1</span>
+          </div>
+          <span class="step-label">Seleccionar Items</span>
+        </div>
+        <div class="step-line" [class.active]="pasoActualDevolucion >= 2"></div>
+        <div class="step" [class.active]="pasoActualDevolucion >= 2" [class.completed]="pasoActualDevolucion > 2">
+          <div class="step-circle">
+            <mat-icon *ngIf="pasoActualDevolucion > 2">check</mat-icon>
+            <span *ngIf="pasoActualDevolucion <= 2">2</span>
+          </div>
+          <span class="step-label">Motivo</span>
+        </div>
+        <div class="step-line" [class.active]="pasoActualDevolucion >= 3"></div>
+        <div class="step" [class.active]="pasoActualDevolucion >= 3" [class.completed]="pasoActualDevolucion > 3">
+          <div class="step-circle">
+            <mat-icon *ngIf="pasoActualDevolucion > 3">check</mat-icon>
+            <span *ngIf="pasoActualDevolucion <= 3">3</span>
+          </div>
+          <span class="step-label">Detalles</span>
+        </div>
+        <div class="step-line" [class.active]="pasoActualDevolucion >= 4"></div>
+        <div class="step" [class.active]="pasoActualDevolucion >= 4" [class.completed]="pasoActualDevolucion > 4">
+          <div class="step-circle">
+            <span>4</span>
+          </div>
+          <span class="step-label">Confirmar</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenido del Modal -->
+    <div class="modal-content modal-devolucion-content">
+
+      <!-- PASO 1: Seleccionar Items -->
+      <div class="paso-content" *ngIf="pasoActualDevolucion === 1">
+        <div class="paso-header">
+          <mat-icon>inventory_2</mat-icon>
+          <h3>Selecciona los productos que deseas devolver</h3>
+          <p>Puedes seleccionar uno o más productos de tu orden</p>
+        </div>
+
+        <div class="items-list-devolucion">
+          <div *ngFor="let item of itemsOrdenDevolucion"
+               class="item-card-devolucion"
+               [class.selected]="isItemSeleccionado(item.id)"
+               (click)="toggleItemSeleccion(item)">
+
+            <div class="item-checkbox">
+              <mat-icon *ngIf="isItemSeleccionado(item.id)">check_circle</mat-icon>
+              <mat-icon *ngIf="!isItemSeleccionado(item.id)">radio_button_unchecked</mat-icon>
+            </div>
+
+            <div class="item-imagen-dev">
+              <img
+                [src]="obtenerRutaImagen(obtenerProducto(item.productoId))"
+                [alt]="obtenerProducto(item.productoId)?.nombre_producto"
+                (error)="manejarErrorImagen($event)">
+            </div>
+
+            <div class="item-info-dev">
+              <h4 class="item-nombre-dev">{{ obtenerProducto(item.productoId)?.nombre_producto }}</h4>
+              <p class="item-descripcion-dev">{{ obtenerProducto(item.productoId)?.descripcion }}</p>
+              <div class="item-detalles-dev">
+                <span class="badge-item">
+                  <mat-icon>shopping_cart</mat-icon>
+                  Cant: {{ item.cantidad }}
+                </span>
+                <span class="badge-item">
+                  <mat-icon>attach_money</mat-icon>
+                  ${{ obtenerProducto(item.productoId)?.precio_ahora | number:'1.2-2' }}
+                </span>
+                <span class="badge-item badge-subtotal">
+                  <mat-icon>calculate</mat-icon>
+                  Subtotal: ${{ calcularSubtotal(item) | number:'1.2-2' }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Motivo específico del item (se muestra si está seleccionado) -->
+<!-- Selector de cantidad (se muestra si está seleccionado) -->
+          <div class="item-motivo-container" *ngIf="isItemSeleccionado(item.id)" (click)="$event.stopPropagation()">
+            <label class="label-motivo-item">Cantidad a devolver:</label>
+            <div class="cantidad-selector">
+              <button class="btn-cantidad" (click)="decrementarCantidad(item.id)">−</button>
+              <span class="cantidad-valor">{{ getCantidadItem(item.id) }}</span>
+              <button class="btn-cantidad" (click)="incrementarCantidad(item.id, item.cantidad)">+</button>
+              <span class="cantidad-max">de {{ item.cantidad }}</span>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <div class="seleccion-summary" *ngIf="itemsSeleccionados.size > 0">
+          <div class="summary-content">
+            <div class="summary-item">
+              <mat-icon>inventory_2</mat-icon>
+              <span>{{ itemsSeleccionados.size }} producto(s) seleccionado(s)</span>
+            </div>
+            <div class="summary-item">
+              <mat-icon>attach_money</mat-icon>
+              <span>Total: ${{ calcularTotalDevolver() | number:'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 2: Motivo y Tipo de Devolución -->
+      <div class="paso-content" *ngIf="pasoActualDevolucion === 2">
+        <div class="paso-header">
+          <mat-icon>help_outline</mat-icon>
+          <h3>¿Por qué deseas realizar la devolución?</h3>
+          <p>Selecciona el tipo de devolución y el motivo principal</p>
+        </div>
+
+        <div class="tipo-devolucion-selector">
+          <div class="tipo-option"
+               [class.selected]="tipoDevolucion === 'REEMBOLSO'"
+               (click)="tipoDevolucion = 'REEMBOLSO'">
+            <mat-icon>payment</mat-icon>
+            <h4>Reembolso</h4>
+            <p>Devolución del dinero</p>
+          </div>
+          <div class="tipo-option"
+               [class.selected]="tipoDevolucion === 'CAMBIO'"
+               (click)="tipoDevolucion = 'CAMBIO'">
+            <mat-icon>swap_horiz</mat-icon>
+            <h4>Cambio</h4>
+            <p>Cambiar por otro producto</p>
+          </div>
+        </div>
+
+        <div class="motivos-grid">
+          <div *ngFor="let motivo of getMotivos()"
+               class="motivo-card"
+               [class.selected]="motivoDevolucion === motivo"
+               (click)="motivoDevolucion = motivo">
+            <mat-icon>
+              {{ motivoDevolucion === motivo ? 'radio_button_checked' : 'radio_button_unchecked' }}
+            </mat-icon>
+            <span>{{ motivo }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 3: Detalles y Fotos -->
+      <div class="paso-content" *ngIf="pasoActualDevolucion === 3">
+        <div class="paso-header">
+          <mat-icon>description</mat-icon>
+          <h3>Proporciona más detalles</h3>
+          <p>Describe el problema y adjunta fotos (opcional pero recomendado)</p>
+        </div>
+
+        <div class="form-group-dev">
+          <label for="descripcion-detallada">Descripción detallada</label>
+          <textarea
+            id="descripcion-detallada"
+            class="textarea-dev"
+            rows="5"
+            placeholder="Describe el problema con el producto, por ejemplo: 'El producto llegó con una fisura en la parte superior derecha, adjunto fotos del defecto...'"
+            [(ngModel)]="descripcionDetallada"></textarea>
+          <small class="hint-text">Máximo 1000 caracteres</small>
+        </div>
+
+        <div class="form-group-dev">
+          <label>Fotos del producto (opcional)</label>
+          <p class="hint-text">
+            <mat-icon>info</mat-icon>
+            Las fotos ayudan a agilizar el proceso de devolución. Puedes subir hasta 3 imágenes.
+          </p>
+
+          <div class="upload-area" *ngIf="fotosDevolucion.length < 3">
+            <input type="file"
+                   #fileInput
+                   accept="image/*"
+                   multiple
+                   (change)="onFileSelected($event)"
+                   style="display: none;">
+            <button type="button" class="btn-upload" (click)="fileInput.click()">
+              <mat-icon>cloud_upload</mat-icon>
+              Seleccionar fotos
+            </button>
+            <p class="upload-hint">JPG, PNG, máx 5MB por foto</p>
+          </div>
+
+          <div class="fotos-preview" *ngIf="previewFotos.length > 0">
+            <div class="foto-preview-item" *ngFor="let foto of previewFotos; let i = index">
+              <img [src]="foto" alt="Preview">
+              <button type="button" class="btn-eliminar-foto" (click)="eliminarFoto(i)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 4: Confirmación y Resumen -->
+      <div class="paso-content" *ngIf="pasoActualDevolucion === 4">
+        <div class="paso-header">
+          <mat-icon>fact_check</mat-icon>
+          <h3>Confirmar Solicitud</h3>
+          <p>Revisa los detalles de tu solicitud antes de enviarla</p>
+        </div>
+
+        <div class="resumen-devolucion">
+
+          <!-- Resumen de orden -->
+          <div class="resumen-card">
+            <div class="resumen-card-header">
+              <mat-icon>receipt</mat-icon>
+              <h4>Orden</h4>
+            </div>
+            <div class="resumen-card-body">
+              <p><strong>Número:</strong> {{ ordenDevolucion?.token_orden }}</p>
+              <p><strong>Fecha:</strong> {{ formatearFecha(ordenDevolucion?.fecha || '') }}</p>
+            </div>
+          </div>
+
+          <!-- Tipo de devolución -->
+          <div class="resumen-card">
+            <div class="resumen-card-header">
+              <mat-icon>{{ tipoDevolucion === 'REEMBOLSO' ? 'payment' : 'swap_horiz' }}</mat-icon>
+              <h4>Tipo de devolución</h4>
+            </div>
+            <div class="resumen-card-body">
+              <p class="tipo-badge" [class.reembolso]="tipoDevolucion === 'REEMBOLSO'"
+                                     [class.cambio]="tipoDevolucion === 'CAMBIO'">
+                {{ tipoDevolucion }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Motivo -->
+          <div class="resumen-card">
+            <div class="resumen-card-header">
+              <mat-icon>help_outline</mat-icon>
+              <h4>Motivo</h4>
+            </div>
+            <div class="resumen-card-body">
+              <p>{{ motivoDevolucion }}</p>
+            </div>
+          </div>
+
+          <!-- Items seleccionados -->
+          <div class="resumen-card">
+            <div class="resumen-card-header">
+              <mat-icon>inventory_2</mat-icon>
+              <h4>Productos a devolver ({{ itemsSeleccionados.size }})</h4>
+            </div>
+            <div class="resumen-card-body">
+              <div class="resumen-item" *ngFor="let item of itemsSeleccionadosArray">
+                <span>{{ obtenerProducto(item.productoId)?.nombre_producto }}</span>
+                <span class="resumen-item-precio">
+                  {{ item.cantidad }} x ${{ item.precio_unitario | number:'1.2-2' }}
+                </span>
+              </div>
+              <div class="resumen-total">
+                <strong>Total:</strong>
+                <strong>${{ calcularTotalDevolver() | number:'1.2-2' }}</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Descripción -->
+          <div class="resumen-card" *ngIf="descripcionDetallada">
+            <div class="resumen-card-header">
+              <mat-icon>description</mat-icon>
+              <h4>Descripción</h4>
+            </div>
+            <div class="resumen-card-body">
+              <p class="descripcion-text">{{ descripcionDetallada }}</p>
+            </div>
+          </div>
+
+          <!-- Fotos -->
+          <div class="resumen-card" *ngIf="fotosDevolucion.length > 0">
+            <div class="resumen-card-header">
+              <mat-icon>photo_library</mat-icon>
+              <h4>Fotos adjuntas ({{ fotosDevolucion.length }})</h4>
+            </div>
+            <div class="resumen-card-body">
+              <div class="resumen-fotos">
+                <div class="resumen-foto-thumb" *ngFor="let foto of previewFotos">
+                  <img [src]="foto" alt="Foto">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información importante -->
+          <div class="info-importante">
+            <mat-icon>info</mat-icon>
+            <div>
+              <h4>Información importante</h4>
+              <ul>
+                <li>Recibirás una confirmación por correo electrónico</li>
+                <li>El proceso de revisión toma 2-3 días hábiles</li>
+                <li>Si se aprueba, recibirás instrucciones de envío</li>
+                <li>El reembolso se procesa 5-7 días después de recibir el producto</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Mensajes de estado -->
+          <div class="mensaje-exito" *ngIf="mensajeExitoDevolucion">
+            <mat-icon>check_circle</mat-icon>
+            <p>{{ mensajeExitoDevolucion }}</p>
+          </div>
+
+          <div class="mensaje-error" *ngIf="mensajeErrorDevolucion">
+            <mat-icon>error</mat-icon>
+            <p>{{ mensajeErrorDevolucion }}</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer con botones de navegación -->
+    <div class="modal-actions modal-devolucion-actions">
+      <button type="button"
+              class="btn-secondary-dev"
+              (click)="irAPaso(pasoActualDevolucion - 1)"
+              [disabled]="pasoActualDevolucion === 1 || procesandoDevolucion">
+        <mat-icon>arrow_back</mat-icon>
+        Anterior
+      </button>
+
+      <div class="spacer"></div>
+
+      <button type="button"
+              class="btn-cancelar-dev"
+              (click)="cerrarModalDevoluciones()"
+              [disabled]="procesandoDevolucion">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+
+      <button type="button"
+              class="btn-primary-dev"
+              *ngIf="pasoActualDevolucion < 4"
+              (click)="irAPaso(pasoActualDevolucion + 1)"
+              [disabled]="procesandoDevolucion">
+        Siguiente
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+
+      <button type="button"
+              class="btn-confirmar-dev"
+              *ngIf="pasoActualDevolucion === 4"
+              (click)="enviarSolicitudDevolucion()"
+              [disabled]="procesandoDevolucion || mensajeExitoDevolucion">
+        <mat-icon *ngIf="!procesandoDevolucion">send</mat-icon>
+        <mat-icon *ngIf="procesandoDevolucion" class="spinning">hourglass_empty</mat-icon>
+        {{ procesandoDevolucion ? 'Procesando...' : 'Enviar Solicitud' }}
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ========================================
+     MODAL NOTIFICACIÓN / ALERTA GENERAL
+     (reemplaza todos los alert() del sistema)
+     ======================================== -->
+<div class="modal-overlay modal-notify-overlay" *ngIf="mostrarModalInfo" (click)="cerrarModalInfo()">
+  <div class="modal-notify-container" (click)="$event.stopPropagation()">
+    <div class="modal-notify-icon-wrap" [ngClass]="'notify-' + modalInfoTipo">
+      <mat-icon>{{ modalInfoIcono }}</mat-icon>
+    </div>
+    <h3 class="modal-notify-titulo">{{ modalInfoTitulo }}</h3>
+    <p class="modal-notify-mensaje">{{ modalInfoMensaje }}</p>
+    <button class="modal-notify-btn" [ngClass]="'notify-btn-' + modalInfoTipo" (click)="cerrarModalInfo()">
+      <mat-icon>check</mat-icon>
+      Entendido
+    </button>
+  </div>
+</div>
+
+<!-- ========================================
+     MODAL ÉXITO - SOLICITUD ENVIADA
+     ======================================== -->
+<div class="modal-overlay modal-exito-overlay" *ngIf="mostrarModalExitoEnvio" (click)="cerrarModalExitoEnvio()">
+  <div class="modal-exito-container" (click)="$event.stopPropagation()">
+    <div class="modal-exito-anim">
+      <div class="exito-circle">
+        <mat-icon>check</mat-icon>
+      </div>
+      <div class="exito-ripple"></div>
+    </div>
+    <h3 class="modal-exito-titulo">¡Solicitud Enviada!</h3>
+    <p class="modal-exito-subtitulo">Tu solicitud de reembolso ha sido recibida correctamente.</p>
+    <p class="modal-exito-info">Nuestro equipo la revisará en un plazo de <strong>2–3 días hábiles</strong>. Recibirás una confirmación por correo.</p>
+    <div class="modal-exito-barra">
+      <div class="modal-exito-barra-fill"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================
+     SPINNER NGX FULLSCREEN (enviar solicitud)
+     ======================================== -->
+<ngx-spinner bdColor="rgba(0,0,0,0.85)" size="large" color="#FAE1D6" type="square-jelly-box" [fullScreen]="true">
+  <p style="color:#FAE1D6; font-size:1.1rem; margin-top:1rem; font-weight:600; letter-spacing:0.5px;">Enviando solicitud de reembolso...</p>
+</ngx-spinner>

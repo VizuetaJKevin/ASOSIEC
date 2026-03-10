@@ -1,0 +1,199 @@
+<section class="catalogo-moderno">
+
+  <!-- Header dinámico -->
+  <div class="header-seccion">
+    <h1 class="titulo-principal">
+      <span class="icono-categoria">{{ obtenerTituloSeccion().split(' ')[0] }}</span>
+      <span>{{ obtenerTituloSeccion().substring(obtenerTituloSeccion().indexOf(' ') + 1) }}</span>
+    </h1>
+    <p class="subtitulo">{{ obtenerSubtituloSeccion() }}</p>
+  </div>
+
+  <!-- Filtros por categoría STICKY -->
+  <div class="filtros-categoria" *ngIf="!cargando">
+    <div class="container">
+      <div class="filtros-wrapper">
+        <button
+          class="btn-filtro-categoria"
+          [class.active]="esCategoriaActiva('todos')"
+          (click)="navegarACategoria(null)">
+          <i class="icono-filtro">🪴</i>
+          <span>Todas</span>
+          <span class="badge-count">{{ listaproductos.length }}</span>
+        </button>
+
+        <button
+          class="btn-filtro-categoria"
+          [class.active]="esCategoriaActiva('joyeria')"
+          (click)="navegarACategoria(1)">
+          <i class="icono-filtro">💎</i>
+          <span>Bisutería</span>
+          <span class="badge-count">{{ contarPorCategoria(1) }}</span>
+        </button>
+
+        <button
+          class="btn-filtro-categoria"
+          [class.active]="esCategoriaActiva('textiles')"
+          (click)="navegarACategoria(3)">
+          <i class="icono-filtro">🧵</i>
+          <span>Textiles</span>
+          <span class="badge-count">{{ contarPorCategoria(3) }}</span>
+        </button>
+
+        <button
+          class="btn-filtro-categoria"
+          [class.active]="esCategoriaActiva('decoracion')"
+          (click)="navegarACategoria(2)">
+          <i class="icono-filtro">🏠</i>
+          <span>Decoración</span>
+          <span class="badge-count">{{ contarPorCategoria(2) }}</span>
+        </button>
+
+        <button
+          class="btn-filtro-categoria"
+          [class.active]="esCategoriaActiva('alimentos')"
+          (click)="navegarACategoria(4)">
+          <i class="icono-filtro">🍯</i>
+          <span>Alimentos</span>
+          <span class="badge-count">{{ contarPorCategoria(4) }}</span>
+        </button>
+
+        <button
+          class="btn-filtro-categoria"
+          [class.active]="esCategoriaActiva('ceramica')"
+          (click)="navegarACategoria(5)">
+          <i class="icono-filtro">🏺</i>
+          <span>Cerámica</span>
+          <span class="badge-count">{{ contarPorCategoria(5) }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de búsqueda moderna -->
+  <div class="contenedor-busqueda">
+    <div class="input-busqueda-moderna">
+      <i class="icono-buscar">🔍</i>
+      <input
+        type="text"
+        class="input-filtro"
+        placeholder="Buscar productos..."
+        [formControl]="filtroNombre"
+      >
+      <button
+        class="btn-limpiar"
+        *ngIf="filtroNombre.value"
+        (click)="limpiarFiltro()"
+        type="button">
+        ✕
+      </button>
+    </div>
+  </div>
+
+  <!-- Contador de productos -->
+  <div class="info-productos" *ngIf="!cargando">
+    <span class="contador-productos">
+      {{ productosFiltrados.length }} producto{{ productosFiltrados.length !== 1 ? 's' : '' }}
+      <span *ngIf="categoriaActual !== null || filtroNombre.value"> encontrado{{ productosFiltrados.length !== 1 ? 's' : '' }}</span>
+      <span *ngIf="categoriaActual === null && !filtroNombre.value"> disponible{{ productosFiltrados.length !== 1 ? 's' : '' }}</span>
+    </span>
+  </div>
+
+  <!-- Loader -->
+  <div class="loader-container" *ngIf="cargando">
+    <div class="loader">
+      <div class="spinner"></div>
+      <p>Cargando productos...</p>
+    </div>
+  </div>
+
+  <!-- Grid de productos -->
+  <div class="grid-productos" *ngIf="!cargando && productosFiltrados.length > 0">
+    <div class="producto-card" *ngFor="let producto of productosFiltrados">
+
+      <!-- Badge de estado -->
+      <div class="badge-estado" [ngClass]="obtenerClaseBadge(producto)">
+        {{ obtenerTextoEstado(producto) }}
+      </div>
+
+      <!-- Badge de categoría -->
+      <div class="badge-categoria">
+        {{ obtenerNombreCategoria(producto.categoria_producto_Id) }}
+      </div>
+
+      <!-- ✅ Imagen del producto - CORREGIDA PARA CLOUDINARY -->
+      <div class="producto-imagen-container">
+        <img
+          [src]="producto.url_Img"
+          [alt]="producto.nombre_producto"
+          class="producto-imagen"
+          loading="lazy"
+          (error)="onImageError($event)"
+        >
+        <div class="imagen-overlay"></div>
+      </div>
+
+      <!-- Contenido del producto -->
+      <div class="producto-contenido">
+
+        <!-- Título -->
+        <h3 class="producto-titulo">{{ producto.nombre_producto }}</h3>
+
+        <!-- Descripción -->
+        <p class="producto-descripcion">{{ producto.descripcion }}</p>
+
+        <!-- Stock -->
+        <div class="stock-container" *ngIf="estaDisponible(producto)">
+          <span class="stock-badge">
+            <i class="stock-icon">✔</i>
+            {{ producto.stock }} en stock
+          </span>
+        </div>
+
+        <!-- Precio -->
+        <div class="precio-container">
+          <div class="precio-actual">
+            {{ producto.precio_ahora | currency:'USD':'symbol':'1.2-2' }}
+          </div>
+          <div class="precio-anterior" *ngIf="producto.precio_antes > producto.precio_ahora">
+            {{ producto.precio_antes | currency:'USD':'symbol':'1.2-2' }}
+            <span class="descuento-badge">
+              -{{ calcularDescuento(producto.precio_antes, producto.precio_ahora) }}%
+            </span>
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="acciones-container">
+          <button
+            class="btn-agregar-carrito"
+            [class.btn-deshabilitado]="estaAgotado(producto)"
+            [disabled]="estaAgotado(producto)"
+            (click)="agregarAlCarrito(producto.id)">
+
+            <span *ngIf="estaDisponible(producto)" class="btn-contenido">
+              <i class="btn-icon">🛒</i>
+              Agregar al carrito
+            </span>
+            <span *ngIf="estaAgotado(producto)" class="btn-contenido">
+              <i class="btn-icon">⚠️</i>
+              Sin stock
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay productos -->
+  <div class="mensaje-vacio" *ngIf="!cargando && productosFiltrados.length === 0">
+    <div class="icono-vacio">📦</div>
+    <h3>No se encontraron productos</h3>
+    <p *ngIf="filtroNombre.value || categoriaActual !== null">
+      Intenta ajustar tus filtros o buscar otros términos
+    </p>
+    <button class="btn-limpiar-filtro" (click)="limpiarTodosFiltros()">
+      Limpiar todos los filtros
+    </button>
+  </div>
+</section>

@@ -1,0 +1,566 @@
+<div class="profile-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+
+      <!-- ========================================
+           COLUMNA IZQUIERDA - INFORMACIÓN BÁSICA
+           ======================================== -->
+      <div class="col-lg-4 mb-4">
+
+        <!-- CARD DE PERFIL PRINCIPAL -->
+        <div class="card profile-card">
+          <div class="card-body text-center">
+
+            <!-- Foto de perfil con botón para cambiar -->
+            <div class="profile-image-wrapper">
+              <img [src]="fotoPerfil"
+                   alt="Foto de perfil"
+                   class="profile-image">
+              <label for="fileInput" class="upload-icon" *ngIf="!viendoPerfilAjeno">
+                <mat-icon>photo_camera</mat-icon>
+              </label>
+              <input type="file"
+                     id="fileInput"
+                     style="display: none;"
+                     accept="image/*"
+                     (change)="onFileSelected($event)">
+              <div class="spinner-overlay" *ngIf="cargandoImagen">
+                <mat-spinner diameter="40"></mat-spinner>
+              </div>
+            </div>
+
+            <!-- Nombre y rol -->
+            <h3 class="profile-name">{{ nombreCompleto }}</h3>
+            <p class="profile-role">{{ formularioPerfil.value.email }}</p>
+
+            <!-- Badge de Rol -->
+            <div class="mb-3">
+              <span class="badge role-badge" [ngClass]="obtenerClaseBadgeRol()">
+                <mat-icon class="badge-icon">{{ formularioPerfil.value.rolId === 1 ? 'shield' : formularioPerfil.value.rolId === 3 ? 'store' : 'person' }}</mat-icon>
+                {{ obtenerNombreRol() }}
+              </span>
+            </div>
+
+            <!-- Botones de acción solo para Admin y Vendedor -->
+            <div class="action-buttons" *ngIf="puedeContactarCliente() && !viendoPerfilAjeno">
+              <button class="btn btn-primary" (click)="abrirEmailCliente()">
+                <mat-icon>email</mat-icon>
+                Email
+              </button>
+              <button class="btn btn-outline-primary" (click)="mostrarMensajes = !mostrarMensajes">
+                <mat-icon>message</mat-icon>
+                Mensajes
+                <span class="badge-count" *ngIf="mensajesNoLeidos > 0">{{ mensajesNoLeidos }}</span>
+              </button>
+            </div>
+
+            <!-- Información de contacto -->
+            <div class="info-section">
+              <div class="info-item">
+                <mat-icon>person</mat-icon>
+                <div class="info-content">
+                  <label>Nombre Completo</label>
+                  <span>{{ nombreCompleto }}</span>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <mat-icon>email</mat-icon>
+                <div class="info-content">
+                  <label>Email</label>
+                  <span>{{ formularioPerfil.value.email }}</span>
+                </div>
+              </div>
+
+              <div class="info-item" *ngIf="formularioPerfil.value.telefono">
+                <mat-icon>phone</mat-icon>
+                <div class="info-content">
+                  <label>Teléfono</label>
+                  <span>{{ formularioPerfil.value.telefono }}</span>
+                </div>
+              </div>
+
+              <div class="info-item" *ngIf="formularioPerfil.value.direccion">
+                <mat-icon>home</mat-icon>
+                <div class="info-content">
+                  <label>Dirección</label>
+                  <span>{{ formularioPerfil.value.direccion }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Redes sociales -->
+            <div class="social-links">
+              <h6>Redes Sociales</h6>
+              <form [formGroup]="formularioRedes" *ngIf="!viendoPerfilAjeno">
+                <div class="mb-2">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text">
+                      <mat-icon>share</mat-icon>
+                    </span>
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Twitter/X URL"
+                           formControlName="twitter">
+                  </div>
+                </div>
+
+                <div class="mb-2">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text">
+                      <mat-icon>camera_alt</mat-icon>
+                    </span>
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Instagram URL"
+                           formControlName="instagram">
+                  </div>
+                </div>
+
+                <div class="mb-2">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text">
+                      <mat-icon>thumb_up</mat-icon>
+                    </span>
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Facebook URL"
+                           formControlName="facebook">
+                  </div>
+                </div>
+
+                <button type="button"
+                        class="btn-redes-guardar"
+                        (click)="actualizarRedesSociales()">
+                  <span class="btn-redes-bg"></span>
+                  <mat-icon class="btn-redes-icon">cloud_done</mat-icon>
+                  <span class="btn-redes-label">Guardar redes</span>
+                  <mat-icon class="btn-redes-arrow">arrow_forward</mat-icon>
+                </button>
+              </form>
+
+              <div class="social-icons" *ngIf="viendoPerfilAjeno">
+                <a [href]="formularioRedes.value.twitter" target="_blank" *ngIf="formularioRedes.value.twitter">
+                  <mat-icon>share</mat-icon>
+                </a>
+                <a [href]="formularioRedes.value.instagram" target="_blank" *ngIf="formularioRedes.value.instagram">
+                  <mat-icon>camera_alt</mat-icon>
+                </a>
+                <a [href]="formularioRedes.value.facebook" target="_blank" *ngIf="formularioRedes.value.facebook">
+                  <mat-icon>thumb_up</mat-icon>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================
+           COLUMNA DERECHA - TABS DE INFORMACIÓN
+           ======================================== -->
+      <div class="col-lg-8">
+
+        <mat-tab-group class="profile-tabs" *ngIf="!viendoPerfilAjeno">
+
+          <!-- TAB 1: INFORMACIÓN PERSONAL -->
+          <mat-tab label="Información Personal">
+            <div class="tab-content-wrapper">
+              <div class="card">
+                <div class="card-header">
+                  <h5>
+                    <mat-icon>edit</mat-icon>
+                    Editar Información Personal
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <form [formGroup]="formularioPerfil" (ngSubmit)="actualizarPerfil()">
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text"
+                               class="form-control"
+                               formControlName="nombre"
+                               placeholder="Nombre">
+                        <div class="invalid-feedback"
+                             *ngIf="formularioPerfil.get('nombre')?.invalid && formularioPerfil.get('nombre')?.touched">
+                          El nombre es requerido
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Apellido</label>
+                        <input type="text"
+                               class="form-control"
+                               formControlName="apellido"
+                               placeholder="Apellido">
+                        <div class="invalid-feedback"
+                             *ngIf="formularioPerfil.get('apellido')?.invalid && formularioPerfil.get('apellido')?.touched">
+                          El apellido es requerido
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email"
+                               class="form-control"
+                               formControlName="email"
+                               placeholder="Email">
+                        <div class="invalid-feedback"
+                             *ngIf="formularioPerfil.get('email')?.invalid && formularioPerfil.get('email')?.touched">
+                          Email válido es requerido
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Teléfono</label>
+                        <input type="tel"
+                               class="form-control"
+                               formControlName="telefono"
+                               placeholder="Teléfono (opcional)">
+                      </div>
+
+                      <div class="col-md-12 mb-3">
+                        <label class="form-label">
+                          <mat-icon class="align-middle me-1">home</mat-icon>
+                          Dirección
+                        </label>
+                        <input type="text"
+                               class="form-control"
+                               formControlName="direccion"
+                               placeholder="Ej: Av. Principal 123, Ciudad">
+                        <small class="form-text text-muted">
+                          Si guardas tu dirección, se autocompletará en el checkout
+                        </small>
+                      </div>
+                    </div>
+
+                    <div class="text-end">
+                      <button type="submit" class="btn btn-primary">
+                        <mat-icon>save</mat-icon>
+                        Guardar Cambios
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- ===================================================
+               TAB 2: ESTADÍSTICAS Y ACTIVIDAD — VERSIÓN MEJORADA
+               =================================================== -->
+          <mat-tab label="Estadísticas">
+            <div class="tab-content-wrapper stats-tab">
+
+              <!-- ── SECCIÓN 1: KPIs del mes actual ──────────────────── -->
+              <div class="stats-section-title">
+                <mat-icon>calendar_month</mat-icon>
+                <span>Este mes</span>
+              </div>
+
+              <div class="kpi-grid">
+
+                <!-- KPI 1: Total gastado este mes -->
+                <div class="kpi-card kpi-gasto">
+                  <div class="kpi-icon-wrapper">
+                    <mat-icon>payments</mat-icon>
+                  </div>
+                  <div class="kpi-body">
+                    <span class="kpi-label">Total gastado</span>
+                    <span class="kpi-value">${{ totalGastadoMes | number:'1.2-2' }}</span>
+                  </div>
+                  <div class="kpi-accent"></div>
+                </div>
+
+                <!-- KPI 2: Productos comprados este mes -->
+                <div class="kpi-card kpi-productos">
+                  <div class="kpi-icon-wrapper">
+                    <mat-icon>inventory_2</mat-icon>
+                  </div>
+                  <div class="kpi-body">
+                    <span class="kpi-label">Productos comprados</span>
+                    <span class="kpi-value">{{ productosCompradosMes }}</span>
+                  </div>
+                  <div class="kpi-accent"></div>
+                </div>
+
+                <!-- KPI 3: Promedio por compra -->
+                <div class="kpi-card kpi-promedio">
+                  <div class="kpi-icon-wrapper">
+                    <mat-icon>trending_up</mat-icon>
+                  </div>
+                  <div class="kpi-body">
+                    <span class="kpi-label">Promedio por compra</span>
+                    <span class="kpi-value">${{ promedioPorCompraMes | number:'1.2-2' }}</span>
+                  </div>
+                  <div class="kpi-accent"></div>
+                </div>
+
+              </div>
+
+              <!-- ── SECCIÓN 2: Gráfica de línea — Evolución del gasto ── -->
+              <div class="stats-section-title">
+                <mat-icon>show_chart</mat-icon>
+                <span>Evolución del gasto — últimos 6 meses</span>
+              </div>
+
+              <div class="card chart-card mb-4">
+                <div class="card-body">
+                  <div class="chart-container-line">
+                    <canvas baseChart
+                            [data]="lineChartGastoData"
+                            [options]="lineChartGastoOptions"
+                            [type]="'line'">
+                    </canvas>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ── SECCIÓN 3: Gráfica de dona + Resumen histórico ───── -->
+              <div class="row g-3 mb-0">
+
+                <!-- Gráfica de dona -->
+                <div class="col-md-6">
+                  <div class="stats-section-title">
+                    <mat-icon>donut_large</mat-icon>
+                    <span>Productos: mes actual vs promedio</span>
+                  </div>
+                  <div class="card chart-card h-100">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                      <div class="chart-container-donut">
+                        <canvas baseChart
+                                [data]="doughnutChartProductosData"
+                                [options]="doughnutChartProductosOptions"
+                                [type]="'doughnut'">
+                        </canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tarjeta de resumen histórico -->
+                <div class="col-md-6">
+                  <div class="stats-section-title">
+                    <mat-icon>history</mat-icon>
+                    <span>Resumen histórico</span>
+                  </div>
+                  <div class="card chart-card h-100">
+                    <div class="card-body">
+
+                      <div class="summary-item">
+                        <div class="summary-icon-wrap summary-icon-total">
+                          <mat-icon>account_balance_wallet</mat-icon>
+                        </div>
+                        <div class="summary-text">
+                          <span class="summary-label">Total histórico gastado</span>
+                          <span class="summary-value">${{ totalHistoricoGastado | number:'1.2-2' }}</span>
+                        </div>
+                      </div>
+
+                      <div class="summary-divider"></div>
+
+                      <div class="summary-item">
+                        <div class="summary-icon-wrap summary-icon-meses">
+                          <mat-icon>date_range</mat-icon>
+                        </div>
+                        <div class="summary-text">
+                          <span class="summary-label">Meses con compras</span>
+                          <span class="summary-value">{{ mesesConCompras }}
+                            <small class="summary-unit">meses</small>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="summary-divider"></div>
+
+                      <div class="summary-item">
+                        <div class="summary-icon-wrap summary-icon-top">
+                          <mat-icon>emoji_events</mat-icon>
+                        </div>
+                        <div class="summary-text">
+                          <span class="summary-label">Mes con mayor gasto</span>
+                          <span class="summary-value summary-highlight">{{ mesMayorGasto }}</span>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <!-- fin row gráficas -->
+
+            </div>
+          </mat-tab>
+
+          <!-- TAB 3: SEGURIDAD -->
+          <mat-tab label="Seguridad">
+            <div class="tab-content-wrapper">
+              <div class="card">
+                <div class="card-header">
+                  <h5>
+                    <mat-icon>lock</mat-icon>
+                    Cambiar Contraseña
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <form [formGroup]="formularioContrasena" (ngSubmit)="cambiarContrasena()">
+
+                    <div class="mb-3">
+                      <label class="form-label">Contraseña Actual</label>
+                      <input type="password"
+                             class="form-control"
+                             formControlName="contrasenaActual"
+                             placeholder="Ingresa tu contraseña actual">
+                      <div class="invalid-feedback"
+                           *ngIf="formularioContrasena.get('contrasenaActual')?.invalid && formularioContrasena.get('contrasenaActual')?.touched">
+                        La contraseña actual es requerida
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Nueva Contraseña</label>
+                      <input type="password"
+                             class="form-control"
+                             formControlName="nuevaContrasena"
+                             placeholder="Mínimo 8 caracteres">
+                      <div class="invalid-feedback"
+                           *ngIf="formularioContrasena.get('nuevaContrasena')?.invalid && formularioContrasena.get('nuevaContrasena')?.touched">
+                        La contraseña debe tener al menos 8 caracteres
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Confirmar Nueva Contraseña</label>
+                      <input type="password"
+                             class="form-control"
+                             formControlName="confirmarContrasena"
+                             [class.is-invalid]="formularioContrasena.get('confirmarContrasena')?.hasError('passwordMismatch') && formularioContrasena.get('confirmarContrasena')?.touched"
+                             placeholder="Repite la nueva contraseña">
+                      <div class="invalid-feedback"
+                           *ngIf="formularioContrasena.get('confirmarContrasena')?.hasError('passwordMismatch') && formularioContrasena.get('confirmarContrasena')?.touched">
+                        Las contraseñas no coinciden
+                      </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                      <mat-icon>info</mat-icon>
+                      <span>Por seguridad, asegúrate de que tu contraseña contenga letras, números y caracteres especiales.</span>
+                    </div>
+
+                    <div class="text-end">
+                      <button type="submit"
+                              class="btn btn-primary"
+                              [disabled]="formularioContrasena.invalid">
+                        <mat-icon>vpn_key</mat-icon>
+                        Cambiar Contraseña
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- TAB 4: MENSAJES -->
+          <mat-tab label="Buzón de Mensajes">
+            <div class="tab-content-wrapper">
+
+              <!-- Botón de nuevo mensaje solo para Admin/Vendedor -->
+              <div class="mb-3" *ngIf="puedeEnviarMensajes()">
+                <button class="btn btn-primary" (click)="abrirFormularioMensaje()">
+                  <mat-icon>add</mat-icon>
+                  Nuevo Mensaje
+                </button>
+              </div>
+
+              <!-- Formulario de nuevo mensaje solo para Admin/Vendedor -->
+              <div class="card mb-3" *ngIf="mostrarNuevoMensaje && puedeEnviarMensajes()">
+                <div class="card-header">
+                  <h5>
+                    <mat-icon>send</mat-icon>
+                    Enviar Mensaje
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <form [formGroup]="formularioMensaje" (ngSubmit)="enviarMensaje()">
+                    <div class="mb-3">
+                      <label class="form-label">Asunto</label>
+                      <input type="text"
+                             class="form-control"
+                             formControlName="asunto"
+                             placeholder="Asunto del mensaje">
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Mensaje</label>
+                      <textarea class="form-control"
+                                rows="4"
+                                formControlName="mensaje"
+                                placeholder="Escribe tu mensaje aquí..."></textarea>
+                    </div>
+
+                    <div class="text-end">
+                      <button type="button"
+                              class="btn btn-secondary me-2"
+                              (click)="mostrarNuevoMensaje = false">
+                        Cancelar
+                      </button>
+                      <button type="submit"
+                              class="btn btn-primary"
+                              [disabled]="formularioMensaje.invalid">
+                        <mat-icon>send</mat-icon>
+                        Enviar
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!-- Lista de mensajes recibidos -->
+              <div class="card">
+                <div class="card-header">
+                  <h5>
+                    <mat-icon>inbox</mat-icon>
+                    Mensajes Recibidos ({{ mensajesRecibidos.length }})
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="messages-list" *ngIf="mensajesRecibidos.length > 0">
+                    <div class="message-item"
+                         *ngFor="let mensaje of mensajesRecibidos"
+                         [class.message-unread]="!mensaje.leido"
+                         (click)="marcarComoLeido(mensaje.id!)">
+                      <div class="message-header">
+                        <div>
+                          <strong>{{ mensaje.nombreRemitente }}</strong>
+                          <span class="badge bg-primary ms-2" *ngIf="!mensaje.leido">Nuevo</span>
+                        </div>
+                        <small>{{ mensaje.fechaEnvio | date:'short' }}</small>
+                      </div>
+                      <h6>{{ mensaje.asunto }}</h6>
+                      <p>{{ mensaje.mensaje }}</p>
+                      <div class="message-actions">
+                        <button class="btn btn-sm btn-danger" (click)="eliminarMensaje(mensaje.id!)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-center text-muted py-4" *ngIf="mensajesRecibidos.length === 0">
+                    <mat-icon class="large-icon">inbox</mat-icon>
+                    <p>No tienes mensajes</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </mat-tab>
+
+        </mat-tab-group>
+
+      </div>
+    </div>
+  </div>
+</div>

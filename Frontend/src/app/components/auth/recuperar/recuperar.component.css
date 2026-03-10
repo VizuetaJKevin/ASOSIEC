@@ -1,0 +1,834 @@
+/* ============================================
+   RECUPERAR CONTRASEÑA - GLASSMORPHISM STYLE
+   ============================================ */
+
+/* Contenedor principal */
+.recovery-container {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Fondo animado con gradiente */
+.animated-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0e0e0e 0%, #242424 100%);
+  z-index: -1;
+}
+
+/* Círculos de gradiente animados */
+.gradient-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: float 20s ease-in-out infinite;
+}
+
+.circle-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.4) 100%);
+  top: -100px;
+  right: -100px;
+  animation-delay: 0s;
+}
+
+.circle-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(118, 75, 162, 0.7) 0%, rgba(102, 126, 234, 0.3) 100%);
+  bottom: -150px;
+  left: -150px;
+  animation-delay: -5s;
+}
+
+.circle-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(254, 254, 255, 0.3) 100%);
+  top: 50%;
+  right: 10%;
+  animation-delay: -10s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(50px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-30px, 30px) scale(0.9);
+  }
+}
+
+/* Card con efecto glassmorphism */
+.glass-card {
+  background: rgba(255, 255, 255, 0.102);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  padding: 48px;
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Header personalizado */
+.card-header-custom {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.icon-container {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.icon-container .material-icons {
+  font-size: 40px;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  font-family: BlackOps;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Contenido del formulario */
+.form-content {
+  margin-top: 32px;
+}
+
+/* Grupo de formulario personalizado */
+.form-group-custom {
+  margin-bottom: 28px;
+}
+
+.form-label-custom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-label-custom .material-icons {
+  font-size: 18px;
+}
+
+/* Input wrapper */
+.input-wrapper {
+  position: relative;
+}
+
+/* Input personalizado */
+.form-control-custom {
+  width: 100%;
+  padding: 16px 48px 16px 20px;
+  font-size: 16px;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  outline: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.form-control-custom::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.form-control-custom:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+.form-control-custom.error {
+  border-color: #ff6b6b;
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+/* Ícono del input */
+.input-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+/* Botón de toggle password */
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-password:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.toggle-password .material-icons {
+  font-size: 20px;
+}
+
+/* Mensaje de error */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 107, 107, 0.2);
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  border-radius: 8px;
+  color: #ffcccb;
+  font-size: 14px;
+  backdrop-filter: blur(10px);
+}
+
+.error-message .material-icons {
+  font-size: 18px;
+}
+
+/* Indicador de progreso */
+.progress-indicator {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  gap: 16px;
+}
+
+.step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.step.completed {
+  background: rgba(86, 205, 173, 0.2);
+  border-color: rgba(86, 205, 173, 0.4);
+}
+
+.step.active {
+  background: rgba(102, 126, 234, 0.3);
+  border-color: rgba(102, 126, 234, 0.5);
+  transform: scale(1.05);
+}
+
+.step .material-icons {
+  font-size: 28px;
+  color: #ffffff;
+}
+
+.step span {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ============================================================
+   AGREGAR AL FINAL DE recuperar.component.css
+   Estilos para el indicador de pasos y los inputs OTP
+   ============================================================ */
+
+/* ── Descripción de cada paso ── */
+.step-description {
+  color: #b0b8d1;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.step-description strong { color: #e0e6ff; }
+.step-description small  { font-size: 12px; }
+
+/* ── Indicador de pasos (stepper) ── */
+.steps-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0 0;
+  gap: 0;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 70px;
+}
+
+.step-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.4);
+  transition: all 0.4s ease;
+}
+
+.step-circle .material-icons { font-size: 16px; }
+
+.step-item span {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: color 0.4s ease;
+}
+
+/* Paso activo */
+.step-item.step-active .step-circle {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-color: #667eea;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(102, 126, 234, 0.5);
+}
+.step-item.step-active span { color: #a78bfa; font-weight: 600; }
+
+/* Paso completado */
+.step-item.step-done .step-circle {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+  color: #22c55e;
+}
+.step-item.step-done span { color: #4ade80; }
+
+/* Línea conectora */
+.step-line {
+  flex: 1;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  margin-bottom: 22px;
+  transition: background 0.4s ease;
+  max-width: 40px;
+}
+.step-line.line-done { background: #22c55e; }
+
+/* ── Inputs OTP ── */
+.otp-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 24px;
+}
+
+.otp-input {
+  width: 52px;
+  height: 62px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  background: rgba(255, 255, 255, 0.07);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: #e0e6ff;
+  outline: none;
+  transition: all 0.2s ease;
+  caret-color: #667eea;
+}
+
+.otp-input:focus {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.12);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
+  transform: translateY(-2px);
+}
+
+.otp-input:not(:placeholder-shown) {
+  border-color: rgba(102, 126, 234, 0.5);
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.otp-divider {
+  color: rgba(255,255,255,0.3);
+  font-size: 20px;
+  margin: 0 2px;
+  user-select: none;
+}
+
+/* ── Reenviar código ── */
+.resend-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.resend-timer {
+  color: rgba(255,255,255,0.35);
+  font-size: 13px;
+}
+
+.btn-link-custom {
+  background: none;
+  border: none;
+  color: #a78bfa;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: underline;
+  padding: 0;
+  transition: color 0.2s;
+}
+.btn-link-custom:hover { color: #667eea; }
+.btn-link-custom .material-icons { font-size: 15px; }
+
+/* Responsive OTP en pantallas pequeñas */
+@media (max-width: 400px) {
+  .otp-input {
+    width: 42px;
+    height: 52px;
+    font-size: 20px;
+  }
+  .otp-container { gap: 6px; }
+}
+/* Grupo de botones */
+.button-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+/* Botones personalizados */
+.btn-custom {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-custom .material-icons {
+  font-size: 20px;
+}
+
+.btn-custom:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #56ccad 0%, #2f80ed 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 25px rgba(86, 204, 173, 0.4);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(86, 204, 173, 0.5);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Spinner de carga */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Footer personalizado */
+.card-footer-custom {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.card-footer-custom p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+}
+
+.card-footer-custom .material-icons {
+  font-size: 18px;
+}
+
+.link-custom {
+  color: #56ccad;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.link-custom::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #56ccad;
+  transition: width 0.3s ease;
+}
+
+.link-custom:hover {
+  color: #2f80ed;
+}
+
+.link-custom:hover::after {
+  width: 100%;
+  background: #2f80ed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .glass-card {
+    padding: 32px 24px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .progress-indicator {
+    flex-direction: column;
+  }
+
+  .step {
+    flex-direction: row;
+  }
+}
+
+/* Animaciones de entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   BLUR DE FONDO CUANDO EL SPINNER ESTÁ ACTIVO
+   ============================================================ */
+
+/* El overlay del spinner se vuelve translúcido con blur real */
+:host ::ng-deep ngx-spinner .overlay {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  background: rgba(14, 11, 9, 0.55) !important;
+}
+
+/* El contenido del componente se difumina cuando el spinner está activo */
+:host ::ng-deep body.ngx-spinner-overlay-active .recovery-container,
+.recovery-container.is-loading {
+  filter: blur(6px);
+  transition: filter 0.3s ease;
+}
+
+/* Clase que aplicamos via JS para el blur del contenido */
+.recovery-container {
+  transition: filter 0.3s ease;
+}
+.recovery-container.is-loading {
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+/* ============================================================
+   SPINNER FULLSCREEN — CANDADO DORADO
+   (reemplaza square-jelly-box)
+   ============================================================ */
+
+/* Contenedor general del spinner custom */
+.rp-spinner-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+  user-select: none;
+}
+
+/* ── Escena del candado ── */
+.rp-lock-scene {
+  width: 110px;
+  height: 110px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Anillo exterior punteado — gira lento */
+.rp-orbit-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(191, 155, 111, 0.3);
+  animation: rp-spin-cw 8s linear infinite;
+}
+
+/* Órbita exterior con punto dorado brillante */
+.rp-orbit {
+  position: absolute;
+  inset: 0;
+  animation: rp-spin-cw 3s linear infinite;
+}
+.rp-orbit-dot {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #F0C97A 0%, #BF9B6F 100%);
+  box-shadow: 0 0 10px rgba(191, 155, 111, 0.8), 0 0 20px rgba(191, 155, 111, 0.4);
+}
+
+/* Órbita interior con punto terracota */
+.rp-orbit2 {
+  position: absolute;
+  inset: 14px;
+  animation: rp-spin-ccw 2s linear infinite;
+}
+.rp-orbit2-dot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #C4714A;
+  box-shadow: 0 0 7px rgba(196, 113, 74, 0.7);
+}
+
+/* Arco dorado que gira — efecto de "trabajando" */
+.rp-ring-gold {
+  position: absolute;
+  inset: 22px;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+  border-top-color: #BF9B6F;
+  border-right-color: rgba(191, 155, 111, 0.35);
+  animation: rp-spin-cw 1.5s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(191, 155, 111, 0.2);
+}
+
+/* Cuerpo del candado */
+.rp-body {
+  width: 32px;
+  height: 29px;
+  background: linear-gradient(160deg, #D4B896 0%, #BF9B6F 45%, #8B6940 100%);
+  border-radius: 6px;
+  position: absolute;
+  bottom: 26px;
+  box-shadow:
+    0 4px 16px rgba(139, 105, 64, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: rp-lock-shake 3.5s ease-in-out infinite;
+}
+
+/* Agujero del candado */
+.rp-hole {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 9px;
+  height: 11px;
+  background: rgba(28, 20, 16, 0.45);
+  border-radius: 4px;
+}
+
+/* Arco superior del candado */
+.rp-shackle {
+  position: absolute;
+  bottom: 51px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 17px;
+  border: 4px solid #BF9B6F;
+  border-bottom: none;
+  border-radius: 9px 9px 0 0;
+  box-shadow: 0 -2px 8px rgba(191, 155, 111, 0.3);
+  animation: rp-lock-shake 3.5s ease-in-out infinite;
+}
+
+/* ── Texto del mensaje ── */
+.rp-msg {
+  color: #F0E6D8;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  margin: 0;
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+}
+
+/* ── Tres puntitos de espera ── */
+.rp-dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.rp-dot {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #BF9B6F;
+  animation: rp-dot-pulse 1.4s ease-in-out infinite;
+}
+.rp-dot:nth-child(1) { animation-delay: 0s; }
+.rp-dot:nth-child(2) { animation-delay: 0.2s; background: #D4B896; }
+.rp-dot:nth-child(3) { animation-delay: 0.4s; background: #C4714A; }
+
+/* ── Keyframes ── */
+@keyframes rp-spin-cw  { to { transform: rotate(360deg); } }
+@keyframes rp-spin-ccw { to { transform: rotate(-360deg); } }
+
+@keyframes rp-lock-shake {
+  0%, 100%  { transform: translateX(0) rotate(0deg); }
+  8%        { transform: translateX(-2px) rotate(-4deg); }
+  16%       { transform: translateX(2px) rotate(4deg); }
+  24%       { transform: translateX(-1px) rotate(-2deg); }
+  32%       { transform: translateX(0) rotate(0deg); }
+}
+
+@keyframes rp-dot-pulse {
+  0%, 100% { transform: scale(1);   opacity: 0.45; }
+  40%      { transform: scale(1.5); opacity: 1; }
+}

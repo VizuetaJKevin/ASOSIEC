@@ -1,0 +1,59 @@
+:host {
+  font-family: Montserrat;
+  margin: 0;
+  padding: 0;
+  display: block;
+  font-weight: 800;
+  min-height: 100vh;
+}
+
+
+/* Fonts */
+@font-face {
+    font-family: 'AntonSC';
+    src: url('/assets/fonts/AntonSC-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/assets/fonts/Montserrat/MontserratRegular-BWBEl.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('/assets/fonts/Ubuntu/Ubuntu-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BlackOps';
+  src: url('/assets/fonts/BlackOpsOne-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'OleoScript';
+  src: url('/assets/fonts/OleoScript-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('/assets/fonts/RubikVinyl-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BrunoAce';
+  src: url('/assets/fonts/BrunoAce-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}

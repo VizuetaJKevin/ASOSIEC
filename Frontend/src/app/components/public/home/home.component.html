@@ -1,0 +1,334 @@
+<!-- ====================================
+     HERO SECTION - PORTADA PRINCIPAL
+     ==================================== -->
+<section class="hero-section">
+  <!-- Imagen de fondo -->
+  <div class="hero-background">
+    <img src="assets/Images/home/portada.png" alt="Productos artesanales" class="hero-bg-image">
+    <div class="hero-overlay"></div>
+  </div>
+
+  <!-- Contenido centrado -->
+  <div class="hero-content">
+    <h1 class="hero-title">
+      Bienvenido a tu tienda virtual
+    </h1>
+    <h2 class="hero-title-2">ASOSIEC</h2>
+    <p class="hero-subtitle">
+      Descubre nuestra colección de productos únicos, nacidos del corazón de artesanos locales
+    </p>
+<button
+  type="button"
+  class="hero-button"
+  (click)="navigateToProductos()"
+  routerLink="/productos"
+  role="link">
+  Ver Catálogo Completo
+</button>
+  </div>
+</section>
+
+<!-- ====================================
+     SECCIÓN ARTESANOS / PRODUCTOS DESTACADOS
+     ==================================== -->
+<section class="artesanos-showcase-section">
+  <div class="container">
+    <div class="showcase-layout">
+
+      <!-- Columna de Texto -->
+      <div class="showcase-text-column">
+        <i class="fas fa-quote-left quote-icon"></i>
+        <h2 class="showcase-title">
+          Juntos, creamos piezas únicas que reflejan tradición y calidad artesanal
+        </h2>
+        <p class="showcase-description">
+          "Porque lo hecho a mano no es solo bonito... es un abrazo en forma de arte. ¿Cuál pieza te va a conquistar hoy?"
+        </p>
+      </div>
+
+      <!-- Columna de Imágenes Flotantes -->
+      <div class="showcase-images-column">
+        <div class="floating-images-container">
+          <!-- Imagen 1 -->
+          <div class="showcase-image-wrapper">
+            <img
+              src="/assets/Images/home/home1.png"
+              class="floating-showcase-img"
+              alt="Artesanía destacada 1"
+              loading="lazy">
+            <div class="image-info">
+              <span class="artisan-name">Artesanía Tradicional</span>
+              <span class="artisan-role">Hecho a mano</span>
+            </div>
+          </div>
+
+          <!-- Imagen 2 -->
+          <div class="showcase-image-wrapper">
+            <img
+              src="/assets/Images/home/home2.png"
+              class="floating-showcase-img"
+              alt="Artesanía destacada 2"
+              loading="lazy">
+            <div class="image-info">
+              <span class="artisan-name">Diseño Único</span>
+              <span class="artisan-role">Calidad premium</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ====================================
+     SECCIÓN OFERTAS DEL DÍA
+     ==================================== -->
+<section class="ofertas-section">
+  <div class="container">
+
+    <!-- Header de Ofertas -->
+    <div class="ofertas-header">
+      <div class="ofertas-badge">
+        <span class="badge-flash">⚡</span>
+        <span class="badge-text">Ofertas Especiales</span>
+      </div>
+      <h2 class="ofertas-title">¡OFERTAS DEL DÍA!</h2>
+      <p class="ofertas-subtitle">Aprovecha estos precios increíbles por tiempo limitado</p>
+    </div>
+
+    <!-- Loader -->
+    <div class="loader-container" *ngIf="cargando">
+      <div class="loader">
+        <div class="spinner"></div>
+        <p>Cargando ofertas...</p>
+      </div>
+    </div>
+
+    <!-- Grid de Productos en Oferta -->
+    <div class="ofertas-grid" *ngIf="!cargando && productosOferta.length > 0">
+
+      <div class="producto-card" *ngFor="let producto of productosOferta">
+
+        <!-- Badge de estado -->
+        <div class="badge-estado" [ngClass]="obtenerClaseBadge(producto)">
+          {{ obtenerTextoEstado(producto) }}
+        </div>
+
+        <!-- Badge de descuento (si aplica) -->
+        <div class="badge-descuento" *ngIf="producto.precio_antes > producto.precio_ahora">
+          <span class="descuento-icon">🔥</span>
+          -{{ calcularDescuento(producto.precio_antes, producto.precio_ahora) }}%
+        </div>
+
+        <!-- Imagen del producto -->
+        <div class="producto-imagen-container">
+          <img
+            [src]="producto.url_Img"
+            [alt]="producto.nombre_producto"
+            class="producto-imagen"
+            loading="lazy"
+          >
+          <div class="imagen-overlay"></div>
+        </div>
+
+        <!-- Contenido del producto -->
+        <div class="producto-contenido">
+
+          <!-- Título -->
+          <h3 class="producto-titulo">{{ producto.nombre_producto }}</h3>
+
+          <!-- Descripción -->
+          <p class="producto-descripcion">{{ producto.descripcion }}</p>
+
+          <!-- Stock -->
+          <div class="stock-container" *ngIf="estaDisponible(producto)">
+            <span class="stock-badge">
+              <i class="stock-icon">✓</i>
+              {{ producto.stock }} disponibles
+            </span>
+          </div>
+
+          <!-- Precios -->
+          <div class="precio-container">
+            <div class="precio-wrapper">
+              <span class="precio-label">Antes:</span>
+              <span class="precio-anterior" *ngIf="producto.precio_antes > producto.precio_ahora">
+                {{ producto.precio_antes | currency:'USD':'symbol':'1.2-2' }}
+              </span>
+            </div>
+            <div class="precio-actual-wrapper">
+              <span class="precio-label-ahora">Ahora:</span>
+              <div class="precio-actual">
+                {{ producto.precio_ahora | currency:'USD':'symbol':'1.2-2' }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Botón de compra -->
+          <div class="acciones-container">
+            <button
+              class="btn-agregar-carrito"
+              [class.btn-deshabilitado]="estaAgotado(producto)"
+              [disabled]="estaAgotado(producto)"
+              (click)="agregarAlCarrito(producto.id)">
+
+              <span *ngIf="estaDisponible(producto)" class="btn-contenido">
+                <i class="btn-icon">🛒</i>
+                Agregar al carrito
+              </span>
+              <span *ngIf="estaAgotado(producto)" class="btn-contenido">
+                <i class="btn-icon">⚠️</i>
+                Sin stock
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensaje cuando no hay productos en oferta -->
+    <div class="mensaje-sin-ofertas" *ngIf="!cargando && productosOferta.length === 0">
+      <div class="icono-sin-ofertas">🎁</div>
+      <h3>No hay ofertas disponibles en este momento</h3>
+      <p>Vuelve pronto para descubrir nuestras próximas promociones especiales</p>
+      <a routerLink="/productos/todos" class="btn-ver-catalogo">
+        Ver catálogo completo
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================
+     SECCIÓN EMPRENDEDORES
+     ==================================== -->
+<section class="emprendedores-section">
+  <div class="container">
+    <!-- Header -->
+    <div class="emprendedores-header">
+      <h2 class="emprendedores-title">Conoce a nuestros emprendedores</h2>
+      <p class="emprendedores-subtitle">
+        Descubre el talento y dedicación de quienes elaboran nuestros productos artesanales
+      </p>
+    </div>
+
+    <!-- Grid de Emprendedores -->
+    <div class="emprendedores-grid">
+
+      <!-- Emprendedor 1 -->
+      <div class="emprendedor-card">
+        <div class="emprendedor-image-wrapper">
+          <img src="assets/Images/home/emprendedor1.jpg" alt="Edgar Patricio López" class="emprendedor-image" loading="lazy">
+        </div>
+        <div class="emprendedor-content">
+          <h3 class="emprendedor-nombre">Edgar Patricio López</h3>
+          <p class="emprendedor-descripcion">
+            Artesanías en madera, souvenirs y elaboración de prendas textiles con técnicas tradicionales
+          </p>
+          <a href="about" class="emprendedor-btn">CONOCER MÁS</a>
+        </div>
+      </div>
+
+      <!-- Emprendedor 2 -->
+      <div class="emprendedor-card">
+        <div class="emprendedor-image-wrapper">
+          <img src="assets/Images/home/emprendedor2.jpg" alt="Rosemarie Avolevan" class="emprendedor-image" loading="lazy">
+        </div>
+        <div class="emprendedor-content">
+          <h3 class="emprendedor-nombre">Rosemarie Avolevan</h3>
+          <p class="emprendedor-descripcion">
+            Especialista en encurtidos artesanales elaborados con ingredientes 100% naturales
+          </p>
+          <a href="about" class="emprendedor-btn">CONOCER MÁS</a>
+        </div>
+      </div>
+
+      <!-- Emprendedor 3 -->
+      <div class="emprendedor-card">
+        <div class="emprendedor-image-wrapper">
+          <img src="assets/Images/home/emprendedor3.jpg" alt="Wendy Ríos" class="emprendedor-image" loading="lazy">
+        </div>
+        <div class="emprendedor-content">
+          <h3 class="emprendedor-nombre">Wendy Ríos</h3>
+          <p class="emprendedor-descripcion">
+            Creadora de detalles vivos, decoración para el hogar, miniaturas y recuerdos únicos
+          </p>
+          <a href="about" class="emprendedor-btn">CONOCER MÁS</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ====================================
+     SECCIÓN CARACTERÍSTICAS - SERVICIOS
+     ==================================== -->
+<section class="features-section">
+  <div class="features-container">
+
+    <!-- Columna de Imagen -->
+    <div class="features-image-column">
+      <div class="features-image-wrapper">
+        <img src="assets/Images/home/caracteristica.jpg" alt="Artesanías ASOSIEC" class="features-main-image">
+      </div>
+    </div>
+
+    <!-- Columna de Texto -->
+    <div class="features-text-column">
+      <div class="features-intro">
+        <p class="features-intro-text">
+          En ASOSIEC nos dedicamos a conectar artesanos talentosos con clientes que
+          aprecian la calidad y autenticidad. Ofrecemos una plataforma segura,
+          facilidades de pago y atención personalizada para que cada compra sea una
+          experiencia única que apoya el comercio local.
+        </p>
+      </div>
+    </div>
+
+    <!-- Columna de Servicios -->
+    <div class="features-services-column">
+
+      <!-- Servicio 1 -->
+      <div class="service-item">
+        <div class="service-icon">
+          <i class="fas fa-headset"></i>
+        </div>
+        <div class="service-content">
+          <h3 class="service-title">Atención Personalizada</h3>
+          <p class="service-description">
+            Asesoría 24/7 para cualquier consulta sobre nuestros productos artesanales
+          </p>
+        </div>
+      </div>
+
+      <!-- Servicio 2 -->
+      <div class="service-item">
+        <div class="service-icon">
+          <i class="fas fa-credit-card"></i>
+        </div>
+        <div class="service-content">
+          <h3 class="service-title">Facilidades de Pago</h3>
+          <p class="service-description">
+            Paga en efectivo o transferencia. Opciones flexibles para tu comodidad
+          </p>
+        </div>
+      </div>
+
+      <!-- Servicio 3 -->
+      <div class="service-item">
+        <div class="service-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="service-content">
+          <h3 class="service-title">Compra Segura</h3>
+          <p class="service-description">
+            Garantizamos la autenticidad y calidad de cada producto artesanal
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>

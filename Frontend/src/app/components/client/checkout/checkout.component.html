@@ -1,0 +1,400 @@
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  CHECKOUT MODAL — Rediseño moderno + spinner carrito ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true"
+  data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable co-dialog">
+    <div class="modal-content co-content">
+
+      <!-- ── HEADER ─────────────────────────────────────── -->
+      <div class="co-header">
+        <div class="co-header-inner">
+          <div class="co-brand">
+            <div class="co-brand-icon">
+              <i class="bi bi-bag-check-fill"></i>
+            </div>
+            <div>
+              <h5 class="co-title" id="checkoutModalLabel">Finalizar Compra</h5>
+              <p class="co-subtitle">Completa tu pedido de forma segura</p>
+            </div>
+          </div>
+          <button type="button" class="co-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+
+        <!-- STEPPER -->
+        <div class="co-stepper">
+          <div class="co-step" [class.co-step--active]="pasoActual === 1" [class.co-step--done]="pasoActual > 1">
+            <div class="co-step-dot">
+              <i class="bi" [ngClass]="pasoActual > 1 ? 'bi-check-lg' : 'bi-person-fill'"></i>
+            </div>
+            <span class="co-step-lbl">Datos</span>
+          </div>
+          <div class="co-step-track" [class.co-step-track--done]="pasoActual > 1"></div>
+          <div class="co-step" [class.co-step--active]="pasoActual === 2" [class.co-step--done]="pasoActual > 2">
+            <div class="co-step-dot">
+              <i class="bi" [ngClass]="pasoActual > 2 ? 'bi-check-lg' : 'bi-cash-coin'"></i>
+            </div>
+            <span class="co-step-lbl">Pago</span>
+          </div>
+          <div class="co-step-track" [class.co-step-track--done]="pasoActual > 2"></div>
+          <div class="co-step" [class.co-step--active]="pasoActual === 3" [class.co-step--done]="pasoActual > 3">
+            <div class="co-step-dot">
+              <i class="bi bi-bag-heart-fill"></i>
+            </div>
+            <span class="co-step-lbl">Listo</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── BODY ──────────────────────────────────────── -->
+      <div class="modal-body">
+        <div class="co-body-inner">
+
+        <!-- ═══════════ PASO 1 — Datos del cliente ═══════════ -->
+        <div *ngIf="pasoActual === 1" class="co-fade">
+          <div class="co-grid">
+
+            <!-- Formulario personal -->
+            <div class="co-main-col">
+              <div class="co-card">
+                <div class="co-card-head">
+                  <div class="co-card-head-icon"><i class="bi bi-person-vcard-fill"></i></div>
+                  <h6>Información Personal</h6>
+                </div>
+                <form [formGroup]="formulario" class="co-form">
+                  <div class="co-row-2">
+                    <div class="co-field">
+                      <label>Nombres <span class="req">*</span></label>
+                      <input type="text" formControlName="nombre" placeholder="Juan" autocomplete="given-name">
+                      <p class="co-err" *ngIf="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched">Campo requerido</p>
+                    </div>
+                    <div class="co-field">
+                      <label>Apellidos <span class="req">*</span></label>
+                      <input type="text" formControlName="apellido" placeholder="Pérez" autocomplete="family-name">
+                      <p class="co-err" *ngIf="formulario.get('apellido')?.invalid && formulario.get('apellido')?.touched">Campo requerido</p>
+                    </div>
+                  </div>
+                  <div class="co-field">
+                    <label>Correo Electrónico <span class="req">*</span></label>
+                    <div class="co-input-icon">
+                      <i class="bi bi-envelope-fill"></i>
+                      <input type="email" formControlName="email" placeholder="juan@ejemplo.com" autocomplete="email">
+                    </div>
+                    <p class="co-err" *ngIf="formulario.get('email')?.invalid && formulario.get('email')?.touched">Correo válido requerido</p>
+                  </div>
+                  <div class="co-field">
+                    <label>Dirección de Envío <span class="req">*</span></label>
+                    <div class="co-input-icon">
+                      <i class="bi bi-geo-alt-fill"></i>
+                      <input type="text" formControlName="direccion_1" placeholder="Av. Principal #123" autocomplete="street-address">
+                    </div>
+                    <p class="co-err" *ngIf="formulario.get('direccion_1')?.invalid && formulario.get('direccion_1')?.touched">Campo requerido</p>
+                  </div>
+                  <div class="co-field">
+                    <label>Referencia / Dirección 2 <span class="opt">(opcional)</span></label>
+                    <div class="co-input-icon">
+                      <i class="bi bi-signpost-2-fill"></i>
+                      <input type="text" formControlName="direccion_2" placeholder="Junto al parque central">
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Resumen lateral -->
+            <div class="co-side-col">
+              <div class="co-summary-card">
+                <div class="co-summary-head">
+                  <i class="bi bi-receipt-cutoff"></i>
+                  <h6>Resumen del Pedido</h6>
+                </div>
+
+                <!-- Lista de productos -->
+                <div class="co-prod-list">
+                  <div class="co-prod-item" *ngFor="let item of productosCarrito">
+                    <div class="co-prod-img-wrap">
+                      <img [src]="item.url_Img || item.img" [alt]="item.nombre_producto || item.nombre" class="co-prod-img" onerror="this.src='assets/placeholder.png'">
+                      <span class="co-prod-qty">{{ item.Entidad_Item.cantidad }}</span>
+                    </div>
+                    <div class="co-prod-info">
+                      <p class="co-prod-name">{{ item.nombre_producto || item.nombre }}</p>
+                      <p class="co-prod-price">${{ (+(item.precio ?? item.precio_ahora) * item.Entidad_Item.cantidad) | number:'1.2-2' }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="co-summary-divider"></div>
+                <div class="co-summary-row">
+                  <span>Subtotal</span>
+                  <span>${{ total | number:'1.2-2' }}</span>
+                </div>
+                <div class="co-summary-row">
+                  <span>Envío</span>
+                  <span>${{ envio | number:'1.2-2' }}</span>
+                </div>
+                <div class="co-summary-divider"></div>
+                <div class="co-summary-total">
+                  <span>Total</span>
+                  <span class="co-total-val">${{ (total + envio) | number:'1.2-2' }}</span>
+                </div>
+                <div class="co-summary-badge">
+                  <i class="bi bi-shield-lock-fill"></i>
+                  Pago 100% seguro
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- ═══════════ PASO 2 — Pago ═══════════ -->
+        <div *ngIf="pasoActual === 2" class="co-fade">
+
+          <div class="co-alert-notice">
+            <i class="bi bi-lightning-charge-fill"></i>
+            <div>
+              <strong>Realiza tu transferencia</strong> y luego sube el comprobante para confirmar tu pedido.
+            </div>
+          </div>
+
+          <!-- CUENTAS BANCARIAS -->
+          <div class="co-section-title">
+            <i class="bi bi-bank2"></i>
+            Cuentas Bancarias
+          </div>
+          <div class="co-banks-grid">
+            <div class="co-bank-card" *ngFor="let cuenta of datosBancarios; let i = index"
+                 [style.--bank-accent]="i % 2 === 0 ? '#C4714A' : '#7A8C6E'">
+              <div class="co-bank-card-top">
+                <div class="co-bank-logo">
+                  <i class="bi bi-bank"></i>
+                </div>
+                <div class="co-bank-name-wrap">
+                  <p class="co-bank-label">Banco</p>
+                  <h6 class="co-bank-name">{{ cuenta.banco }}</h6>
+                </div>
+                <div class="co-bank-chip"></div>
+              </div>
+              <div class="co-bank-card-body">
+                <div class="co-bank-row">
+                  <span class="co-bank-lbl">Tipo</span>
+                  <span class="co-bank-val">{{ cuenta.tipo_cuenta }}</span>
+                </div>
+                <div class="co-bank-row co-bank-row--highlight">
+                  <span class="co-bank-lbl">Número de Cuenta</span>
+                  <span class="co-bank-num">{{ cuenta.numero_cuenta }}</span>
+                </div>
+                <div class="co-bank-row">
+                  <span class="co-bank-lbl">Titular</span>
+                  <span class="co-bank-val">{{ cuenta.titular }}</span>
+                </div>
+              </div>
+              <div class="co-bank-card-foot">
+                <span class="co-bank-foot-label">Monto a transferir</span>
+                <span class="co-bank-amount">${{ (total + envio) | number:'1.2-2' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- RESUMEN MINI ANTES DEL COMPROBANTE -->
+          <div class="co-order-recap">
+            <div class="co-order-recap-inner">
+              <div class="co-recap-item" *ngFor="let item of productosCarrito">
+                <img [src]="item.url_Img || item.img" [alt]="item.nombre_producto" class="co-recap-img" onerror="this.src='assets/placeholder.png'">
+                <span class="co-recap-name">{{ item.nombre_producto || item.nombre }}</span>
+                <span class="co-recap-qty">x{{ item.Entidad_Item.cantidad }}</span>
+                <span class="co-recap-price">${{ (+(item.precio ?? item.precio_ahora) * item.Entidad_Item.cantidad) | number:'1.2-2' }}</span>
+              </div>
+              <div class="co-recap-total-row">
+                <span>Subtotal</span><span>${{ total | number:'1.2-2' }}</span>
+              </div>
+              <div class="co-recap-total-row">
+                <span>Envío</span><span>${{ envio | number:'1.2-2' }}</span>
+              </div>
+              <div class="co-recap-total-row co-recap-total-row--final">
+                <span>Total a pagar</span><span>${{ (total + envio) | number:'1.2-2' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FORMULARIO COMPROBANTE -->
+          <div class="co-card co-mt">
+            <div class="co-card-head">
+              <div class="co-card-head-icon"><i class="bi bi-cloud-arrow-up-fill"></i></div>
+              <h6>Datos del Comprobante</h6>
+            </div>
+            <form [formGroup]="formularioComprobante" class="co-form">
+              <div class="co-row-2">
+                <div class="co-field">
+                  <label>Número de Comprobante</label>
+                  <div class="co-input-icon">
+                    <i class="bi bi-hash"></i>
+                    <input type="text" formControlName="numero_referencia" placeholder="123456789">
+                  </div>
+                  <p class="co-hint">Número que aparece en tu comprobante</p>
+                </div>
+                <div class="co-field">
+                  <label>Teléfono de Contacto <span class="req">*</span></label>
+                  <div class="co-input-icon">
+                    <i class="bi bi-phone-fill"></i>
+                    <input type="text" formControlName="telefono_contacto" placeholder="0999999999">
+                  </div>
+                  <p class="co-err" *ngIf="formularioComprobante.get('telefono_contacto')?.invalid && formularioComprobante.get('telefono_contacto')?.touched">Campo requerido</p>
+                </div>
+              </div>
+
+              <!-- Zona de subida de comprobante -->
+              <div class="co-field">
+                <label>Comprobante de Pago <span class="req">*</span></label>
+                <div class="co-upload-zone" [class.co-upload-zone--filled]="previsualizacionComprobante" (click)="triggerFileInput()">
+                  <ng-container *ngIf="!previsualizacionComprobante && !subiendoComprobante">
+                    <div class="co-upload-icon"><i class="bi bi-cloud-arrow-up"></i></div>
+                    <p class="co-upload-text">Arrastra tu comprobante aquí o <strong>haz clic para subir</strong></p>
+                    <p class="co-upload-hint">JPG, PNG, GIF, PDF — máx. 5MB</p>
+                  </ng-container>
+                  <ng-container *ngIf="subiendoComprobante">
+                    <div class="co-upload-spinner">
+                      <div class="co-mini-spin"></div>
+                    </div>
+                    <p class="co-upload-text">Subiendo comprobante...</p>
+                  </ng-container>
+                  <ng-container *ngIf="previsualizacionComprobante && !subiendoComprobante">
+                    <img [src]="previsualizacionComprobante" alt="Comprobante" class="co-preview-img">
+                    <div class="co-preview-overlay">
+                      <i class="bi bi-pencil-fill"></i> Cambiar
+                    </div>
+                  </ng-container>
+                </div>
+                <input #fileInputRef type="file" class="co-file-hidden"
+                  accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,application/pdf"
+                  (change)="onComprobanteSeleccionado($event)"
+                  [disabled]="subiendoComprobante">
+                <button *ngIf="previsualizacionComprobante" type="button" class="co-btn-clear" (click)="limpiarComprobante()">
+                  <i class="bi bi-trash3-fill"></i> Quitar comprobante
+                </button>
+              </div>
+
+              <div class="co-row-2">
+                <div class="co-field">
+                  <label>Dirección de Entrega <span class="req">*</span></label>
+                  <div class="co-input-icon co-input-icon--textarea">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <textarea formControlName="direccion_entrega" rows="3" placeholder="Indica tu dirección completa..."></textarea>
+                  </div>
+                  <p class="co-err" *ngIf="formularioComprobante.get('direccion_entrega')?.invalid && formularioComprobante.get('direccion_entrega')?.touched">Campo requerido</p>
+                </div>
+                <div class="co-field">
+                  <label>Observaciones <span class="opt">(opcional)</span></label>
+                  <div class="co-input-icon co-input-icon--textarea">
+                    <i class="bi bi-chat-text-fill"></i>
+                    <textarea formControlName="observaciones" rows="3" placeholder="Instrucciones adicionales para la entrega..."></textarea>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+        <!-- ═══════════ PASO 3 — Confirmación ═══════════ -->
+        <div *ngIf="pasoActual === 3" class="co-fade co-success">
+          <div class="co-success-orbs">
+            <div class="co-orb co-orb--1"></div>
+            <div class="co-orb co-orb--2"></div>
+            <div class="co-orb co-orb--3"></div>
+          </div>
+          <div class="co-success-icon-wrap">
+            <div class="co-success-ring co-success-ring--1"></div>
+            <div class="co-success-ring co-success-ring--2"></div>
+            <div class="co-success-icon">
+              <i class="bi bi-bag-heart-fill"></i>
+            </div>
+          </div>
+          <h3 class="co-success-title">¡Pedido Registrado!</h3>
+          <p class="co-success-sub">Tu compra ha sido procesada exitosamente</p>
+          <div class="co-token-wrap">
+            <span class="co-token-lbl">Código de orden</span>
+            <div class="co-token">{{ tokenOrden }}</div>
+          </div>
+          <div class="co-success-note">
+            <i class="bi bi-envelope-heart-fill"></i>
+            Recibirás un correo con los detalles de tu pedido. Una vez verifiquemos tu pago, te notificaremos para el envío.
+          </div>
+        </div>
+
+        </div><!-- /co-body-inner -->
+      </div><!-- /modal-body -->
+
+      <!-- ── FOOTER ─────────────────────────────────────── -->
+      <div class="co-footer">
+        <div class="co-footer-left">
+          <button class="co-btn co-btn--ghost" *ngIf="pasoActual === 2" (click)="pasoAnterior()">
+            <i class="bi bi-arrow-left"></i> Volver
+          </button>
+        </div>
+        <div class="co-footer-right">
+          <button class="co-btn co-btn--primary" *ngIf="pasoActual === 1" (click)="siguientePaso()">
+            Continuar <i class="bi bi-arrow-right"></i>
+          </button>
+          <button class="co-btn co-btn--success" *ngIf="pasoActual === 2"
+            (click)="finalizarCompra()"
+            [disabled]="formularioComprobante.invalid || !comprobanteSeleccionado || isLoading || subiendoComprobante">
+            <ng-container *ngIf="!isLoading && !subiendoComprobante">
+              <i class="bi bi-check2-circle"></i> Finalizar Compra
+            </ng-container>
+            <ng-container *ngIf="isLoading || subiendoComprobante">
+              <span class="co-btn-spinner"></span> Procesando...
+            </ng-container>
+          </button>
+          <button class="co-btn co-btn--primary" *ngIf="pasoActual === 3"
+            data-bs-dismiss="modal" (click)="cerrarYVolverInicio()">
+            Volver al Inicio <i class="bi bi-house-fill"></i>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /co-content -->
+  </div><!-- /modal-dialog -->
+
+
+  <!-- ═══════════ OVERLAY SPINNER (Carrito Pulsante - Spinner 01) ═══════════ -->
+  <div *ngIf="isLoading" class="co-overlay">
+    <!-- estrellas decorativas -->
+    <div class="s1-stars">
+      <div class="s1-star"></div><div class="s1-star"></div>
+      <div class="s1-star"></div><div class="s1-star"></div>
+      <div class="s1-star"></div><div class="s1-star"></div>
+      <div class="s1-star"></div><div class="s1-star"></div>
+      <div class="s1-star"></div><div class="s1-star"></div>
+    </div>
+    <div class="s1-scene">
+      <div class="s1-cart-wrap">
+        <!-- Productos cayendo -->
+        <div class="s1-drop"></div>
+        <div class="s1-drop"></div>
+        <div class="s1-drop"></div>
+        <!-- Carrito SVG -->
+        <svg class="s1-cart-svg" viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="26" cy="62" r="5" fill="none" stroke="#BF9B6F" stroke-width="2.5"/>
+          <circle cx="57" cy="62" r="5" fill="none" stroke="#BF9B6F" stroke-width="2.5"/>
+          <path d="M8 14 L14 44 Q15 50 22 50 L62 50 Q68 50 70 44 L76 18" stroke="#BF9B6F" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M2 6 Q6 6 8 14" stroke="#D4B896" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <line x1="24" y1="20" x2="20" y2="50" stroke="rgba(191,155,111,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="42" y1="18" x2="42" y2="50" stroke="rgba(191,155,111,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="60" y1="20" x2="64" y2="50" stroke="rgba(191,155,111,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="s1-glow"></div>
+      </div>
+      <div class="s1-title">Procesando<br><em>tu pedido</em></div>
+      <div class="s1-bar-wrap">
+        <div class="s1-bar-track">
+          <div class="s1-bar-fill"></div>
+        </div>
+      </div>
+      <div class="s1-sub">Por favor espera un momento</div>
+    </div>
+  </div>
+
+</div><!-- /modal -->

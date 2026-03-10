@@ -1,0 +1,204 @@
+<!-- Host container -->
+<div class="reg-host">
+
+  <!-- Orbes decorativos del fondo (igual que login) -->
+  <div class="bg-canvas">
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+  </div>
+
+<!-- Contenedor principal -->
+<div class="reg-wrapper">
+
+  <!-- Card de registro -->
+  <div class="reg-card">
+
+    <!-- Logo idéntico al login: anillo pulsante + foto -->
+    <div class="logo-wrapper">
+      <div class="logo-ring"></div>
+      <img
+        src="/assets/Images/auth/logo.png"
+        alt="Logo de la Asociación"
+        class="logo-img"
+        (error)="onLogoError($event)"
+      />
+    </div>
+
+    <h1 class="reg-title">Forma parte de nuestra familia</h1>
+    <p class="reg-subtitle">Únete a nuestra comunidad artesanal</p>
+
+    <!-- ══ Selector tipo de usuario ══ -->
+    <span class="tipo-selector-label">¿Cómo quieres registrarte?</span>
+
+    <div class="tipo-pills">
+      <button
+        type="button"
+        class="pill-btn"
+        [class.active]="tipoUsuario === 'cliente'"
+        (click)="seleccionarTipo('cliente')">
+        <div class="pill-icon">
+          <i class="material-icons">shopping_bag</i>
+        </div>
+        <p class="pill-title">Soy Cliente</p>
+        <p class="pill-desc">Quiero comprar productos</p>
+      </button>
+
+      <button
+        type="button"
+        class="pill-btn"
+        [class.active]="tipoUsuario === 'vendedor'"
+        (click)="seleccionarTipo('vendedor')">
+        <div class="pill-icon">
+          <i class="material-icons">storefront</i>
+        </div>
+        <p class="pill-title">Soy Vendedor</p>
+        <p class="pill-desc">Quiero vender artesanías</p>
+      </button>
+    </div>
+
+    <!-- Alerta informativa para vendedores -->
+    <div class="vendor-alert" *ngIf="tipoUsuario === 'vendedor'">
+      <i class="material-icons">info</i>
+      <span>
+        <strong>Revisión pendiente:</strong> Tu cuenta será evaluada por un administrador
+        en las próximas <strong>24–48 horas</strong> antes de ser activada.
+      </span>
+    </div>
+
+    <!-- Divider -->
+
+    <!-- ══ Formulario — oculto hasta ngAfterViewInit para bloquear autofill de Chrome ══ -->
+    <form *ngIf="formVisible" [formGroup]="FormularioRegistro" class="reg-form" autocomplete="off">
+
+      <!-- Fila: Nombre + Apellido -->
+      <div class="fields-row">
+
+        <div class="field-group" [class.field-error]="valido('nombre')">
+          <label class="field-label">
+            <span class="label-icon"><i class="material-icons">person</i></span>
+            Nombres
+          </label>
+          <div class="input-wrap">
+            <input
+              formControlName="nombre"
+              type="text"
+              class="field-input"
+              placeholder="Juan"
+              autocomplete="off"
+            />
+            <span class="input-glow"></span>
+          </div>
+          <p *ngIf="valido('nombre')" class="field-err-msg">
+            <i class="material-icons" style="font-size:14px">error_outline</i>
+            Nombres requeridos
+          </p>
+        </div>
+
+        <div class="field-group" [class.field-error]="valido('apellido')">
+          <label class="field-label">
+            <span class="label-icon"><i class="material-icons">badge</i></span>
+            Apellidos
+          </label>
+          <div class="input-wrap">
+            <input
+              formControlName="apellido"
+              type="text"
+              class="field-input"
+              placeholder="Pérez"
+              autocomplete="off"
+            />
+            <span class="input-glow"></span>
+          </div>
+          <p *ngIf="valido('apellido')" class="field-err-msg">
+            <i class="material-icons" style="font-size:14px">error_outline</i>
+            Apellidos requeridos
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Email -->
+      <div class="field-group" [class.field-error]="valido('email')">
+        <label class="field-label">
+          <span class="label-icon"><i class="material-icons">email</i></span>
+          Correo electrónico
+        </label>
+        <div class="input-wrap">
+          <input
+            formControlName="email"
+            type="email"
+            class="field-input"
+            placeholder="correo@ejemplo.com"
+            autocomplete="off"
+          />
+          <span class="input-glow"></span>
+        </div>
+        <p *ngIf="valido('email')" class="field-err-msg">
+          <i class="material-icons" style="font-size:14px">error_outline</i>
+          Ingresa un correo electrónico válido
+        </p>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="field-group" [class.field-error]="valido('password')">
+        <label class="field-label">
+          <span class="label-icon"><i class="material-icons">lock</i></span>
+          Contraseña
+        </label>
+        <div class="input-wrap">
+          <input
+            formControlName="password"
+            type="password"
+            class="field-input"
+            placeholder="Mínimo 8 caracteres con mayúsculas, números y símbolos"
+            [(ngModel)]="passwordValue"
+            autocomplete="new-password"
+          />
+          <span class="input-glow"></span>
+        </div>
+
+        <!-- Indicador de fortaleza de contraseña -->
+        <div class="strength-wrapper">
+          <app-password-strength
+            [password]="passwordValue"
+            [showRequirements]="true">
+          </app-password-strength>
+        </div>
+
+        <p *ngIf="valido('password')" class="field-err-msg">
+          <i class="material-icons" style="font-size:14px">error_outline</i>
+          <span *ngIf="FormularioRegistro.get('password')?.hasError('required')">La contraseña es requerida</span>
+          <span *ngIf="FormularioRegistro.get('password')?.hasError('minlength')">Mínimo 8 caracteres</span>
+        </p>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="actions-row">
+
+        <button
+          type="button"
+          class="btn-submit"
+          (click)="registro()">
+          <span class="btn-shine"></span>
+          <span class="btn-content">
+            <i class="material-icons">how_to_reg</i>
+            {{ tipoUsuario === 'vendedor' ? 'Enviar Solicitud' : 'Crear mi cuenta' }}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          class="btn-cancel"
+          (click)="cancelarRegistro()">
+          <i class="material-icons" style="font-size:18px">arrow_back</i>
+          Volver al inicio de sesión
+        </button>
+
+      </div>
+
+    </form>
+  </div>
+</div>
+<!-- /reg-host -->
+</div>

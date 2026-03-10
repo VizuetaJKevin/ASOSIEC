@@ -1,0 +1,2406 @@
+[
+  {
+    "ContainingType": "ASOSIEC.Controllers.ConfiguracionController",
+    "Method": "Actualizar",
+    "RelativePath": "api/Actualizar_Configuracion",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "config",
+        "Type": "ASOSIEC.Services.ConfiguracionBD",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ItemController",
+    "Method": "Actualizar",
+    "RelativePath": "api/Actualizar_Item",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Item",
+        "Type": "Entidad.Entidad_Item",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ItemController",
+    "Method": "Actualizar_ItemUserId",
+    "RelativePath": "api/Actualizar_ItemUserId/{id}/{orderid}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderid",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.MarcaProductoController",
+    "Method": "Actualizar",
+    "RelativePath": "api/Actualizar_MarcaProducto",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "MarcaProducto",
+        "Type": "Entidad.Entidad_MarcaProducto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.OrdenController",
+    "Method": "Actualizar",
+    "RelativePath": "api/Actualizar_orden",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Orden",
+        "Type": "Entidad.Entidad_Orden",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.RolController",
+    "Method": "Actualizar",
+    "RelativePath": "api/Actualizar_rol",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Rol",
+        "Type": "Entidad.Entidad_Rol",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.UsuarioController",
+    "Method": "Actualizar",
+    "RelativePath": "api/Actualizar_usuario",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuario",
+        "Type": "Entidad.Entidad_Usuario",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.CategoriaProductoController",
+    "Method": "Actualizar",
+    "RelativePath": "api/ActualizarCategoriaProducto",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoria",
+        "Type": "Entidad.Entidad_CategoriaProducto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.DatosBancariosController",
+    "Method": "ActualizarDatosBancarios",
+    "RelativePath": "api/ActualizarDatosBancarios",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "datos",
+        "Type": "Entidad.Entidad_DatosBancarios",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoItemController",
+    "Method": "Actualizar",
+    "RelativePath": "api/ActualizarEstadoItem",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estado",
+        "Type": "Entidad.Entidad_EstadoItem",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoOrdenController",
+    "Method": "Actualizar",
+    "RelativePath": "api/ActualizarEstadoOrden",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estado",
+        "Type": "Entidad.Entidad_EstadoOrden",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoProductoController",
+    "Method": "Actualizar",
+    "RelativePath": "api/ActualizarEstadoProducto",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estado",
+        "Type": "Entidad.Entidad_EstadoProducto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoUsuarioController",
+    "Method": "Actualizar",
+    "RelativePath": "api/ActualizarEstadoUsuario",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estado",
+        "Type": "Entidad.Entidad_EstadoUsuario",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ProductoController",
+    "Method": "Actualizar",
+    "RelativePath": "api/ActualizarProducto",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Producto",
+        "Type": "Entidad.Entidad_Producto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.VendedorController",
+    "Method": "ActualizarVendedor",
+    "RelativePath": "api/ActualizarVendedor",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "vendedor",
+        "Type": "Entidad.Entidad_Vendedor",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ProductoController",
+    "Method": "AprobarProducto",
+    "RelativePath": "api/AprobarProducto",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "AprobarProductoRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.UsuarioController",
+    "Method": "AprobarUsuario",
+    "RelativePath": "api/AprobarUsuario",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "tienda_instrumentos.Controllers.AprobarUsuarioRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.AuditController",
+    "Method": "GetEntityHistory",
+    "RelativePath": "api/audit/entity/{entidad}/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entidad",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.AuditController",
+    "Method": "GetAuditLogs",
+    "RelativePath": "api/audit/logs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fechaInicio",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "fechaFin",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "usuarioId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "entidad",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "entidadId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "tipoOperacion",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "soloExitosos",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "pagina",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "registrosPorPagina",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.AuditController",
+    "Method": "GetAuditStats",
+    "RelativePath": "api/audit/stats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fechaInicio",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "fechaFin",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.AuditController",
+    "Method": "GetUserActivity",
+    "RelativePath": "api/audit/user/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dias",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.LoginController",
+    "Method": "CambiarPasswordConCodigo",
+    "RelativePath": "api/CambiarPasswordConCodigo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "datos",
+        "Type": "ASOSIEC.Controllers.CambiarPasswordConCodigoDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ReporteriaController",
+    "Method": "ComprobantesPendientes",
+    "RelativePath": "api/ComprobantesPendientes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ConfiguracionController",
+    "Method": "ConsultarPorId",
+    "RelativePath": "api/Configuracion/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ConfiguracionController",
+    "Method": "ConsultarPorClave",
+    "RelativePath": "api/Configuracion/Clave/{clave}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "clave",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ConfiguracionController",
+    "Method": "TestConfiguracion",
+    "RelativePath": "api/Configuracion/Test",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.CategoriaProductoController",
+    "Method": "Consultar",
+    "RelativePath": "api/ConsultarCategoriaProducto",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.ComprobantePagoController",
+    "Method": "ConsultarComprobantePorOrden",
+    "RelativePath": "api/ConsultarComprobantePorOrden/{ordenId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ordenId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.ComprobantePagoController",
+    "Method": "ConsultarComprobantes",
+    "RelativePath": "api/ConsultarComprobantes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ConfiguracionController",
+    "Method": "ConsultarTodas",
+    "RelativePath": "api/ConsultarConfiguraciones",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.DatosBancariosController",
+    "Method": "ConsultarDatosBancarios",
+    "RelativePath": "api/ConsultarDatosBancarios",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.DatosBancariosController",
+    "Method": "ConsultarDatosBancariosActivos",
+    "RelativePath": "api/ConsultarDatosBancariosActivos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.LoginController",
+    "Method": "ConsultarEstadoBloqueo",
+    "RelativePath": "api/ConsultarEstadoBloqueo/{email}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoItemController",
+    "Method": "ConsultarPorId",
+    "RelativePath": "api/ConsultarEstadoItem/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoOrdenController",
+    "Method": "ConsultarPorId",
+    "RelativePath": "api/ConsultarEstadoOrden/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoProductoController",
+    "Method": "ConsultarPorId",
+    "RelativePath": "api/ConsultarEstadoProducto/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoItemController",
+    "Method": "Consultar",
+    "RelativePath": "api/ConsultarEstadosItem",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoOrdenController",
+    "Method": "Consultar",
+    "RelativePath": "api/ConsultarEstadosOrden",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoProductoController",
+    "Method": "Consultar",
+    "RelativePath": "api/ConsultarEstadosProducto",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoUsuarioController",
+    "Method": "Consultar",
+    "RelativePath": "api/ConsultarEstadosUsuario",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoUsuarioController",
+    "Method": "ConsultarPorId",
+    "RelativePath": "api/ConsultarEstadoUsuario/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ItemController",
+    "Method": "Consultar",
+    "RelativePath": "api/ConsultarItem",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ItemController",
+    "Method": "ConsultarItemId",
+    "RelativePath": "api/ConsultarItemId/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ItemController",
+    "Method": "ConsultarItemsPorOrden",
+    "RelativePath": "api/ConsultarItemsPorOrden/{ordenId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ordenId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.MarcaProductoController",
+    "Method": "Consultar",
+    "RelativePath": "api/ConsultarMarcaProducto",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ItemController",
+    "Method": "Consultarmisproductosid",
+    "RelativePath": "api/Consultarmisproductosid/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.OrdenController",
+    "Method": "Consultartoken",
+    "RelativePath": "api/ConsultarOrden/{token}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.OrdenController",
+    "Method": "Consultar",
+    "RelativePath": "api/ConsultarOrdenes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.ComprobantePagoController",
+    "Method": "ConsultarOrdenesConComprobantes",
+    "RelativePath": "api/ConsultarOrdenesConComprobantes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "soloNoVerificados",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.OrdenController",
+    "Method": "ConsultarOrdenUserId",
+    "RelativePath": "api/ConsultarOrdenUserId/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ProductoController",
+    "Method": "Consultar",
+    "RelativePath": "api/ConsultarProducto",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ProductoController",
+    "Method": "ConsultarProductoAdmin",
+    "RelativePath": "api/ConsultarProductoAdmin",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ProductoController",
+    "Method": "ConsultarId",
+    "RelativePath": "api/ConsultarProductoId/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ProductoController",
+    "Method": "ConsultarPaginado",
+    "RelativePath": "api/ConsultarProductoPaginado",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pagina",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ProductoController",
+    "Method": "ConsultarProductosPorUsuario",
+    "RelativePath": "api/ConsultarProductosPorUsuario/{usuarioId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuarioId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ProductoController",
+    "Method": "ConsultarProductosVendedor",
+    "RelativePath": "api/ConsultarProductosVendedor/{vendedorId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "vendedorId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.RolController",
+    "Method": "Consultar",
+    "RelativePath": "api/ConsultarRoles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.UsuarioController",
+    "Method": "ConsultarId",
+    "RelativePath": "api/ConsultarUsuario/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.UsuarioController",
+    "Method": "Consultar",
+    "RelativePath": "api/ConsultarUsuarios",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.UsuarioController",
+    "Method": "ConsultarUsuariosPendientes",
+    "RelativePath": "api/ConsultarUsuariosPendientes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.VendedorController",
+    "Method": "ConsultarVendedor",
+    "RelativePath": "api/ConsultarVendedor/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.VendedorController",
+    "Method": "ConsultarVendedores",
+    "RelativePath": "api/ConsultarVendedores",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.VendedorController",
+    "Method": "ConsultarVendedorPorUsuario",
+    "RelativePath": "api/ConsultarVendedorPorUsuario/{usuarioId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuarioId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ProductoController",
+    "Method": "ConsultarVendedorProducto",
+    "RelativePath": "api/ConsultarVendedorProducto",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ReporteriaController",
+    "Method": "DashboardKPIs",
+    "RelativePath": "api/DashboardKPIs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ReporteriaController",
+    "Method": "DashboardKPIsVendedor",
+    "RelativePath": "api/DashboardKPIsVendedor/{vendedorId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "vendedorId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.LoginController",
+    "Method": "DesbloquearUsuario",
+    "RelativePath": "api/DesbloquearUsuario",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.DevolucionController",
+    "Method": "CancelarDevolucion",
+    "RelativePath": "api/Devolucion/{devolucionId}/cancelar",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "devolucionId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "usuarioId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.DevolucionController",
+    "Method": "ConsultarItemsDevolucion",
+    "RelativePath": "api/Devolucion/{devolucionId}/items",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "devolucionId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.DevolucionController",
+    "Method": "ConsultarDevolucionPorId",
+    "RelativePath": "api/Devolucion/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.DevolucionController",
+    "Method": "AprobarDevolucion",
+    "RelativePath": "api/Devolucion/admin/{devolucionId}/aprobar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "devolucionId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "datos",
+        "Type": "ASOSIEC_backend.Controllers.AprobarDevolucionDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.DevolucionController",
+    "Method": "ActualizarEstadoDevolucion",
+    "RelativePath": "api/Devolucion/admin/{devolucionId}/estado",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "devolucionId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "data",
+        "Type": "System.Object",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.DevolucionController",
+    "Method": "RechazarDevolucion",
+    "RelativePath": "api/Devolucion/admin/{devolucionId}/rechazar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "devolucionId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "datos",
+        "Type": "ASOSIEC_backend.Controllers.RechazarDevolucionDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.DevolucionController",
+    "Method": "ConsultarTodasDevoluciones",
+    "RelativePath": "api/Devolucion/admin/todas",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.DevolucionController",
+    "Method": "ConsultarEstadosDevolucion",
+    "RelativePath": "api/Devolucion/estados",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.DevolucionController",
+    "Method": "RegistrarItemsDevolucion",
+    "RelativePath": "api/Devolucion/items",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "items",
+        "Type": "System.Collections.Generic.List\u00601[[Entidad.Entidad_ItemDevolucion, Entidad, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.DevolucionController",
+    "Method": "RegistrarDevolucion",
+    "RelativePath": "api/Devolucion/registrar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "devolucion",
+        "Type": "Entidad.Entidad_Devolucion",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.DevolucionController",
+    "Method": "SubirFotoDevolucion",
+    "RelativePath": "api/Devolucion/subir-foto",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.DevolucionController",
+    "Method": "ConsultarDevolucionesPorUsuario",
+    "RelativePath": "api/Devolucion/usuario/{usuarioId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuarioId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.DevolucionController",
+    "Method": "VerificarPuedeDevolver",
+    "RelativePath": "api/Devolucion/verificar/{ordenId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ordenId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ItemController",
+    "Method": "Elimnar",
+    "RelativePath": "api/Eliminar_Item/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.MarcaProductoController",
+    "Method": "Elimnar",
+    "RelativePath": "api/Eliminar_MarcaProducto/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.OrdenController",
+    "Method": "Elimnar",
+    "RelativePath": "api/Eliminar_orden/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.RolController",
+    "Method": "Elimnar",
+    "RelativePath": "api/Eliminar_rol/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.UsuarioController",
+    "Method": "Eliminar",
+    "RelativePath": "api/Eliminar_usuario/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.CategoriaProductoController",
+    "Method": "Eliminar",
+    "RelativePath": "api/EliminarCategoriaProducto/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.DatosBancariosController",
+    "Method": "EliminarDatosBancarios",
+    "RelativePath": "api/EliminarDatosBancarios/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoItemController",
+    "Method": "Eliminar",
+    "RelativePath": "api/EliminarEstadoItem/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoOrdenController",
+    "Method": "Eliminar",
+    "RelativePath": "api/EliminarEstadoOrden/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoProductoController",
+    "Method": "Eliminar",
+    "RelativePath": "api/EliminarEstadoProducto/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoUsuarioController",
+    "Method": "Eliminar",
+    "RelativePath": "api/EliminarEstadoUsuario/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ProductoController",
+    "Method": "Eliminar",
+    "RelativePath": "api/EliminarProducto/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.VendedorController",
+    "Method": "EliminarVendedor",
+    "RelativePath": "api/EliminarVendedor/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.LoginController",
+    "Method": "EnviarCodigoRecuperacion",
+    "RelativePath": "api/EnviarCodigoRecuperacion",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "datos",
+        "Type": "ASOSIEC.Controllers.SolicitudRecuperacionDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.LoginController",
+    "Method": "Login",
+    "RelativePath": "api/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "credenciales",
+        "Type": "Entidad.Entidad_Login",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.MensajesController",
+    "Method": "EliminarMensaje",
+    "RelativePath": "api/Mensajes/{mensajeId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mensajeId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.MensajesController",
+    "Method": "ObtenerMensajes",
+    "RelativePath": "api/Mensajes/{usuarioId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuarioId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.MensajesController",
+    "Method": "EnviarMensaje",
+    "RelativePath": "api/Mensajes/enviar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mensaje",
+        "Type": "Entidad.Entidad_MensajeUsuario",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.MensajesController",
+    "Method": "MarcarComoLeido",
+    "RelativePath": "api/Mensajes/marcar-leido/{mensajeId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mensajeId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.PerfilController",
+    "Method": "ObtenerPerfil",
+    "RelativePath": "api/perfil/{usuarioId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuarioId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.PerfilController",
+    "Method": "ActualizarPerfil",
+    "RelativePath": "api/perfil/actualizar/{usuarioId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuarioId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "ASOSIEC.Controllers.ActualizarPerfilRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.PerfilController",
+    "Method": "CambiarContrasena",
+    "RelativePath": "api/perfil/cambiar-contrasena",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "ASOSIEC.Controllers.CambiarContrasenaRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.PerfilController",
+    "Method": "ObtenerEstadisticas",
+    "RelativePath": "api/perfil/estadisticas/{usuarioId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuarioId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.PerfilController",
+    "Method": "ActualizarFotoPerfil",
+    "RelativePath": "api/perfil/foto/{usuarioId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuarioId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "ASOSIEC.Controllers.ActualizarFotoRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.PerfilController",
+    "Method": "ActualizarRedesSociales",
+    "RelativePath": "api/perfil/redes-sociales/{usuarioId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuarioId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "ASOSIEC.Controllers.ActualizarRedesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ReporteriaController",
+    "Method": "ProductosMasVendidos",
+    "RelativePath": "api/ProductosMasVendidos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ReporteriaController",
+    "Method": "ProductosVendedorEstadisticas",
+    "RelativePath": "api/ProductosVendedorEstadisticas/{vendedorId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "vendedorId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.ComprobantePagoController",
+    "Method": "RechazarComprobante",
+    "RelativePath": "api/RechazarComprobante/{id}/{adminId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "adminId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "tienda_instrumentos.Controllers.RechazarComprobanteRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ProductoController",
+    "Method": "RechazarProducto",
+    "RelativePath": "api/RechazarProducto",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "RechazarProductoRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.UsuarioController",
+    "Method": "RechazarUsuario",
+    "RelativePath": "api/RechazarUsuario",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "tienda_instrumentos.Controllers.RechazarUsuarioRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.LoginController",
+    "Method": "RecuperarPsw",
+    "RelativePath": "api/recuperarpsw/{mail}/{psw}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mail",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "psw",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ConfiguracionController",
+    "Method": "RefrescarCache",
+    "RelativePath": "api/RefreshCache_Configuracion",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.MarcaProductoController",
+    "Method": "Registrar",
+    "RelativePath": "api/Registar_MarcaProducto",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "MarcaProducto",
+        "Type": "Entidad.Entidad_MarcaProducto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.RolController",
+    "Method": "Registrar",
+    "RelativePath": "api/Registar_Rol",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Rol",
+        "Type": "Entidad.Entidad_Rol",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ItemController",
+    "Method": "Registrar",
+    "RelativePath": "api/Registrar_Item",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Item",
+        "Type": "Entidad.Entidad_Item",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.OrdenController",
+    "Method": "Registrar",
+    "RelativePath": "api/Registrar_orden",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Orden",
+        "Type": "Entidad.Entidad_Orden",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.UsuarioController",
+    "Method": "Registrar",
+    "RelativePath": "api/Registrar_usuario",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Usuario",
+        "Type": "Entidad.Entidad_Usuario",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.CategoriaProductoController",
+    "Method": "Registrar",
+    "RelativePath": "api/RegistrarCategoriaProducto",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categorias",
+        "Type": "Entidad.Entidad_CategoriaProducto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.ComprobantePagoController",
+    "Method": "RegistrarComprobante",
+    "RelativePath": "api/RegistrarComprobante",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "comprobante",
+        "Type": "Entidad.Entidad_ComprobantePago",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.DatosBancariosController",
+    "Method": "RegistrarDatosBancarios",
+    "RelativePath": "api/RegistrarDatosBancarios",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "datos",
+        "Type": "Entidad.Entidad_DatosBancarios",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoItemController",
+    "Method": "Registrar",
+    "RelativePath": "api/RegistrarEstadoItem",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estado",
+        "Type": "Entidad.Entidad_EstadoItem",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoOrdenController",
+    "Method": "Registrar",
+    "RelativePath": "api/RegistrarEstadoOrden",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estado",
+        "Type": "Entidad.Entidad_EstadoOrden",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoProductoController",
+    "Method": "Registrar",
+    "RelativePath": "api/RegistrarEstadoProducto",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estado",
+        "Type": "Entidad.Entidad_EstadoProducto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.EstadoUsuarioController",
+    "Method": "Registrar",
+    "RelativePath": "api/RegistrarEstadoUsuario",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estado",
+        "Type": "Entidad.Entidad_EstadoUsuario",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ProductoController",
+    "Method": "Registrar",
+    "RelativePath": "api/RegistrarProducto",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Producto",
+        "Type": "Entidad.Entidad_Producto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.VendedorController",
+    "Method": "RegistrarVendedor",
+    "RelativePath": "api/RegistrarVendedor",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "vendedor",
+        "Type": "Entidad.Entidad_Vendedor",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ReporteriaController",
+    "Method": "ReporteVendedor",
+    "RelativePath": "api/ReporteVendedor/{vendedorId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "vendedorId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ReporteriaController",
+    "Method": "ReporteVentasGeneral",
+    "RelativePath": "api/ReporteVentasGeneral",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.LoginController",
+    "Method": "RestablecerPassword",
+    "RelativePath": "api/RestablecerPassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "datos",
+        "Type": "ASOSIEC.Controllers.RestablecerPasswordDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.LoginController",
+    "Method": "SolicitarRecuperacion",
+    "RelativePath": "api/SolicitarRecuperacion",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "datos",
+        "Type": "ASOSIEC.Controllers.SolicitudRecuperacionDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.UploadController",
+    "Method": "DeleteImage",
+    "RelativePath": "api/Upload",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "publicId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.UploadController",
+    "Method": "UploadComprobante",
+    "RelativePath": "api/Upload/comprobante",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.UploadController",
+    "Method": "UploadDevolucionImage",
+    "RelativePath": "api/Upload/devolucion",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.UploadController",
+    "Method": "UploadProfileImage",
+    "RelativePath": "api/Upload/perfil",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC_backend.Controllers.UploadController",
+    "Method": "UploadProductImage",
+    "RelativePath": "api/Upload/producto",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.UsuarioController",
+    "Method": "ValidarPassword",
+    "RelativePath": "api/ValidarPassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "datos",
+        "Type": "tienda_instrumentos.Controllers.ValidarPasswordDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ItemController",
+    "Method": "ValidarStockCarrito",
+    "RelativePath": "api/ValidarStockCarrito",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuarioId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ReporteriaController",
+    "Method": "VentasPorMes",
+    "RelativePath": "api/VentasPorMes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ReporteriaController",
+    "Method": "VentasPorVendedor",
+    "RelativePath": "api/VentasPorVendedor",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ReporteriaController",
+    "Method": "VentasSemanales",
+    "RelativePath": "api/VentasSemanales",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.ReporteriaController",
+    "Method": "VentasSemanalesVendedor",
+    "RelativePath": "api/VentasSemanalesVendedor/{vendedorId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "vendedorId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.LoginController",
+    "Method": "VerificarCodigoRecuperacion",
+    "RelativePath": "api/VerificarCodigoRecuperacion",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "datos",
+        "Type": "ASOSIEC.Controllers.VerificarCodigoDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "tienda_instrumentos.Controllers.ComprobantePagoController",
+    "Method": "VerificarComprobante",
+    "RelativePath": "api/VerificarComprobante/{id}/{adminId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "adminId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.LoginController",
+    "Method": "VerificarMail",
+    "RelativePath": "api/Verificarmail/{mail}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mail",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ASOSIEC.Controllers.LoginController",
+    "Method": "VerificarToken",
+    "RelativePath": "api/VerificarToken/{token}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

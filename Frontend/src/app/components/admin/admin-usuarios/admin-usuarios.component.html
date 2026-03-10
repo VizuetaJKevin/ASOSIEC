@@ -1,0 +1,881 @@
+<div class="usuarios-wrapper">
+
+  <!-- Header con degradado -->
+  <div class="usuarios-header">
+    <div class="header-content">
+      <div class="header-icon-wrapper">
+        <mat-icon class="header-icon">people</mat-icon>
+      </div>
+      <div class="header-text">
+        <h1 class="header-title">Gestión de Usuarios</h1>
+        <p class="header-subtitle">Administra usuarios, vendedores y permisos del sistema</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="usuarios-container">
+
+    <!-- ========================================
+         STATS CARDS
+         ======================================== -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper">
+          <mat-icon>groups</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{totalUsuarios}}</h4>
+          <p class="stat-label">Total Usuarios</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper admin">
+          <mat-icon>admin_panel_settings</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{totalAdministradores}}</h4>
+          <p class="stat-label">Administradores</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper vendedor">
+          <mat-icon>store</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{totalVendedores}}</h4>
+          <p class="stat-label">Vendedores</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper cliente">
+          <mat-icon>person</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{totalClientes}}</h4>
+          <p class="stat-label">Clientes</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper pendiente">
+          <mat-icon>pending_actions</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{totalPendientes}}</h4>
+          <p class="stat-label">Pendientes</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         TABS CONTAINER
+         ======================================== -->
+    <div class="tabs-wrapper">
+      <mat-tab-group class="modern-tabs" animationDuration="300ms">
+
+        <!-- ============================================
+             TAB 1: PENDIENTES
+             ============================================ -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>pending_actions</mat-icon>
+              <span>Pendientes</span>
+              <span class="tab-badge" *ngIf="totalPendientes > 0">
+                {{totalPendientes}}
+              </span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+
+            <!-- Action Bar -->
+            <div class="action-bar" *ngIf="!cargandoPendientes && UsuariosPendientes.length > 0">
+              <div class="search-box">
+                <mat-icon>search</mat-icon>
+                <input type="text"
+                       placeholder="Buscar por nombre o email..."
+                       class="search-input"
+                       [(ngModel)]="searchTermPendientes">
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" *ngIf="!cargandoPendientes && UsuariosPendientes.length === 0">
+              <div class="empty-icon-wrapper">
+                <mat-icon>inbox</mat-icon>
+              </div>
+              <h3 class="empty-title">No hay solicitudes pendientes</h3>
+              <p class="empty-subtitle">Todas las solicitudes de vendedores han sido procesadas</p>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading-state" *ngIf="cargandoPendientes">
+              <div class="spinner-wrapper">
+                <div class="modern-spinner"></div>
+              </div>
+              <p class="loading-text">Cargando solicitudes...</p>
+            </div>
+
+            <!-- Cards de Pendientes -->
+            <div class="pendientes-grid" *ngIf="!cargandoPendientes && usuariosFiltradosPendientes.length > 0">
+              <div class="pending-card" *ngFor="let usuario of usuariosFiltradosPendientes">
+                <div class="pending-card-header">
+                  <div class="user-avatar">
+                    <mat-icon>person</mat-icon>
+                  </div>
+                  <div class="user-info">
+                    <h4 class="user-name">{{ usuario.nombre }} {{ usuario.apellido }}</h4>
+                    <p class="user-email">{{ usuario.email }}</p>
+                  </div>
+                  <div class="pending-badge">
+                    <mat-icon>hourglass_empty</mat-icon>
+                    <span>Pendiente</span>
+                  </div>
+                </div>
+
+                <div class="pending-card-actions">
+                  <button class="btn-approve" (click)="aprobarVendedor(usuario)">
+                    <mat-icon>check_circle</mat-icon>
+                    Aprobar
+                  </button>
+                  <button class="btn-reject" (click)="rechazarVendedor(usuario)">
+                    <mat-icon>cancel</mat-icon>
+                    Rechazar
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- No Results -->
+            <div class="empty-state" *ngIf="!cargandoPendientes && UsuariosPendientes.length > 0 && usuariosFiltradosPendientes.length === 0">
+              <div class="empty-icon-wrapper">
+                <mat-icon>search_off</mat-icon>
+              </div>
+              <h3 class="empty-title">No se encontraron resultados</h3>
+              <p class="empty-subtitle">Intenta con otro término de búsqueda</p>
+            </div>
+
+          </div>
+        </mat-tab>
+
+        <!-- ============================================
+             TAB 2: ADMINISTRADORES
+             ============================================ -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>admin_panel_settings</mat-icon>
+              <span>Administradores</span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+
+            <!-- Action Bar -->
+            <div class="action-bar">
+              <div class="search-box">
+                <mat-icon>search</mat-icon>
+                <input type="text"
+                       placeholder="Buscar administradores..."
+                       class="search-input"
+                       [(ngModel)]="searchTermAdmins">
+              </div>
+              <button mat-raised-button class="btn-add-user" (click)="abrirModalAgregar()">
+                <mat-icon>person_add</mat-icon>
+                <span>Nuevo Usuario</span>
+              </button>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading-state" *ngIf="cargando">
+              <div class="spinner-wrapper">
+                <div class="modern-spinner"></div>
+              </div>
+              <p class="loading-text">Cargando administradores...</p>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" *ngIf="!cargando && administradores.length === 0">
+              <div class="empty-icon-wrapper">
+                <mat-icon>admin_panel_settings</mat-icon>
+              </div>
+              <h3 class="empty-title">No hay administradores registrados</h3>
+              <p class="empty-subtitle">Agrega el primer administrador al sistema</p>
+            </div>
+
+            <!-- Cards de Administradores -->
+            <div *ngIf="!cargando && administradores.length > 0">
+
+              <!-- Info de resultados -->
+              <div class="results-info">
+                <span class="results-count">{{ infoPaginacionAdmins }}</span>
+                <div class="pagination-size">
+                  <span>Mostrar:</span>
+                  <select
+                    class="pagination-select"
+                    [(ngModel)]="adminsPorPagina"
+                    (change)="cambiarAdminsPorPagina(adminsPorPagina)">
+                    <option *ngFor="let opcion of opcionesPaginacion" [value]="opcion">
+                      {{ opcion }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="users-grid">
+                <div class="user-card" *ngFor="let usuario of administradoresPaginados">
+
+                  <div class="user-card-header">
+                    <div class="user-avatar-large">
+                      <mat-icon>admin_panel_settings</mat-icon>
+                    </div>
+                    <div class="user-details">
+                      <h3 class="user-card-name">{{ usuario.nombre }} {{ usuario.apellido }}</h3>
+                      <p class="user-card-email">{{ usuario.email }}</p>
+                    </div>
+                  </div>
+
+                  <div class="user-card-info">
+                    <div class="info-row">
+                      <mat-icon>badge</mat-icon>
+                      <span>{{ obtenerNombreRol(usuario.rolId) }}</span>
+                    </div>
+                    <div class="info-row">
+                      <mat-icon>toggle_on</mat-icon>
+                      <span class="status-badge" [class.active]="usuario.estadoUsuarioId === 1">
+                        {{ obtenerNombreEstado(usuario.estadoUsuarioId) }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="user-card-actions">
+                    <button class="action-btn edit-btn" (click)="editar(usuario)">
+                      <mat-icon>edit</mat-icon>
+                      <span>Editar</span>
+                    </button>
+                    <button class="action-btn delete-btn" (click)="eliminar(usuario.id)">
+                      <mat-icon>delete</mat-icon>
+                      <span>Eliminar</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pagination -->
+              <div class="pagination-container" *ngIf="totalPaginasAdmins > 1">
+                <div class="pagination">
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPaginaAdmins(paginaActualAdmins - 1)"
+                          [disabled]="paginaActualAdmins === 0">
+                    <mat-icon>chevron_left</mat-icon>
+                  </button>
+
+                  <ng-container *ngFor="let pagina of obtenerPaginasVisiblesAdmins()">
+                    <button *ngIf="pagina >= 0"
+                            mat-button
+                            class="pagination-number"
+                            [class.active]="pagina === paginaActualAdmins"
+                            (click)="irAPaginaAdmins(pagina)">
+                      {{ pagina + 1 }}
+                    </button>
+                    <span *ngIf="pagina < 0" class="pagination-ellipsis">...</span>
+                  </ng-container>
+
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPaginaAdmins(paginaActualAdmins + 1)"
+                          [disabled]="paginaActualAdmins === totalPaginasAdmins - 1">
+                    <mat-icon>chevron_right</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </mat-tab>
+
+        <!-- ============================================
+             TAB 3: VENDEDORES
+             ============================================ -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>store</mat-icon>
+              <span>Vendedores</span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+
+            <div class="action-bar">
+              <div class="search-box">
+                <mat-icon>search</mat-icon>
+                <input type="text"
+                       placeholder="Buscar vendedores..."
+                       class="search-input"
+                       [(ngModel)]="searchTermVendedores">
+              </div>
+              <button mat-raised-button class="btn-add-user" (click)="abrirModalAgregar()">
+                <mat-icon>person_add</mat-icon>
+                <span>Nuevo Usuario</span>
+              </button>
+            </div>
+
+            <div class="empty-state" *ngIf="!cargando && vendedores.length === 0">
+              <div class="empty-icon-wrapper">
+                <mat-icon>store</mat-icon>
+              </div>
+              <h3 class="empty-title">No hay vendedores registrados</h3>
+              <p class="empty-subtitle">Los vendedores aprobados aparecerán aquí</p>
+            </div>
+
+            <div *ngIf="!cargando && vendedores.length > 0">
+
+              <!-- Info de resultados -->
+              <div class="results-info">
+                <span class="results-count">{{ infoPaginacionVendedores }}</span>
+                <div class="pagination-size">
+                  <span>Mostrar:</span>
+                  <select
+                    class="pagination-select"
+                    [(ngModel)]="vendedoresPorPagina"
+                    (change)="cambiarVendedoresPorPagina(vendedoresPorPagina)">
+                    <option *ngFor="let opcion of opcionesPaginacion" [value]="opcion">
+                      {{ opcion }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="users-grid">
+                <div class="user-card" *ngFor="let usuario of vendedoresPaginados">
+
+                  <div class="user-card-header">
+                    <div class="user-avatar-large vendedor">
+                      <mat-icon>store</mat-icon>
+                    </div>
+                    <div class="user-details">
+                      <h3 class="user-card-name">{{ usuario.nombre }} {{ usuario.apellido }}</h3>
+                      <p class="user-card-email">{{ usuario.email }}</p>
+                    </div>
+                  </div>
+
+                  <div class="user-card-info">
+                    <div class="info-row">
+                      <mat-icon>badge</mat-icon>
+                      <span>{{ obtenerNombreRol(usuario.rolId) }}</span>
+                    </div>
+                    <div class="info-row">
+                      <mat-icon>toggle_on</mat-icon>
+                      <span class="status-badge" [class.active]="usuario.estadoUsuarioId === 1">
+                        {{ obtenerNombreEstado(usuario.estadoUsuarioId) }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="user-card-actions">
+                    <button class="action-btn edit-btn" (click)="editar(usuario)">
+                      <mat-icon>edit</mat-icon>
+                      <span>Editar</span>
+                    </button>
+                    <button class="action-btn delete-btn" (click)="eliminar(usuario.id)">
+                      <mat-icon>delete</mat-icon>
+                      <span>Eliminar</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pagination -->
+              <div class="pagination-container" *ngIf="totalPaginasVendedores > 1">
+                <div class="pagination">
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPaginaVendedores(paginaActualVendedores - 1)"
+                          [disabled]="paginaActualVendedores === 0">
+                    <mat-icon>chevron_left</mat-icon>
+                  </button>
+
+                  <ng-container *ngFor="let pagina of obtenerPaginasVisiblesVendedores()">
+                    <button *ngIf="pagina >= 0"
+                            mat-button
+                            class="pagination-number"
+                            [class.active]="pagina === paginaActualVendedores"
+                            (click)="irAPaginaVendedores(pagina)">
+                      {{ pagina + 1 }}
+                    </button>
+                    <span *ngIf="pagina < 0" class="pagination-ellipsis">...</span>
+                  </ng-container>
+
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPaginaVendedores(paginaActualVendedores + 1)"
+                          [disabled]="paginaActualVendedores === totalPaginasVendedores - 1">
+                    <mat-icon>chevron_right</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </mat-tab>
+
+        <!-- ============================================
+             TAB 4: CLIENTES (TABLA)
+             ============================================ -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div class="tab-label">
+              <mat-icon>person</mat-icon>
+              <span>Clientes</span>
+            </div>
+          </ng-template>
+
+          <div class="tab-content">
+
+            <div class="action-bar">
+              <div class="search-box">
+                <mat-icon>search</mat-icon>
+                <input type="text"
+                       placeholder="Buscar clientes..."
+                       class="search-input"
+                       [(ngModel)]="searchTermClientes">
+              </div>
+              <button mat-raised-button class="btn-add-user" (click)="abrirModalAgregar()">
+                <mat-icon>person_add</mat-icon>
+                <span>Nuevo Usuario</span>
+              </button>
+            </div>
+
+            <div class="empty-state" *ngIf="!cargando && clientes.length === 0">
+              <div class="empty-icon-wrapper">
+                <mat-icon>person</mat-icon>
+              </div>
+              <h3 class="empty-title">No hay clientes registrados</h3>
+              <p class="empty-subtitle">Los clientes aparecerán aquí cuando se registren</p>
+            </div>
+
+            <div class="table-wrapper" *ngIf="!cargando && clientes.length > 0">
+
+              <!-- Info de resultados -->
+              <div class="results-info">
+                <span class="results-count">{{ infoPaginacion }}</span>
+                <div class="pagination-size">
+                  <span>Mostrar:</span>
+                  <select
+                    class="pagination-select"
+                    [(ngModel)]="clientesPorPagina"
+                    (change)="cambiarClientesPorPagina(clientesPorPagina)">
+                    <option *ngFor="let opcion of opcionesPaginacion" [value]="opcion">
+                      {{ opcion }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <table class="clientes-table">
+                <thead>
+                  <tr>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th class="th-actions">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let usuario of clientesPaginados">
+                    <td>
+                      <div class="table-user-cell">
+                        <div class="table-avatar">
+                          <mat-icon>person</mat-icon>
+                        </div>
+                        <span class="table-user-name">{{ usuario.nombre }} {{ usuario.apellido }}</span>
+                      </div>
+                    </td>
+                    <td>{{ usuario.email }}</td>
+                    <td>
+                      <span class="role-badge cliente">
+                        {{ obtenerNombreRol(usuario.rolId) }}
+                      </span>
+                    </td>
+                    <td>
+                      <span class="status-badge" [class.active]="usuario.estadoUsuarioId === 1">
+                        {{ obtenerNombreEstado(usuario.estadoUsuarioId) }}
+                      </span>
+                    </td>
+                    <td class="td-actions">
+                      <button mat-mini-fab
+                              class="modern-edit-btn"
+                              (click)="editar(usuario)"
+                              matTooltip="Editar usuario"
+                              matTooltipPosition="above">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button mat-mini-fab
+                              class="modern-delete-btn"
+                              (click)="eliminar(usuario.id)"
+                              matTooltip="Eliminar usuario"
+                              matTooltipPosition="above">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Pagination -->
+              <div class="pagination-container" *ngIf="totalPaginasClientes > 1">
+                <div class="pagination">
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPaginaClientes(paginaActualClientes - 1)"
+                          [disabled]="paginaActualClientes === 0">
+                    <mat-icon>chevron_left</mat-icon>
+                  </button>
+
+                  <ng-container *ngFor="let pagina of obtenerPaginasVisiblesClientes()">
+                    <button *ngIf="pagina >= 0"
+                            mat-button
+                            class="pagination-number"
+                            [class.active]="pagina === paginaActualClientes"
+                            (click)="irAPaginaClientes(pagina)">
+                      {{ pagina + 1 }}
+                    </button>
+                    <span *ngIf="pagina < 0" class="pagination-ellipsis">...</span>
+                  </ng-container>
+
+                  <button mat-icon-button
+                          class="pagination-btn"
+                          (click)="irAPaginaClientes(paginaActualClientes + 1)"
+                          [disabled]="paginaActualClientes === totalPaginasClientes - 1">
+                    <mat-icon>chevron_right</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========================================
+     MODAL AGREGAR USUARIO - GLASSMORPHISM
+     ======================================== -->
+<div class="glass-modal-overlay" *ngIf="mostrarModalAgregar" (click)="cerrarModal()">
+  <div class="glass-modal-container" (click)="$event.stopPropagation()">
+
+    <!-- Modal Header -->
+    <div class="glass-modal-header">
+      <div class="glass-header-content">
+        <div class="glass-icon-wrapper">
+          <mat-icon>person_add</mat-icon>
+        </div>
+        <div class="glass-header-text">
+          <h2 class="glass-modal-title">Nuevo Usuario</h2>
+          <p class="glass-modal-subtitle">Completa la información del nuevo usuario</p>
+        </div>
+      </div>
+      <button class="glass-close-btn" (click)="cerrarModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="glass-modal-body">
+      <form [formGroup]="formulario">
+        <div class="glass-form-grid">
+
+          <!-- Nombre -->
+          <div class="glass-form-field">
+            <label class="glass-label">
+              <mat-icon>person</mat-icon>
+              <span>Nombre *</span>
+            </label>
+            <div class="glass-input-wrapper">
+              <input type="text"
+                     class="glass-input"
+                     formControlName="nombre"
+                     placeholder="Ingresa el nombre">
+            </div>
+          </div>
+
+          <!-- Apellido -->
+          <div class="glass-form-field">
+            <label class="glass-label">
+              <mat-icon>badge</mat-icon>
+              <span>Apellido</span>
+            </label>
+            <div class="glass-input-wrapper">
+              <input type="text"
+                     class="glass-input"
+                     formControlName="apellido"
+                     placeholder="Ingresa el apellido">
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="glass-form-field">
+            <label class="glass-label">
+              <mat-icon>email</mat-icon>
+              <span>Email *</span>
+            </label>
+            <div class="glass-input-wrapper">
+              <input type="email"
+                     class="glass-input"
+                     formControlName="email"
+                     placeholder="correo@ejemplo.com">
+            </div>
+          </div>
+
+          <!-- Contraseña -->
+          <div class="glass-form-field">
+            <label class="glass-label">
+              <mat-icon>lock</mat-icon>
+              <span>Contraseña *</span>
+            </label>
+            <div class="glass-input-wrapper">
+              <input type="password"
+                     class="glass-input"
+                     formControlName="password"
+                     placeholder="••••••••">
+            </div>
+          </div>
+
+          <!-- Estado -->
+          <div class="glass-form-field">
+            <label class="glass-label">
+              <mat-icon>toggle_on</mat-icon>
+              <span>Estado *</span>
+            </label>
+            <div class="glass-select-wrapper">
+              <select class="glass-select" formControlName="estadoUsuarioId">
+                <option *ngFor="let estado of ListaEstadosUsuario" [value]="estado.id">
+                  {{estado.descripcion}}
+                </option>
+              </select>
+              <mat-icon class="select-arrow">expand_more</mat-icon>
+            </div>
+          </div>
+
+          <!-- Rol -->
+          <div class="glass-form-field">
+            <label class="glass-label">
+              <mat-icon>admin_panel_settings</mat-icon>
+              <span>Rol *</span>
+            </label>
+            <div class="glass-select-wrapper">
+              <select class="glass-select" formControlName="rolId">
+                <option *ngFor="let rol of ListaRoles" [value]="rol.id">
+                  {{rol.descripcion}}
+                </option>
+              </select>
+              <mat-icon class="select-arrow">expand_more</mat-icon>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="glass-modal-footer">
+      <button class="glass-btn glass-btn-cancel" (click)="cerrarModal()">
+        <mat-icon>cancel</mat-icon>
+        <span>Cancelar</span>
+      </button>
+      <button class="glass-btn glass-btn-primary" (click)="registrar()" [disabled]="formulario.invalid">
+        <mat-icon>save</mat-icon>
+        <span>Registrar Usuario</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========================================
+     MODAL EDITAR USUARIO - GLASSMORPHISM
+     ======================================== -->
+<div class="glass-modal-overlay" *ngIf="mostrarModalEditar" (click)="cerrarModal()">
+  <div class="glass-modal-container glass-modal-lg" (click)="$event.stopPropagation()">
+
+    <!-- Modal Header con foto de perfil -->
+    <div class="glass-modal-header-profile">
+
+      <!-- Foto de perfil con efecto -->
+      <div class="glass-profile-section">
+        <div class="glass-profile-wrapper">
+          <img [src]="fotoPerfilActual"
+               alt="Foto de perfil"
+               class="glass-profile-image">
+          <label for="fileInputEdit" class="glass-camera-overlay">
+            <mat-icon>photo_camera</mat-icon>
+          </label>
+          <input type="file"
+                 id="fileInputEdit"
+                 style="display: none;"
+                 accept="image/*"
+                 (change)="onFileSelected($event)">
+          <div class="glass-loading-overlay" *ngIf="cargandoImagen">
+            <mat-spinner diameter="40"></mat-spinner>
+          </div>
+        </div>
+      </div>
+
+      <button class="glass-close-btn" (click)="cerrarModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Título del modal -->
+    <div class="glass-modal-title-section">
+      <div class="glass-icon-wrapper-small">
+        <mat-icon>edit</mat-icon>
+      </div>
+      <div>
+        <h2 class="glass-modal-title">Editar Usuario</h2>
+        <p class="glass-modal-subtitle">Actualiza la información del usuario</p>
+      </div>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="glass-modal-body">
+      <form [formGroup]="formularioEdicion">
+        <div class="glass-form-grid">
+
+          <!-- Nombre -->
+          <div class="glass-form-field">
+            <label class="glass-label">
+              <mat-icon>person</mat-icon>
+              <span>Nombre *</span>
+            </label>
+            <div class="glass-input-wrapper">
+              <input type="text"
+                     class="glass-input"
+                     formControlName="nombre"
+                     placeholder="Ingresa el nombre">
+            </div>
+          </div>
+
+          <!-- Apellido -->
+          <div class="glass-form-field">
+            <label class="glass-label">
+              <mat-icon>badge</mat-icon>
+              <span>Apellido</span>
+            </label>
+            <div class="glass-input-wrapper">
+              <input type="text"
+                     class="glass-input"
+                     formControlName="apellido"
+                     placeholder="Ingresa el apellido">
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="glass-form-field">
+            <label class="glass-label">
+              <mat-icon>email</mat-icon>
+              <span>Email *</span>
+            </label>
+            <div class="glass-input-wrapper">
+              <input type="email"
+                     class="glass-input"
+                     formControlName="email"
+                     placeholder="correo@ejemplo.com">
+            </div>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="glass-form-field">
+            <label class="glass-label">
+              <mat-icon>phone</mat-icon>
+              <span>Teléfono</span>
+            </label>
+            <div class="glass-input-wrapper">
+              <input type="text"
+                     class="glass-input"
+                     formControlName="telefono"
+                     placeholder="Número de teléfono">
+            </div>
+          </div>
+
+          <!-- Contraseña -->
+          <div class="glass-form-field">
+            <label class="glass-label">
+              <mat-icon>lock</mat-icon>
+              <span>Contraseña *</span>
+            </label>
+            <div class="glass-input-wrapper">
+              <input type="password"
+                     class="glass-input"
+                     formControlName="password"
+                     placeholder="••••••••">
+            </div>
+          </div>
+
+          <!-- Estado -->
+          <div class="glass-form-field">
+            <label class="glass-label">
+              <mat-icon>toggle_on</mat-icon>
+              <span>Estado *</span>
+            </label>
+            <div class="glass-select-wrapper">
+              <select class="glass-select" formControlName="estadoUsuarioId">
+                <option *ngFor="let estado of ListaEstadosUsuario" [value]="estado.id">
+                  {{estado.descripcion}}
+                </option>
+              </select>
+              <mat-icon class="select-arrow">expand_more</mat-icon>
+            </div>
+          </div>
+
+          <!-- Rol -->
+          <div class="glass-form-field">
+            <label class="glass-label">
+              <mat-icon>admin_panel_settings</mat-icon>
+              <span>Rol *</span>
+            </label>
+            <div class="glass-select-wrapper">
+              <select class="glass-select" formControlName="rolId">
+                <option *ngFor="let rol of ListaRoles" [value]="rol.id">
+                  {{rol.descripcion}}
+                </option>
+              </select>
+              <mat-icon class="select-arrow">expand_more</mat-icon>
+            </div>
+          </div>
+
+          <!-- Campos ocultos -->
+          <input type="hidden" formControlName="fotoPerfil">
+          <input type="hidden" formControlName="twitter">
+          <input type="hidden" formControlName="instagram">
+          <input type="hidden" formControlName="facebook">
+
+        </div>
+      </form>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="glass-modal-footer">
+      <button class="glass-btn glass-btn-cancel" (click)="cerrarModal()">
+        <mat-icon>cancel</mat-icon>
+        <span>Cancelar</span>
+      </button>
+      <button class="glass-btn glass-btn-primary" (click)="actualizarUsuario()" [disabled]="formularioEdicion.invalid">
+        <mat-icon>save</mat-icon>
+        <span>Guardar Cambios</span>
+      </button>
+    </div>
+
+  </div>
+</div>

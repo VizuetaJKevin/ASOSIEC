@@ -1,0 +1,415 @@
+<!-- 🎨 CARRITO DE COMPRAS MODERNO -->
+<div class="carrito-container">
+  <!-- Header del Carrito -->
+  <div class="carrito-header">
+    <div class="container">
+      <div class="header-content">
+        <div class="header-icon">
+          <i class="bi bi-cart-check-fill"></i>
+        </div>
+        <div class="header-text">
+          <h1 class="header-title">Mi Carrito</h1>
+          <p class="header-subtitle" *ngIf="productosEnCarrito.length > 0">
+            {{ itemsTotal }} {{ itemsTotal === 1 ? 'producto' : 'productos' }} en tu carrito
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido del Carrito -->
+  <div class="container carrito-content">
+
+    <!-- ✅ CARRITO CON PRODUCTOS -->
+    <div *ngIf="user.rolid === 2 && productosEnCarrito.length > 0; else carritoVacio">
+
+      <div class="row">
+        <!-- Columna de Productos -->
+        <div class="col-lg-8 mb-4">
+          <div class="productos-lista">
+
+            <!-- 🛒 Card de Producto -->
+            <div class="producto-card" *ngFor="let producto of productosEnCarrito; let i = index">
+
+              <!-- Imagen del Producto -->
+              <div class="producto-imagen">
+                <div class="imagen-wrapper">
+                  <!-- ✅ CAMBIO: Usar obtenerRutaImagen() en lugar de ruta fija -->
+                  <img
+                    [src]="obtenerRutaImagen(producto)"
+                    [alt]="obtenerNombreProducto(producto)"
+                    (error)="onImageError($event)"
+                    class="img-producto"
+                  >
+                  <!-- Badge de categoría -->
+                  <div class="categoria-badge">
+                    {{ obtenerNombreCategoria(producto.categoria_producto_Id) }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Información del Producto -->
+              <div class="producto-info">
+                <h3 class="producto-nombre">{{ obtenerNombreProducto(producto) }}</h3>
+                <div class="title-divider mx-start"></div>
+
+                <p class="producto-descripcion-corta">
+                  {{ producto.descripcion | slice:0:80 }}{{ producto.descripcion.length > 80 ? '...' : '' }}
+                </p>
+
+                <!-- Precio -->
+                <div class="producto-precio">
+                  <span class="precio-label">Precio unitario:</span>
+                  <span class="precio-valor">{{ obtenerPrecio(producto) | currency:'USD':'symbol':'1.2-2' }}</span>
+                </div>
+              </div>
+
+              <!-- Controles del Producto -->
+              <div class="producto-controles">
+
+                <!-- Control de Cantidad -->
+                <div class="cantidad-control">
+                  <label class="cantidad-label">Cantidad:</label>
+                  <div class="cantidad-buttons">
+                    <button
+                      class="btn-cantidad btn-decrementar"
+                      (click)="decrementarCantidad(producto.Entidad_Item)"
+                      [disabled]="!producto.Entidad_Item || producto.Entidad_Item.cantidad <= 1"
+                      title="Disminuir cantidad">
+                      <i class="bi bi-dash"></i>
+                    </button>
+                    <span class="cantidad-display">
+                      {{ producto.Entidad_Item.cantidad || 0 }}
+                    </span>
+                    <button
+                      class="btn-cantidad btn-incrementar"
+                      (click)="incrementarCantidad(producto.Entidad_Item, producto.stock)"
+                      [disabled]="!producto.Entidad_Item || producto.Entidad_Item.cantidad >= producto.stock"
+                      title="Aumentar cantidad">
+                      <i class="bi bi-plus"></i>
+                    </button>
+                  </div>
+                  <span class="stock-disponible">
+                    <i class="bi bi-box-seam"></i>
+                    {{ producto.stock }} disponibles
+                  </span>
+                </div>
+
+                <!-- Subtotal -->
+                <div class="subtotal-section">
+                  <span class="subtotal-label">Subtotal:</span>
+                  <span class="subtotal-valor">
+                    {{ (obtenerPrecio(producto) * (producto.Entidad_Item.cantidad || 0)) | currency:'USD':'symbol':'1.2-2' }}
+                  </span>
+                </div>
+
+                <!-- Acciones -->
+                <div class="producto-acciones">
+                  <button
+                    class="btn-accion btn-ver-detalles"
+                    (click)="abrirDetalles(producto)"
+                    title="Ver detalles">
+                    <i class="bi bi-eye"></i>
+                    <span>Detalles</span>
+                  </button>
+                  <button
+                    class="btn-accion btn-eliminar"
+                    (click)="eliminarProducto(producto.id)"
+                    title="Eliminar del carrito">
+                    <i class="bi bi-trash3"></i>
+                    <span>Eliminar</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Columna de Resumen -->
+        <div class="col-lg-4">
+          <div class="resumen-card ">
+            <h3 class="resumen-title">
+              <i class="bi bi-receipt"></i>
+              Resumen de Compra
+            </h3>
+
+            <div class="resumen-items">
+              <div class="resumen-item">
+                <span>Subtotal ({{ itemsTotal }} productos):</span>
+                <span class="resumen-valor">{{ totalValue | currency:'USD':'symbol':'1.2-2' }}</span>
+              </div>
+
+              <div class="resumen-item">
+                <span>Envío:</span>
+                <span class="resumen-valor">{{ envio | currency:'USD':'symbol':'1.2-2' }}</span>
+              </div>
+
+              <div class="resumen-divider"></div>
+
+              <div class="resumen-item resumen-total">
+                <span>Total:</span>
+                <span class="resumen-valor-total">{{ (totalValue + envio) | currency:'USD':'symbol':'1.2-2' }}</span>
+              </div>
+            </div>
+
+            <button class="btn-checkout" (click)="abrirCheckoutModal()">
+              <i class="bi bi-credit-card"></i>
+              <span>Proceder al Pago</span>
+            </button>
+
+            <button class="btn-continuar-comprando" routerLink="/productos">
+              <i class="bi bi-arrow-left"></i>
+              <span>Continuar Comprando</span>
+            </button>
+
+            <!-- Información adicional -->
+            <div class="info-adicional">
+              <div class="info-item">
+                <i class="bi bi-shield-check"></i>
+                <span>Compra 100% segura</span>
+              </div>
+              <div class="info-item">
+                <i class="bi bi-truck"></i>
+                <span>Envío a todo el país</span>
+              </div>
+              <div class="info-item">
+                <i class="bi bi-arrow-return-left"></i>
+                <span>Devolución gratuita</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ⛔ CARRITO VACÍO -->
+   <!-- ── REEMPLAZA el ng-template #carritoVacio ── -->
+
+<ng-template #carritoVacio>
+  <div class="carrito-vacio">
+
+    <!-- Orbes de fondo -->
+    <div class="vacio-orbs">
+      <div class="vacio-orb vacio-orb--1"></div>
+      <div class="vacio-orb vacio-orb--2"></div>
+      <div class="vacio-orb vacio-orb--3"></div>
+    </div>
+
+    <div class="vacio-content">
+
+      <!-- Icono central -->
+      <div class="vacio-icon-wrapper">
+        <div class="vacio-ring vacio-ring--1"></div>
+        <div class="vacio-ring vacio-ring--2"></div>
+        <div class="vacio-icon-box">
+          <i class="bi bi-bag-x vacio-icon"></i>
+        </div>
+        <!-- Partículas decorativas -->
+        <div class="vacio-particle vacio-particle--1"></div>
+        <div class="vacio-particle vacio-particle--2"></div>
+        <div class="vacio-particle vacio-particle--3"></div>
+        <div class="vacio-particle vacio-particle--4"></div>
+      </div>
+
+      <h2 class="vacio-title">Tu carrito está vacío</h2>
+      <p class="vacio-subtitle">
+        Descubre nuestra colección de productos artesanales únicos,<br>hechos con dedicación y amor.
+      </p>
+
+      <!-- Features -->
+      <div class="vacio-features">
+        <div class="vacio-feature">
+          <div class="vacio-feature-icon">
+            <i class="bi bi-stars"></i>
+          </div>
+          <span>Productos únicos</span>
+        </div>
+        <div class="vacio-feature-divider"></div>
+        <div class="vacio-feature">
+          <div class="vacio-feature-icon">
+            <i class="bi bi-hand-index-thumb"></i>
+          </div>
+          <span>Hechos a mano</span>
+        </div>
+        <div class="vacio-feature-divider"></div>
+        <div class="vacio-feature">
+          <div class="vacio-feature-icon">
+            <i class="bi bi-box-seam"></i>
+          </div>
+          <span>Envío seguro</span>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <a routerLink="/productos" class="btn-ir-tienda">
+        <i class="bi bi-shop-window"></i>
+        <span>Explorar Tienda</span>
+        <i class="bi bi-arrow-right btn-arrow"></i>
+      </a>
+
+    </div>
+  </div>
+</ng-template>
+    <!-- ✅ FIN DEL NG-TEMPLATE -->
+
+  </div>
+</div>
+
+<!-- 🔍 MODAL DE DETALLES DEL PRODUCTO -->
+<div class="modal-overlay" *ngIf="mostrarDetalles" (click)="cerrarDetalles()">
+  <div class="modal-detalles-moderno" (click)="$event.stopPropagation()">
+
+    <!-- Botón cerrar mejorado -->
+    <button class="btn-cerrar-modal-nuevo" (click)="cerrarDetalles()" aria-label="Cerrar">
+      <i class="bi bi-x-lg"></i>
+    </button>
+
+    <div class="modal-content-nuevo" *ngIf="productoSeleccionado">
+
+      <!-- ✅ SECCIÓN SUPERIOR: Imagen + Info Básica -->
+      <div class="modal-top-section">
+
+        <!-- Imagen del producto -->
+        <div class="modal-imagen-nuevo">
+          <div class="imagen-container-nuevo">
+            <!-- ✅ CAMBIO: Usar obtenerRutaImagen() en lugar de ruta fija -->
+            <img
+              [src]="obtenerRutaImagen(productoSeleccionado)"
+              [alt]="obtenerNombreProducto(productoSeleccionado)"
+              (error)="onImageError($event)"
+              class="img-detalle-nuevo"
+            >
+            <!-- Badge de disponibilidad flotante -->
+            <div class="disponibilidad-badge-nuevo" [class.disponible]="productoSeleccionado.stock > 0">
+              <i class="bi" [ngClass]="productoSeleccionado.stock > 0 ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i>
+              {{ productoSeleccionado.stock > 0 ? 'Disponible' : 'Agotado' }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Información básica -->
+        <div class="modal-info-basica">
+          <!-- Categoría -->
+          <div class="categoria-tag-nuevo">
+            <i class="bi bi-tag-fill"></i>
+            {{ obtenerNombreCategoria(productoSeleccionado.categoria_producto_Id) }}
+          </div>
+
+          <!-- Título -->
+          <h2 class="modal-titulo-nuevo">{{ obtenerNombreProducto(productoSeleccionado) }}</h2>
+
+          <!-- ✅ VENDEDOR - NUEVO -->
+          <div class="vendedor-info-nuevo" *ngIf="productoSeleccionado.nombre_vendedor">
+            <i class="bi bi-shop"></i>
+            <span>Por: <strong>{{ productoSeleccionado.nombre_vendedor }}</strong></span>
+          </div>
+
+          <!-- Precio y Stock -->
+          <div class="precio-stock-grid">
+            <div class="precio-box-nuevo">
+              <div class="label-nuevo">
+                <i class="bi bi-cash-coin"></i> Precio
+              </div>
+              <div class="valor-precio-nuevo">
+                {{ obtenerPrecio(productoSeleccionado) | currency:'USD':'symbol':'1.2-2' }}
+              </div>
+            </div>
+            <div class="stock-box-nuevo">
+              <div class="label-nuevo">
+                <i class="bi bi-boxes"></i> Stock
+              </div>
+              <div class="valor-stock-nuevo">
+                {{ productoSeleccionado.stock }} unidades
+              </div>
+            </div>
+          </div>
+
+          <!-- Cantidad en carrito -->
+          <div class="cantidad-carrito-nuevo">
+            <div class="cantidad-header">
+              <i class="bi bi-cart-check"></i>
+              <span>En tu carrito</span>
+            </div>
+            <div class="cantidad-display-nuevo">
+              <span class="cantidad-numero-nuevo">{{ productoSeleccionado.Entidad_Item.cantidad }}</span>
+              <span class="cantidad-texto-nuevo">
+                {{ productoSeleccionado.Entidad_Item.cantidad === 1 ? 'unidad' : 'unidades' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Subtotal destacado -->
+          <div class="subtotal-box-nuevo">
+            <span class="subtotal-label-nuevo">Subtotal:</span>
+            <span class="subtotal-valor-nuevo">
+              {{ (obtenerPrecio(productoSeleccionado) * productoSeleccionado.Entidad_Item.cantidad) | currency:'USD':'symbol':'1.2-2' }}
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ✅ SECCIÓN INFERIOR: Descripción + Info Adicional -->
+      <div class="modal-bottom-section">
+
+        <!-- Descripción -->
+        <div class="descripcion-section-nuevo">
+          <h4 class="section-title-nuevo">
+            <i class="bi bi-file-text"></i>
+            Descripción del Producto
+          </h4>
+          <p class="descripcion-texto-nuevo">{{ productoSeleccionado.descripcion }}</p>
+        </div>
+
+        <!-- Características -->
+        <div class="caracteristicas-section-nuevo">
+          <h4 class="section-title-nuevo">
+            <i class="bi bi-stars"></i>
+            Características
+          </h4>
+          <div class="caracteristicas-grid">
+            <div class="caracteristica-item-nuevo">
+              <i class="bi bi-hand-thumbs-up-fill"></i>
+              <span>Hecho a mano</span>
+            </div>
+            <div class="caracteristica-item-nuevo">
+              <i class="bi bi-shield-check-fill"></i>
+              <span>Calidad garantizada</span>
+            </div>
+            <div class="caracteristica-item-nuevo">
+              <i class="bi bi-truck"></i>
+              <span>Envío seguro</span>
+            </div>
+            <div class="caracteristica-item-nuevo">
+              <i class="bi bi-arrow-return-left"></i>
+              <span>Devoluciones</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ✅ FOOTER: Botones de Acción -->
+      <div class="modal-footer-nuevo">
+        <button class="btn-modal-nuevo btn-eliminar-nuevo" (click)="eliminarProducto(productoSeleccionado.id); cerrarDetalles()">
+          <i class="bi bi-trash3-fill"></i>
+          <span>Eliminar</span>
+        </button>
+        <button class="btn-modal-nuevo btn-seguir-nuevo" (click)="cerrarDetalles()">
+          <i class="bi bi-arrow-left-circle-fill"></i>
+          <span>Seguir Comprando</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- Componente de Checkout -->
+<app-checkout #checkoutModal></app-checkout>
+
+<!-- Router Outlet -->
+<router-outlet></router-outlet>

@@ -1,0 +1,473 @@
+<div class="audit-wrapper">
+
+  <!-- Header con degradado -->
+  <div class="audit-header">
+    <div class="header-content">
+      <div class="header-icon-wrapper">
+        <mat-icon class="header-icon">shield</mat-icon>
+      </div>
+      <div class="header-text">
+        <h1 class="header-title">Auditoría del Sistema</h1>
+        <p class="header-subtitle">Monitoreo y registro de actividades del sistema</p>
+      </div>
+    </div>
+    <div class="export-buttons">
+      <button mat-raised-button class="btn-export btn-excel" (click)="exportarExcel()">
+        <mat-icon>table_view</mat-icon>
+        <span>Exportar Excel</span>
+      </button>
+      <button mat-raised-button class="btn-export btn-pdf" (click)="exportarPDF()">
+        <mat-icon>picture_as_pdf</mat-icon>
+        <span>Exportar PDF</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="audit-container">
+
+    <!-- ========================================
+         STATS CARDS
+         ======================================== -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper primary">
+          <mat-icon>analytics</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{ estadisticas[0].valor }}</h4>
+          <p class="stat-label">Total de Eventos</p>
+        </div>
+        <div class="stat-trend success" *ngIf="estadisticas[0].trend">
+          <mat-icon class="trend-icon">trending_up</mat-icon>
+          <span>{{ estadisticas[0].trend }}%</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper success">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{ estadisticas[1].valor }}</h4>
+          <p class="stat-label">Operaciones Exitosas</p>
+        </div>
+        <div class="stat-trend success" *ngIf="estadisticas[1].trend">
+          <mat-icon class="trend-icon">trending_up</mat-icon>
+          <span>{{ estadisticas[1].trend }}%</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper warning">
+          <mat-icon>warning</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{ estadisticas[2].valor }}</h4>
+          <p class="stat-label">Operaciones Fallidas</p>
+        </div>
+        <div class="stat-trend danger" *ngIf="estadisticas[2].trend !== undefined">
+          <mat-icon class="trend-icon">trending_down</mat-icon>
+          <span>{{ Math.abs(estadisticas[2].trend || 0) }}%</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper info">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h4 class="stat-value">{{ estadisticas[3].valor }}</h4>
+          <p class="stat-label">Usuarios Activos</p>
+        </div>
+        <div class="stat-trend success" *ngIf="estadisticas[3].trend">
+          <mat-icon class="trend-icon">trending_up</mat-icon>
+          <span>{{ estadisticas[3].trend }}%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         FILTERS SECTION - CENTRADOS
+         ======================================== -->
+    <div class="filters-wrapper">
+      <div class="filters-header" (click)="toggleFiltros()">
+        <div class="filters-title">
+          <mat-icon>filter_list</mat-icon>
+          <h3>Filtros de Búsqueda</h3>
+        </div>
+        <button class="toggle-filters-btn">
+          <mat-icon>{{ mostrarFiltros ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </button>
+      </div>
+
+      <div class="filters-content" [class.collapsed]="!mostrarFiltros">
+        <div class="filters-grid-centered">
+          <div class="filter-group">
+            <label class="filter-label">
+              <mat-icon>calendar_today</mat-icon>
+              <span>Fecha Inicio</span>
+            </label>
+            <input type="date" class="filter-input" [(ngModel)]="filtros.fechaInicio">
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">
+              <mat-icon>event</mat-icon>
+              <span>Fecha Fin</span>
+            </label>
+            <input type="date" class="filter-input" [(ngModel)]="filtros.fechaFin">
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">
+              <mat-icon>storage</mat-icon>
+              <span>Entidad</span>
+            </label>
+            <div class="filter-select-wrapper">
+              <select class="filter-select" [(ngModel)]="filtros.entidad">
+                <option value="">Todas las entidades</option>
+                <option *ngFor="let e of entidades" [value]="e">{{ e }}</option>
+              </select>
+              <mat-icon class="select-arrow">expand_more</mat-icon>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">
+              <mat-icon>settings</mat-icon>
+              <span>Operación</span>
+            </label>
+            <div class="filter-select-wrapper">
+              <select class="filter-select" [(ngModel)]="filtros.tipoOperacion">
+                <option value="">Todas las operaciones</option>
+                <option *ngFor="let op of tiposOperacion" [value]="op">{{ op }}</option>
+              </select>
+              <mat-icon class="select-arrow">expand_more</mat-icon>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">
+              <mat-icon>check_circle_outline</mat-icon>
+              <span>Estado</span>
+            </label>
+            <div class="filter-select-wrapper">
+              <select class="filter-select" [(ngModel)]="filtros.soloExitosos">
+                <option [ngValue]="undefined">Todos</option>
+                <option [ngValue]="true">Solo exitosos</option>
+                <option [ngValue]="false">Solo errores</option>
+              </select>
+              <mat-icon class="select-arrow">expand_more</mat-icon>
+            </div>
+          </div>
+
+          <div class="filter-actions-centered">
+            <button mat-raised-button class="btn-filter btn-primary" (click)="aplicarFiltros()">
+              <mat-icon>search</mat-icon>
+              <span>Filtrar</span>
+            </button>
+            <button mat-stroked-button class="btn-filter btn-secondary" (click)="limpiarFiltros()">
+              <mat-icon>refresh</mat-icon>
+              <span>Limpiar</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         TABLE SECTION
+         ======================================== -->
+    <div class="table-wrapper">
+      <div class="table-header">
+        <div class="table-title">
+          <mat-icon>list_alt</mat-icon>
+          <h3>Registros de Auditoría</h3>
+        </div>
+        <div class="table-info">
+          <span class="record-count">{{ totalRegistros }} registros</span>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading-state" *ngIf="cargando">
+        <div class="spinner-wrapper">
+          <div class="modern-spinner"></div>
+        </div>
+        <p class="loading-text">Cargando registros...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="!cargando && logsFiltrados.length === 0">
+        <div class="empty-icon-wrapper">
+          <mat-icon>inbox</mat-icon>
+        </div>
+        <h3 class="empty-title">No hay registros para mostrar</h3>
+        <p class="empty-subtitle">Intenta ajustar los filtros de búsqueda</p>
+      </div>
+
+      <!-- Results Info -->
+      <div class="results-info" *ngIf="!cargando && logsFiltrados.length > 0">
+        <span class="results-count">{{ infoPaginacion }}</span>
+        <div class="pagination-size">
+          <span>Mostrar:</span>
+          <select
+            class="pagination-select"
+            [(ngModel)]="registrosPorPagina"
+            (change)="cambiarRegistrosPorPagina(registrosPorPagina)">
+            <option *ngFor="let opcion of opcionesPaginacion" [value]="opcion">
+              {{ opcion }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Table Content -->
+      <div class="table-container" *ngIf="!cargando && logsFiltrados.length > 0">
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th (click)="ordenarPor('fecha_evento')" class="sortable">
+                <div class="th-content">
+                  <span>Fecha</span>
+                  <mat-icon class="sort-icon" [class.active]="ordenActual === 'fecha_evento'">
+                    {{ ordenActual === 'fecha_evento' && ordenDireccion === 'desc' ? 'arrow_downward' : 'arrow_upward' }}
+                  </mat-icon>
+                </div>
+              </th>
+              <th (click)="ordenarPor('usuario_email')" class="sortable">
+                <div class="th-content">
+                  <span>Usuario</span>
+                  <mat-icon class="sort-icon" [class.active]="ordenActual === 'usuario_email'">
+                    {{ ordenActual === 'usuario_email' && ordenDireccion === 'desc' ? 'arrow_downward' : 'arrow_upward' }}
+                  </mat-icon>
+                </div>
+              </th>
+              <th (click)="ordenarPor('tipo_operacion')" class="sortable">
+                <div class="th-content">
+                  <span>Operación</span>
+                  <mat-icon class="sort-icon" [class.active]="ordenActual === 'tipo_operacion'">
+                    {{ ordenActual === 'tipo_operacion' && ordenDireccion === 'desc' ? 'arrow_downward' : 'arrow_upward' }}
+                  </mat-icon>
+                </div>
+              </th>
+              <th (click)="ordenarPor('entidad')" class="sortable">
+                <div class="th-content">
+                  <span>Entidad</span>
+                  <mat-icon class="sort-icon" [class.active]="ordenActual === 'entidad'">
+                    {{ ordenActual === 'entidad' && ordenDireccion === 'desc' ? 'arrow_downward' : 'arrow_upward' }}
+                  </mat-icon>
+                </div>
+              </th>
+              <th>Acción</th>
+              <th (click)="ordenarPor('exito')" class="sortable">
+                <div class="th-content">
+                  <span>Estado</span>
+                  <mat-icon class="sort-icon" [class.active]="ordenActual === 'exito'">
+                    {{ ordenActual === 'exito' && ordenDireccion === 'desc' ? 'arrow_downward' : 'arrow_upward' }}
+                  </mat-icon>
+                </div>
+              </th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of logsPaginados; let i = index" class="table-row" [style.animation-delay]="(i * 0.05) + 's'">
+              <td>
+                <div class="date-cell">
+                  <mat-icon class="cell-icon">schedule</mat-icon>
+                  <span>{{ log.fecha_evento | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+              </td>
+              <td>
+                <div class="user-cell">
+                  <div class="user-avatar">
+                    <mat-icon>person</mat-icon>
+                  </div>
+                  <span>{{ log.usuario_email || 'Sistema' }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="operation-badge" [attr.data-type]="log.tipo_operacion">
+                  <mat-icon class="badge-icon">{{ getOperationIcon(log.tipo_operacion) }}</mat-icon>
+                  {{ log.tipo_operacion }}
+                </span>
+              </td>
+              <td>
+                <span class="entity-tag">{{ log.entidad }}</span>
+              </td>
+              <td>
+                <span class="action-text">{{ log.accion }}</span>
+              </td>
+              <td>
+                <span class="status-badge" [class.success]="log.exito" [class.error]="!log.exito">
+                  <mat-icon class="badge-icon">{{ log.exito ? 'check_circle' : 'cancel' }}</mat-icon>
+                  {{ log.exito ? 'Éxito' : 'Error' }}
+                </span>
+              </td>
+              <td class="text-center">
+                <button mat-icon-button class="action-btn-table" (click)="abrirModal(log)" matTooltip="Ver detalles">
+                  <mat-icon class="detail-icon">article</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-container" *ngIf="!cargando && logsFiltrados.length > 0 && totalPaginas > 1">
+        <div class="pagination">
+          <button mat-icon-button
+                  class="pagination-btn"
+                  (click)="irAPagina(paginaActual - 1)"
+                  [disabled]="paginaActual === 0">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+
+          <ng-container *ngFor="let pagina of obtenerPaginasVisibles()">
+            <button *ngIf="pagina >= 0"
+                    mat-button
+                    class="pagination-number"
+                    [class.active]="pagina === paginaActual"
+                    (click)="irAPagina(pagina)">
+              {{ pagina + 1 }}
+            </button>
+            <span *ngIf="pagina < 0" class="pagination-ellipsis">...</span>
+          </ng-container>
+
+          <button mat-icon-button
+                  class="pagination-btn"
+                  (click)="irAPagina(paginaActual + 1)"
+                  [disabled]="paginaActual === totalPaginas - 1">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========================================
+     MODAL DE DETALLES - CSS PURO
+     ======================================== -->
+<div class="modal-overlay" *ngIf="modalAbierto" (click)="cerrarModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <div class="modal-header-content">
+        <div class="modal-icon-wrapper">
+          <mat-icon class="modal-icon">description</mat-icon>
+        </div>
+        <div class="modal-title-section">
+          <h2 class="modal-title">Detalles de Auditoría</h2>
+          <p class="modal-subtitle">Información completa del registro</p>
+        </div>
+      </div>
+      <button class="modal-close-btn" (click)="cerrarModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body" *ngIf="logSeleccionado">
+      <!-- Información Principal -->
+      <div class="modal-section">
+        <div class="section-header">
+          <mat-icon class="section-icon">info</mat-icon>
+          <h3 class="section-title">Información General</h3>
+        </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">
+              <mat-icon>person</mat-icon>
+              <span>Usuario</span>
+            </div>
+            <div class="info-value">{{ logSeleccionado.usuario_email || 'Sistema' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <mat-icon>schedule</mat-icon>
+              <span>Fecha y Hora</span>
+            </div>
+            <div class="info-value">{{ logSeleccionado.fecha_evento | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <mat-icon>router</mat-icon>
+              <span>Dirección IP</span>
+            </div>
+            <div class="info-value">{{ logSeleccionado.ip_address || 'N/A' }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">
+              <mat-icon>{{ logSeleccionado.exito ? 'check_circle' : 'error' }}</mat-icon>
+              <span>Estado</span>
+            </div>
+            <div class="info-value">
+              <span class="status-chip" [class.success-chip]="logSeleccionado.exito" [class.error-chip]="!logSeleccionado.exito">
+                {{ logSeleccionado.exito ? 'Exitoso' : 'Fallido' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detalles de la Operación -->
+      <div class="modal-section">
+        <div class="section-header">
+          <mat-icon class="section-icon">settings</mat-icon>
+          <h3 class="section-title">Detalles de la Operación</h3>
+        </div>
+        <div class="operation-details">
+          <div class="detail-row">
+            <span class="detail-label">Entidad:</span>
+            <span class="detail-badge entity-badge">{{ logSeleccionado.entidad }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Tipo de Operación:</span>
+            <span class="detail-badge operation-badge" [attr.data-type]="logSeleccionado.tipo_operacion">
+              <mat-icon class="badge-icon-small">{{ getOperationIcon(logSeleccionado.tipo_operacion) }}</mat-icon>
+              {{ logSeleccionado.tipo_operacion }}
+            </span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Acción Realizada:</span>
+            <span class="detail-text">{{ logSeleccionado.accion }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Valores Anteriores -->
+      <div class="modal-section" *ngIf="logSeleccionado.valores_anteriores">
+        <div class="section-header">
+          <mat-icon class="section-icon danger-icon">history</mat-icon>
+          <h3 class="section-title">Valores Anteriores</h3>
+        </div>
+        <div class="code-container previous-values">
+          <pre class="code-block">{{ formatearJSON(logSeleccionado.valores_anteriores) }}</pre>
+        </div>
+      </div>
+
+      <!-- Valores Nuevos -->
+      <div class="modal-section" *ngIf="logSeleccionado.valores_nuevos">
+        <div class="section-header">
+          <mat-icon class="section-icon success-icon">new_releases</mat-icon>
+          <h3 class="section-title">Valores Nuevos</h3>
+        </div>
+        <div class="code-container new-values">
+          <pre class="code-block">{{ formatearJSON(logSeleccionado.valores_nuevos) }}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button mat-raised-button class="btn-modal-close" (click)="cerrarModal()">
+        <mat-icon>check</mat-icon>
+        <span>Cerrar</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,323 @@
+<div class="instagram-settings-wrapper">
+
+  <!-- ========================================
+       LAYOUT TIPO INSTAGRAM
+       ======================================== -->
+  <div class="settings-layout">
+
+    <!-- SIDEBAR - MENÚ DE CATEGORÍAS -->
+    <aside class="settings-sidebar">
+      <div class="sidebar-header">
+        <h1 class="sidebar-title">Configuración</h1>
+        <p class="sidebar-subtitle">Administra los parámetros del sistema</p>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button
+          class="nav-item"
+          [class.active]="categoriaActiva === 'security'"
+          (click)="cambiarCategoria('security')">
+          <div class="nav-item-icon">
+            <mat-icon>security</mat-icon>
+          </div>
+          <span class="nav-item-text">Seguridad</span>
+          <mat-icon class="nav-arrow">chevron_right</mat-icon>
+        </button>
+
+        <button
+          class="nav-item"
+          [class.active]="categoriaActiva === 'products'"
+          (click)="cambiarCategoria('products')">
+          <div class="nav-item-icon">
+            <mat-icon>inventory_2</mat-icon>
+          </div>
+          <span class="nav-item-text">Productos</span>
+          <mat-icon class="nav-arrow">chevron_right</mat-icon>
+        </button>
+
+        <button
+          class="nav-item"
+          [class.active]="categoriaActiva === 'system'"
+          (click)="cambiarCategoria('system')">
+          <div class="nav-item-icon">
+            <mat-icon>settings_suggest</mat-icon>
+          </div>
+          <span class="nav-item-text">Sistema</span>
+          <mat-icon class="nav-arrow">chevron_right</mat-icon>
+        </button>
+
+        <button
+          class="nav-item"
+          [class.active]="categoriaActiva === 'all'"
+          (click)="cambiarCategoria('all')">
+          <div class="nav-item-icon">
+            <mat-icon>view_list</mat-icon>
+          </div>
+          <span class="nav-item-text">Todas</span>
+          <mat-icon class="nav-arrow">chevron_right</mat-icon>
+        </button>
+      </nav>
+
+      <!-- Botón de actualizar en sidebar -->
+      <div class="sidebar-footer">
+        <button class="refresh-btn" (click)="refrescarCache()">
+          <mat-icon>refresh</mat-icon>
+          <span>Actualizar caché</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT - CONFIGURACIONES -->
+    <main class="settings-main">
+
+      <!-- Header con búsqueda -->
+      <div class="main-header">
+        <div class="header-top">
+          <h2 class="category-title">{{ getTituloCategoriaActual() }}</h2>
+          <span class="config-count">{{ getConfiguracionesActuales().length }} configuraciones</span>
+        </div>
+
+        <!-- Barra de búsqueda -->
+        <div class="search-container">
+          <mat-icon class="search-icon">search</mat-icon>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Buscar en configuraciones..."
+            [(ngModel)]="filtroTexto"
+            (input)="onSearchChange()">
+          <button
+            *ngIf="filtroTexto"
+            class="clear-btn"
+            (click)="limpiarFiltro()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="cargando" class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p class="loading-text">Cargando configuraciones...</p>
+      </div>
+
+      <!-- Lista de configuraciones -->
+      <div *ngIf="!cargando" class="settings-list">
+
+        <!-- Item de configuración -->
+        <div
+          class="setting-item"
+          *ngFor="let config of getConfiguracionesActuales()"
+          (click)="abrirModalEditar(config)"
+          [@cardAnimation]>
+
+          <div class="setting-item-left">
+            <div class="setting-icon" [ngClass]="'icon-' + getColorTipo(config.tipo)">
+              <mat-icon>{{ getIconoConfig(config.clave) }}</mat-icon>
+            </div>
+            <div class="setting-info">
+              <h3 class="setting-title">{{ getNombreAmigable(config.clave) }}</h3>
+              <p class="setting-description">{{ config.descripcion || 'Sin descripción' }}</p>
+              <div class="setting-meta">
+                <span class="meta-badge" [ngClass]="getColorTipo(config.tipo)">
+                  <mat-icon>{{ getIconoTipo(config.tipo) }}</mat-icon>
+                  {{ config.tipo }}
+                </span>
+                <span class="meta-key">{{ config.clave }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="setting-item-right">
+            <span class="current-value" [ngClass]="'value-' + getColorTipo(config.tipo)">
+              {{ formatearValor(config.valor, config.tipo) }}
+            </span>
+            <mat-icon class="chevron-icon">chevron_right</mat-icon>
+          </div>
+        </div>
+
+        <!-- Empty state -->
+        <div *ngIf="getConfiguracionesActuales().length === 0" class="empty-state">
+          <mat-icon class="empty-icon">search_off</mat-icon>
+          <h3 class="empty-title">No se encontraron configuraciones</h3>
+          <p class="empty-text">Intenta con otros términos de búsqueda</p>
+          <button class="empty-btn" (click)="limpiarFiltro()" *ngIf="filtroTexto">
+            Limpiar búsqueda
+          </button>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ========================================
+       MODAL DE EDICIÓN
+       ======================================== -->
+  <div class="modal-overlay" *ngIf="mostrarModalEditar" [@modalAnimation] (click)="cerrarModalEditar()">
+    <div class="modal-container" (click)="$event.stopPropagation()" [@modalContentAnimation]>
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-icon-circle">
+            <mat-icon>edit</mat-icon>
+          </div>
+          <div class="modal-title-section">
+            <h2 class="modal-title">Editar configuración</h2>
+            <p class="modal-subtitle">{{ getNombreAmigable(configuracionActual?.clave || '') }}</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" (click)="cerrarModalEditar()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+
+        <!-- Info chips -->
+        <div class="info-chips">
+          <div class="info-chip">
+            <mat-icon>key</mat-icon>
+            <span>{{ configuracionActual?.clave }}</span>
+          </div>
+          <div class="info-chip" [ngClass]="getColorTipo(configuracionActual?.tipo ?? '')">
+            <mat-icon>{{ getIconoTipo(configuracionActual?.tipo ?? '') }}</mat-icon>
+            <span>{{ configuracionActual?.tipo }}</span>
+          </div>
+          <div class="info-chip" *ngIf="configuracionActual?.fecha_modificacion">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ formatearFecha(configuracionActual?.fecha_modificacion ?? null) }}</span>
+          </div>
+        </div>
+
+        <!-- Formulario -->
+        <form [formGroup]="formularioEdicion" class="modal-form">
+
+          <!-- Campo Valor - BOOLEAN (Toggle Switch) -->
+          <div class="form-field" *ngIf="configuracionActual?.tipo === 'BOOLEAN'">
+            <label class="field-label">
+              <mat-icon>toggle_on</mat-icon>
+              <span>Estado</span>
+            </label>
+            <div class="toggle-container">
+              <div class="toggle-info">
+                <span class="toggle-label">{{ valorBooleanActual ? 'Activado' : 'Desactivado' }}</span>
+                <p class="toggle-description">{{ getHintText(configuracionActual?.tipo ?? '') }}</p>
+              </div>
+              <label class="switch">
+                <input
+                  type="checkbox"
+                  [checked]="valorBooleanActual"
+                  (change)="onToggleChange($event)">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Campo Valor - NUMBER (Counter) -->
+          <div class="form-field" *ngIf="configuracionActual?.tipo === 'NUMBER'">
+            <label class="field-label">
+              <mat-icon>numbers</mat-icon>
+              <span>Valor numérico</span>
+            </label>
+            <div class="counter-container">
+              <button
+                type="button"
+                class="counter-btn decrement"
+                (click)="decrementarValor()"
+                [disabled]="!puedeDecrementar()">
+                <mat-icon>remove</mat-icon>
+              </button>
+              <div class="counter-display">
+                <input
+                  type="number"
+                  class="counter-input"
+                  formControlName="valor"
+                  [placeholder]="getPlaceholder(configuracionActual?.tipo ?? '')"
+                  (input)="onNumberInputChange()">
+                <span class="counter-hint">{{ getHintText(configuracionActual?.tipo ?? '') }}</span>
+              </div>
+              <button
+                type="button"
+                class="counter-btn increment"
+                (click)="incrementarValor()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+            <span class="field-error" *ngIf="formularioEdicion.get('valor')?.hasError('required')">
+              El valor es obligatorio
+            </span>
+            <span class="field-error" *ngIf="formularioEdicion.get('valor')?.hasError('pattern')">
+              {{ getErrorText(configuracionActual?.tipo ?? '') }}
+            </span>
+          </div>
+
+          <!-- Campo Valor - STRING (Input normal) -->
+          <div class="form-field" *ngIf="configuracionActual?.tipo === 'STRING'">
+            <label class="field-label">
+              <mat-icon>edit</mat-icon>
+              <span>Nuevo valor</span>
+            </label>
+            <div class="input-container">
+              <input
+                class="field-input"
+                formControlName="valor"
+                [placeholder]="getPlaceholder(configuracionActual?.tipo ?? '')">
+              <span class="field-hint" *ngIf="!formularioEdicion.get('valor')?.errors">
+                {{ getHintText(configuracionActual?.tipo ?? '') }}
+              </span>
+              <span class="field-error" *ngIf="formularioEdicion.get('valor')?.hasError('required')">
+                El valor es obligatorio
+              </span>
+            </div>
+          </div>
+
+          <!-- Campo Descripción -->
+          <div class="form-field">
+            <label class="field-label">
+              <mat-icon>description</mat-icon>
+              <span>Descripción (opcional)</span>
+            </label>
+            <div class="input-container">
+              <textarea
+                class="field-textarea"
+                formControlName="descripcion"
+                rows="3"
+                placeholder="Agrega una descripción..."></textarea>
+            </div>
+          </div>
+
+          <!-- Warning si es crítico -->
+          <div class="warning-alert" *ngIf="esConfiguracionCritica(configuracionActual?.clave || '')">
+            <mat-icon class="warning-icon">warning</mat-icon>
+            <div class="warning-content">
+              <strong>Configuración crítica</strong>
+              <p>Este cambio afectará el comportamiento del sistema inmediatamente.</p>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="modal-btn cancel-btn" (click)="cerrarModalEditar()">
+          <mat-icon>close</mat-icon>
+          <span>Cancelar</span>
+        </button>
+        <button
+          class="modal-btn save-btn"
+          [disabled]="formularioEdicion.invalid"
+          (click)="guardarConfiguracion()">
+          <mat-icon>check</mat-icon>
+          <span>Guardar cambios</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
